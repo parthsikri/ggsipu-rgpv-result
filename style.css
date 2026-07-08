@@ -527,6 +527,7 @@ input::placeholder { color: var(--text-muted); }
 .ae-link { padding: 7px 16px; border-radius: var(--r-sm); font-size: .8rem; font-weight: 700; border: 1px solid; transition: var(--ease); }
 .ae-yt  { background: rgba(220,38,38,.15); border-color: rgba(220,38,38,.4); color: #fca5a5; }
 .ae-tg  { background: rgba(6,182,212,.12); border-color: rgba(6,182,212,.3); color: #67e8f9; }
+.ae-wa  { background: rgba(34,197,94,.12); border-color: rgba(34,197,94,.3); color: #86efac; }
 .ae-link:hover { transform: translateY(-2px); }
 
 /* ── Recommendation Section ── */
