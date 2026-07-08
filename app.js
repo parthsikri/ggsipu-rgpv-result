@@ -430,6 +430,9 @@ function renderDashboard(data) {
   // Next-semester recommendations (both universities)
   const latestSem = Math.max(...data.allSemesters.map(s => s.semester));
   renderRecommendations(data.allSemesters, data.cgpa, data.studentInfo.programme, latestSem);
+
+  // Initialize Comeback Planner
+  initComebackPlanner(data);
 }
 
 // ─────────────────────────────────────────────
@@ -1284,10 +1287,103 @@ window.resetDashboard = function() {
   document.getElementById('results-section').style.display  = 'none';
   document.getElementById('insights-section').style.display = 'none';
   document.getElementById('rec-section').style.display      = 'none';
+  document.getElementById('comeback-section').style.display = 'none';
   document.getElementById('loginForm').reset();
   currentData = null;
   document.getElementById('login-section').scrollIntoView({ behavior:'smooth' });
   loadCaptcha();
+};
+
+// ─────────────────────────────────────────────
+//  COMEBACK PLANNER
+// ─────────────────────────────────────────────
+window.initComebackPlanner = function(data) {
+  const completedSems = data.allSemesters.length;
+  const currentCgpa = data.cgpa;
+  const maxSems = 8;
+  const remSems = Math.max(1, maxSems - completedSems);
+
+  // Set status labels
+  document.getElementById('cbCompletedSems').textContent = completedSems;
+  document.getElementById('cbCurrentCgpa').textContent = currentCgpa.toFixed(2);
+  document.getElementById('cbRemSemsLbl').textContent = remSems;
+
+  // Build target sems dropdown
+  const select = document.getElementById('cbTargetSems');
+  if (select) {
+    let optionsHtml = '';
+    for (let i = 1; i <= remSems; i++) {
+      const isLast = (i === remSems);
+      optionsHtml += `<option value="${i}" ${isLast ? 'selected' : ''}>
+        Next ${i} Semester${i > 1 ? 's' : ''} ${isLast ? '(all remaining)' : ''}
+      </option>`;
+    }
+    select.innerHTML = optionsHtml;
+  }
+
+  // Set default target CGPA to be slightly higher than current
+  const targetInput = document.getElementById('cbTargetCgpa');
+  if (targetInput) {
+    targetInput.value = Math.min(10.0, Math.max(8.0, currentCgpa + 0.5)).toFixed(1);
+  }
+
+  document.getElementById('comeback-section').style.display = 'block';
+  calculateComeback();
+};
+
+window.calculateComeback = function() {
+  if (!currentData) return;
+  const completedSems = currentData.allSemesters.length;
+  const currentCgpa = currentData.cgpa;
+  const targetCgpa = parseFloat(document.getElementById('cbTargetCgpa').value) || 8.5;
+  const plannedSems = parseInt(document.getElementById('cbTargetSems').value) || 1;
+
+  const valEl = document.getElementById('cbResultValue');
+  const feedEl = document.getElementById('cbResultFeedback');
+
+  if (targetCgpa > 10.0 || targetCgpa < 1.0) {
+    valEl.textContent = '❌';
+    feedEl.innerHTML = '<span style="color:#ef4444;font-weight:700;">Bhai, target CGPA 1.0 se 10.0 ke beech mein rakho!</span>';
+    return;
+  }
+
+  const totalSems = completedSems + plannedSems;
+  const reqTotalPoints = targetCgpa * totalSems;
+  const currentPoints = currentCgpa * completedSems;
+  const reqPoints = reqTotalPoints - currentPoints;
+  const reqSgpa = reqPoints / plannedSems;
+
+  if (reqSgpa > 10.0) {
+    valEl.textContent = '☠️';
+    valEl.style.color = '#ef4444';
+    feedEl.innerHTML = `Required: <strong>${reqSgpa.toFixed(2)} SGPA</strong>.<br/>
+      <span style="color:#ef4444;font-weight:700;">bhai, drop out plan ready karo or target CGPA change karo, 10+ SGPA is not possible in this universe 😭</span>`;
+  } else if (reqSgpa > 9.5) {
+    valEl.textContent = reqSgpa.toFixed(2);
+    valEl.style.color = '#fb923c';
+    feedEl.innerHTML = `Required: <strong>${reqSgpa.toFixed(2)} SGPA</strong>.<br/>
+      <span style="color:#fb923c;font-weight:700;">pure semester lock-in krna padega 🔒. library mein hi tent lagalo, continuous 9.5+ is extreme grind mode!</span>`;
+  } else if (reqSgpa > 8.0) {
+    valEl.textContent = reqSgpa.toFixed(2);
+    valEl.style.color = '#60a5fa';
+    feedEl.innerHTML = `Required: <strong>${reqSgpa.toFixed(2)} SGPA</strong>.<br/>
+      doable but effort lagana padega. regular classes attend karo aur exam sheets fully bharo! 📈`;
+  } else if (reqSgpa > 5.0) {
+    valEl.textContent = reqSgpa.toFixed(2);
+    valEl.style.color = '#22c55e';
+    feedEl.innerHTML = `Required: <strong>${reqSgpa.toFixed(2)} SGPA</strong>.<br/>
+      araam se ho jaega. last night study and bhaiya ke imp topics read karlo. secure status. 😎`;
+  } else if (reqSgpa > 0) {
+    valEl.textContent = Math.max(4.0, reqSgpa).toFixed(2);
+    valEl.style.color = '#10b981';
+    feedEl.innerHTML = `Required: <strong>${Math.max(4.0, reqSgpa).toFixed(2)} SGPA</strong>.<br/>
+      bhai, target set kiya ya mazak? bas exam hall mein attendance lagani hai, pass ho jaoge!`;
+  } else {
+    valEl.textContent = '0.00';
+    valEl.style.color = '#34d399';
+    feedEl.innerHTML = `Already Achieved! 🎉<br/>
+      agle sems mein zero SGPA le aao toh bhi target reach ho jayega. relax and chill! 🏝️`;
+  }
 };
 
 // ─────────────────────────────────────────────
