@@ -946,10 +946,10 @@ function findSubjectNameInSyllabus(code, syllabusData) {
   }
 });
 
-server.listen(PORT, 'localhost', () => {
+server.listen(PORT, '0.0.0.0', () => {
   console.log('\n╔═══════════════════════════════════════════╗');
   console.log('║  🎓 Apna Engineering Result Server        ║');
-  console.log(`║  🌐 http://localhost:${PORT}               ║`);
+  console.log(`║  🌐 http://0.0.0.0:${PORT}                 ║`);
   console.log('║  Press Ctrl+C to stop                     ║');
   console.log('╚═══════════════════════════════════════════╝\n');
 });
