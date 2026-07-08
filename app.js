@@ -1361,10 +1361,19 @@ window.onCompletedSemsChange = function() {
   const completedInput = document.getElementById('cbCompletedSems');
   if (!completedInput) return;
   
-  let completedSems = parseInt(completedInput.value) || 2;
-  if (completedSems < 1) completedSems = 1;
-  if (completedSems > 7) completedSems = 7;
-  completedInput.value = completedSems; // Clamp value
+  // Allow empty input value while typing/backspacing
+  if (completedInput.value === '') return;
+  
+  let completedSems = parseInt(completedInput.value);
+  if (isNaN(completedSems)) return;
+
+  if (completedSems < 1) {
+    completedSems = 1;
+    completedInput.value = 1;
+  } else if (completedSems > 7) {
+    completedSems = 7;
+    completedInput.value = 7;
+  }
   
   const maxSems = 8;
   const remSems = Math.max(1, maxSems - completedSems);
@@ -1395,13 +1404,19 @@ window.onCompletedSemsChange = function() {
 window.calculateComeback = function() {
   const completedInput = document.getElementById('cbCompletedSems');
   const currentInput = document.getElementById('cbCurrentCgpa');
+  const targetInput = document.getElementById('cbTargetCgpa');
   const schemeSelect = document.getElementById('cbSchemeSelect');
   
-  if (!completedInput || !currentInput || !schemeSelect) return;
+  if (!completedInput || !currentInput || !targetInput || !schemeSelect) return;
+
+  // Let inputs be empty while user is typing
+  if (completedInput.value === '' || currentInput.value === '' || targetInput.value === '') {
+    return;
+  }
 
   const completedSems = parseInt(completedInput.value) || 2;
   const currentCgpa = parseFloat(currentInput.value) || 7.50;
-  const targetCgpa = parseFloat(document.getElementById('cbTargetCgpa').value) || 8.50;
+  const targetCgpa = parseFloat(targetInput.value) || 8.50;
   const scheme = schemeSelect.value || 'before_2025';
   
   const targetEndSem = parseInt(document.getElementById('cbTargetSems').value) || (completedSems + 1);
