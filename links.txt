@@ -1,0 +1,9 @@
+../css/main.css
+../css/header.css
+../css/navbar.css
+../css/student/sthome.css
+../css/student/modern_form.css
+../student/studenthome.jsp
+../student/profile.jsp
+../changepasswd.jsp
+../Logout

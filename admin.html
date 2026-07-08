@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard 🛡️ — GGSIPU Result Analyzer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <!-- SheetJS Library for Excel/CSV parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <style>
+    :root {
+      --bg: #09090b;
+      --card-bg: rgba(18, 18, 20, 0.7);
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #ffffff;
+      --text-muted: #a1a1aa;
+      --indigo: #6366f1;
+      --indigo-glow: rgba(99, 102, 241, 0.15);
+      --green: #22c55e;
+      --red: #ef4444;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Glow Orbs */
+    .glow-orb {
+      position: fixed;
+      width: 450px;
+      height: 450px;
+      border-radius: 50%;
+      filter: blur(140px);
+      opacity: 0.08;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .glow-1 { background: var(--indigo); top: -10%; left: -10%; }
+    .glow-2 { background: #4f46e5; bottom: -10%; right: -10%; }
+
+    .admin-container {
+      max-width: 1200px;
+      width: 100%;
+      z-index: 10;
+    }
+
+    header {
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2.25rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      text-transform: lowercase;
+      margin-bottom: 0.5rem;
+    }
+
+    header p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      text-transform: lowercase;
+    }
+
+    /* Admin Tabs */
+    .admin-tabs {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.75rem;
+    }
+
+    .admin-tab-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      text-transform: lowercase;
+    }
+
+    .admin-tab-btn.active {
+      background: var(--indigo);
+      color: #fff;
+      box-shadow: 0 0 15px var(--indigo-glow);
+    }
+
+    .admin-tab-panel {
+      display: none;
+      width: 100%;
+    }
+
+    .admin-tab-panel.active {
+      display: block;
+    }
+
+    .entries-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(24px);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6);
+      width: 100%;
+      margin-bottom: 1.5rem;
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+      margin-top: 1rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    th, td {
+      padding: 1rem 1.25rem;
+      font-size: 0.85rem;
+    }
+
+    th {
+      background: rgba(0, 0, 0, 0.3);
+      border-bottom: 2px solid var(--border);
+      color: var(--text-muted);
+      font-weight: 800;
+      text-transform: lowercase;
+      letter-spacing: 0.02em;
+    }
+
+    td {
+      border-bottom: 1px solid var(--border);
+      color: #e4e4e7;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .student-name {
+      font-weight: 700;
+      color: #fff;
+      text-transform: lowercase;
+    }
+
+    .student-roll {
+      font-family: monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .cgpa-badge {
+      font-family: monospace;
+      font-weight: 900;
+      font-size: 1rem;
+      color: var(--indigo);
+    }
+
+    .feedback-text {
+      font-size: 0.8rem;
+      color: #d1d1d6;
+      line-height: 1.45;
+      max-width: 350px;
+      word-break: break-word;
+      font-style: italic;
+    }
+
+    .source-tag {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      font-weight: 800;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-muted);
+      text-transform: lowercase;
+    }
+
+    /* Switch styling */
+    .switch-label {
+      display: inline-flex;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .switch-input {
+      display: none;
+    }
+
+    .switch-slider {
+      width: 42px;
+      height: 22px;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 11px;
+      position: relative;
+      transition: background-color 0.2s ease;
+      border: 1px solid var(--border);
+    }
+
+    .switch-slider::before {
+      content: "";
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      left: 2px;
+      bottom: 2px;
+      background-color: #fff;
+      border-radius: 50%;
+      transition: transform 0.2s ease;
+    }
+
+    .switch-input:checked + .switch-slider {
+      background-color: var(--green);
+    }
+
+    .switch-input:checked + .switch-slider::before {
+      transform: translateX(20px);
+    }
+
+    .status-text {
+      margin-left: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: lowercase;
+    }
+    
+    .status-text.approved {
+      color: var(--green);
+    }
+    
+    .status-text.pending {
+      color: var(--text-muted);
+    }
+
+    /* Form Fields Styling */
+    .form-row {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .form-group {
+      flex: 1;
+      min-width: 200px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    label {
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: var(--indigo);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .admin-input, select {
+      width: 100%;
+      padding: 0.85rem 1.1rem;
+      border-radius: 10px;
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--border);
+      color: #fff;
+      font-size: 0.9rem;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .admin-input:focus, select:focus {
+      border-color: var(--indigo);
+      box-shadow: 0 0 15px rgba(99, 102, 241, 0.2);
+    }
+
+    /* Action Buttons */
+    .admin-btn {
+      background: linear-gradient(135deg, var(--indigo), #4f46e5);
+      color: #fff;
+      font-weight: 800;
+      font-size: 0.9rem;
+      border: none;
+      padding: 0.85rem 1.5rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-transform: lowercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2);
+    }
+
+    .admin-btn:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.1);
+    }
+
+    .admin-btn.secondary {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      box-shadow: none;
+    }
+
+    .admin-btn.danger {
+      background: linear-gradient(135deg, var(--red), #b91c1c);
+      box-shadow: 0 4px 15px rgba(239, 68, 68, 0.2);
+    }
+
+    /* Syllabus Editor UI */
+    .subject-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .subject-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.75rem;
+    }
+
+    .subject-title {
+      font-size: 1rem;
+      font-weight: 800;
+      color: #fff;
+      text-transform: lowercase;
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+      background: rgba(0,0,0,0.1);
+      padding: 1rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .skills-grid .form-group {
+      min-width: 100px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.01);
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.8rem;
+      transition: all 0.2s ease;
+      text-transform: lowercase;
+    }
+
+    .back-btn:hover {
+      border-color: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.04);
+      color: #fff;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem 0;
+      color: var(--text-muted);
+      text-transform: lowercase;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="glow-orb glow-1"></div>
+  <div class="glow-orb glow-2"></div>
+
+  <div class="admin-container">
+    <a href="index.html" class="back-btn">← Back to Results</a>
+    <header>
+      <h1>Apna Engineering Admin 🛡️</h1>
+      <p>Configure dynamic course recommendations & approve verified students reviews</p>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <div class="admin-tabs">
+      <button class="admin-tab-btn active" onclick="switchTab('leaderboard')">Leaderboard approvals</button>
+      <button class="admin-tab-btn" onclick="switchTab('syllabus')">Syllabus configurator</button>
+    </div>
+
+    <!-- Tab 1: Leaderboard Approvals -->
+    <div id="panel-leaderboard" class="admin-tab-panel active">
+      <div class="entries-card">
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Student details</th>
+                <th>College & branch</th>
+                <th>CGPA</th>
+                <th>Source</th>
+                <th>Feedback / Experience</th>
+                <th>Show on leaderboard</th>
+              </tr>
+            </thead>
+            <tbody id="entriesBody">
+              <!-- Loaded dynamically -->
+            </tbody>
+          </table>
+        </div>
+        <div id="emptyState" class="empty-state" style="display: none;">
+          no student reviews submitted yet.
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 2: Syllabus Configurator -->
+    <div id="panel-syllabus" class="admin-tab-panel">
+      <!-- Select Stream and Semester Config -->
+      <div class="entries-card" style="margin-bottom: 2rem;">
+        <div class="form-row">
+          <div class="form-group" style="flex: 2;">
+            <label for="streamSelect">Stream / Branch</label>
+            <select id="streamSelect">
+              <option value="CSE">CSE (Computer Science)</option>
+              <option value="ECE">ECE (Electronics & Comm)</option>
+              <option value="IT">IT (Information Tech)</option>
+              <option value="EEE">EEE (Electrical & Electronics)</option>
+              <option value="MAE">MAE (Mechanical & Auto)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="semInput">Target Semester</label>
+            <input type="number" id="semInput" class="admin-input" value="3" min="1" max="8">
+          </div>
+          <div class="form-group" style="align-self: flex-end; flex: 0.5;">
+            <button class="admin-btn" onclick="loadSyllabus()">Load Syllabus</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Config area: Manual editor on left, Split Bulk Uploaders on right -->
+      <div class="form-row">
+        <!-- Manual Config Summary (Left Panel) -->
+        <div class="entries-card" style="flex: 1.5; min-width: 320px;">
+          <h2 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 1.5rem; text-transform: lowercase;">Syllabus Subjects list</h2>
+          
+          <div id="subjectsList">
+            <!-- Subject cards loaded dynamically -->
+          </div>
+
+          <div style="display: flex; gap: 0.75rem; margin-top: 1.5rem; flex-wrap: wrap;">
+            <button class="admin-btn secondary" onclick="addNewSubject()">+ Add Subject</button>
+            <button class="admin-btn" onclick="saveSyllabus()">Save Syllabus Config</button>
+            <button class="admin-btn" onclick="deleteSemester('branch')" style="background: linear-gradient(135deg, #dc2626, #b91c1c); border-color: #dc2626;" title="Delete all subjects for selected branch + semester">🗑 Delete (This Branch)</button>
+            <button class="admin-btn" onclick="deleteSemester('all')" style="background: linear-gradient(135deg, #ef4444, #dc2626); border-color: #ef4444;" title="Delete all subjects for this semester across all branches">🗑 Delete (All Branches)</button>
+          </div>
+        </div>
+
+        <!-- Separate Bulk Uploaders (Right Panel) -->
+        <div style="flex: 1; min-width: 280px; display: flex; flex-direction: column; gap: 1.5rem;">
+          
+          <!-- Uploader A: Bulk Subject Credits Only -->
+          <div class="entries-card" style="margin-bottom: 0;">
+            <h2 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 0.5rem; text-transform: lowercase; color: var(--indigo);">1. Bulk credit uploader</h2>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.25rem; line-height: 1.4;">
+              upload an Excel (.xlsx/.xls) or CSV sheet containing subject credits. matches row codes to currently selected target semester.
+            </p>
+
+            <div style="background: rgba(0,0,0,0.2); border: 2px dashed var(--border); border-radius: 12px; padding: 1.5rem 1rem; text-align: center; margin-bottom: 1rem;">
+              <input type="file" id="creditCsvFileInput" accept=".csv, .xlsx, .xls" style="display: none;" onchange="handleCreditCsvFile(this)">
+              <button class="admin-btn secondary" style="padding: 0.5rem 1rem;" onclick="document.getElementById('creditCsvFileInput').click()">select Credits sheet</button>
+              <div id="creditFileName" style="font-size: 0.75rem; color: var(--green); margin-top: 0.5rem; font-weight: 700;"></div>
+            </div>
+
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border); padding: 0.75rem; border-radius: 8px; font-size: 0.75rem;">
+              Format Columns: **code, credits, semester**
+              <pre style="font-family: monospace; font-size: 0.7rem; background: #000; padding: 0.4rem; border-radius: 4px; margin-top: 0.35rem; color: #a1a1aa;">code,credits,semester
+CIC-205,4,3
+CIC-209,4,3</pre>
+              <a id="downloadCreditTemplateBtn" class="back-btn" style="margin-top: 0.5rem; margin-bottom: 0; width: 100%; text-align: center; padding: 4px;" download="ggsipu_credits_only_template.csv">Download Credits Template</a>
+            </div>
+          </div>
+
+          <!-- Uploader B: Bulk Subjects with Attributes -->
+          <div class="entries-card" style="margin-bottom: 0;">
+            <h2 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 0.5rem; text-transform: lowercase; color: var(--indigo);">2. Bulk subject & attributes uploader</h2>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.25rem; line-height: 1.4;">
+              upload full subjects containing subtitles, study tips, and coding/math weight ratios in bulk using Excel (.xlsx/.xls) or CSV.
+            </p>
+
+            <div style="background: rgba(0,0,0,0.2); border: 2px dashed var(--border); border-radius: 12px; padding: 1.5rem 1rem; text-align: center; margin-bottom: 1rem;">
+              <input type="file" id="subjectCsvFileInput" accept=".csv, .xlsx, .xls" style="display: none;" onchange="handleSubjectCsvFile(this)">
+              <button class="admin-btn secondary" style="padding: 0.5rem 1rem;" onclick="document.getElementById('subjectCsvFileInput').click()">select Attributes sheet</button>
+              <div id="subjectFileName" style="font-size: 0.75rem; color: var(--green); margin-top: 0.5rem; font-weight: 700;"></div>
+            </div>
+
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border); padding: 0.75rem; border-radius: 8px; font-size: 0.75rem; overflow: hidden;">
+              Format Columns: **code, name, credits, subtitle, tip, math, code, logic, concept, rote, branch**
+              <a id="downloadSubjectTemplateBtn" class="back-btn" style="margin-top: 0.5rem; margin-bottom: 0; width: 100%; text-align: center; padding: 4px;" download="ggsipu_full_subjects_template.csv">Download Full Subjects Template</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API = 'http://localhost:5000/api';
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('onclick').includes(tabId));
+      });
+      document.querySelectorAll('.admin-tab-panel').forEach(panel => {
+        panel.classList.toggle('active', panel.id === `panel-${tabId}`);
+      });
+      if (tabId === 'leaderboard') {
+        loadEntries();
+      } else {
+        loadSyllabus();
+      }
+    }
+
+    // Setup templates download links
+    document.getElementById('downloadCreditTemplateBtn').href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(
+      "code,credits,semester\nCIC-205,4,3\nECC-207,4,3\nCIC-209,4,3\nCIC-211,4,3\nHS-203,2,3\n"
+    );
+
+    document.getElementById('downloadSubjectTemplateBtn').href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(
+      "code,name,credits,subtitle,tip,math,code,logic,concept,rote,branch\n" +
+      "CIC-205,Discrete Mathematics,4,Sets & Graphs,Practice proofs daily,0.3,0,0.7,0,0,CSE/IT\n" +
+      "CIC-209,Data Structures,4,Arrays & Trees,Implement from scratch,0,0.6,0.4,0,0,CSE/IT/ECE\n" +
+      "HS-203,Indian Knowledge System,2,Philosophy & Culture,Make weekly notes,0,0,0,0,1,\n"
+    );
+
+    // Helper promise function to read Excel or CSV using SheetJS
+    function readExcelOrCsv(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          try {
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, { type: 'array' });
+            const firstSheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[firstSheetName];
+            const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+            resolve(rows);
+          } catch(err) {
+            reject(err);
+          }
+        };
+        reader.onerror = reject;
+        reader.readAsArrayBuffer(file);
+      });
+    }
+
+    // ─────────────────────────────────────────────
+    //  LEADERBOARD APPROVAL CODE
+    // ─────────────────────────────────────────────
+    async function loadEntries() {
+      try {
+        const r = await fetch(`${API}/admin/entries`);
+        const list = await r.json();
+        
+        const tbody = document.getElementById('entriesBody');
+        const emptyState = document.getElementById('emptyState');
+        
+        if (list.length === 0) {
+          tbody.innerHTML = '';
+          emptyState.style.display = 'block';
+          return;
+        }
+        
+        emptyState.style.display = 'none';
+        tbody.innerHTML = list.map(student => {
+          const isApproved = student.approved === true;
+          
+          return `
+            <tr>
+              <td>
+                <div class="student-name">${student.name}</div>
+                <div class="student-roll">${student.rollno || 'Legacy (no roll)'}</div>
+              </td>
+              <td>
+                <div style="font-size: 0.8rem; font-weight: 700; text-transform: lowercase;">${student.branch || 'general'}</div>
+                <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: lowercase; max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${student.college}">${student.college || 'other'}</div>
+              </td>
+              <td>
+                <div class="cgpa-badge">${(student.cgpa || student.sgpa || 0).toFixed(2)}</div>
+              </td>
+              <td>
+                <span class="source-tag">${student.source}</span>
+              </td>
+              <td>
+                <div class="feedback-text">"${student.experience}"</div>
+              </td>
+              <td>
+                <label class="switch-label">
+                  <input type="checkbox" class="switch-input" ${isApproved ? 'checked' : ''} onchange="toggleApproval('${student.rollno || ''}', ${student.timestamp}, this.checked)">
+                  <div class="switch-slider"></div>
+                  <span class="status-text ${isApproved ? 'approved' : 'pending'}">${isApproved ? 'approved' : 'pending'}</span>
+                </label>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      } catch(e) {
+        console.error('Failed to load admin entries:', e);
+      }
+    }
+
+    async function toggleApproval(rollno, timestamp, approved) {
+      try {
+        const r = await fetch(`${API}/admin/approve`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ rollno, timestamp, approved })
+        });
+        const res = await r.json();
+        if (res.success) {
+          loadEntries();
+        } else {
+          alert('Failed to update status');
+        }
+      } catch(e) {
+        console.error(e);
+        alert('Error updating status');
+      }
+    }
+
+    // ─────────────────────────────────────────────
+    //  SYLLABUS CONFIGURATOR CODE
+    // ─────────────────────────────────────────────
+    let activeSubjects = [];
+
+    async function loadSyllabus() {
+      const stream = document.getElementById('streamSelect').value;
+      const semester = document.getElementById('semInput').value;
+      const listDiv = document.getElementById('subjectsList');
+      listDiv.innerHTML = '<div style="color:var(--text-muted);font-size:0.85rem;">Loading syllabus...</div>';
+
+      try {
+        const r = await fetch(`${API}/syllabus?stream=${stream}&semester=${semester}`);
+        activeSubjects = await r.json();
+        renderSubjectsEditor();
+      } catch(e) {
+        console.error('Failed to load syllabus:', e);
+        listDiv.innerHTML = '<div style="color:var(--red);font-size:0.85rem;">Failed to load syllabus config from server.</div>';
+      }
+    }
+
+    function renderSubjectsEditor() {
+      const listDiv = document.getElementById('subjectsList');
+      if (activeSubjects.length === 0) {
+        listDiv.innerHTML = '<div class="empty-state">No subjects configured. Add manual subjects or upload an Excel/CSV!</div>';
+        return;
+      }
+
+      listDiv.innerHTML = activeSubjects.map((sub, index) => {
+        const skills = sub.skills || {};
+        const whyWeak = sub.whyWeak || {};
+        
+        return `
+          <div class="subject-card" id="sub-card-${index}">
+            <div class="subject-card-header">
+              <span class="subject-title">Subject #${index + 1} (${sub.code || 'NEW'})</span>
+              <button class="admin-btn danger" style="padding: 6px 12px; font-size: 0.75rem;" onclick="removeSubject(${index})">Remove</button>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group" style="flex: 1.5;">
+                <label>Subject Name</label>
+                <input type="text" class="admin-input sub-name-input" value="${sub.name || ''}" placeholder="e.g. Applied Mathematics-III" required>
+              </div>
+              <div class="form-group">
+                <label>Subject Code</label>
+                <input type="text" class="admin-input sub-code-input" value="${sub.code || ''}" placeholder="e.g. CIC-205" required>
+              </div>
+              <div class="form-group" style="flex: 0.5;">
+                <label>Credits</label>
+                <input type="number" class="admin-input sub-credits-input" value="${sub.credits || 4}" min="1" max="6" required>
+              </div>
+              <div class="form-group" style="flex: 0.5; justify-content: center; align-items: center; display: flex; flex-direction: row; gap: 0.5rem; padding-top: 1.25rem;">
+                <input type="checkbox" id="easy-${index}" class="sub-easy-input" ${sub.isEasy ? 'checked' : ''} style="width: 18px; height: 18px;">
+                <label for="easy-${index}" style="cursor: pointer;">Is Easy?</label>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group" style="flex: 2;">
+                <label>Subtitle / Description</label>
+                <input type="text" class="admin-input sub-subtitle-input" value="${sub.subtitle || ''}" placeholder="e.g. Vector Calculus and Transforms">
+              </div>
+              <div class="form-group">
+                <label>Branch / Streams (separated by /)</label>
+                <input type="text" class="admin-input sub-branch-input" value="${sub.branch || ''}" placeholder="e.g. CSE/IT/ECE (leave blank for current)">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>Study Tip (shown in insights)</label>
+                <input type="text" class="admin-input sub-tip-input" value="${sub.tip || ''}" placeholder="e.g. Focus on Fourier series and draw waveforms.">
+              </div>
+            </div>
+
+            <!-- Skills Weightages -->
+            <label style="margin-bottom: 0.5rem; display: block;">Skill Difficulty Weightages (sums up to 1.0)</label>
+            <div class="skills-grid">
+              <div class="form-group">
+                <label style="color:#fca5a5;">Maths</label>
+                <input type="number" class="admin-input skill-math" value="${skills.math || 0}" step="0.05" min="0" max="1" style="padding: 0.5rem 0.75rem;">
+              </div>
+              <div class="form-group">
+                <label style="color:#93c5fd;">Coding</label>
+                <input type="number" class="admin-input skill-code" value="${skills.code || 0}" step="0.05" min="0" max="1" style="padding: 0.5rem 0.75rem;">
+              </div>
+              <div class="form-group">
+                <label style="color:#c084fc;">Logic</label>
+                <input type="number" class="admin-input skill-logic" value="${skills.logic || 0}" step="0.05" min="0" max="1" style="padding: 0.5rem 0.75rem;">
+              </div>
+              <div class="form-group">
+                <label style="color:#6ee7b7;">Concept</label>
+                <input type="number" class="admin-input skill-concept" value="${skills.concept || 0}" step="0.05" min="0" max="1" style="padding: 0.5rem 0.75rem;">
+              </div>
+              <div class="form-group">
+                <label style="color:#fed7aa;">Memory</label>
+                <input type="number" class="admin-input skill-rote" value="${skills.rote || 0}" step="0.05" min="0" max="1" style="padding: 0.5rem 0.75rem;">
+              </div>
+            </div>
+
+            <!-- Personal Weak Tip details -->
+            <div class="form-row">
+              <div class="form-group">
+                <label>Weak Math Warning Sub-text</label>
+                <textarea class="admin-input weak-math-msg" rows="1" style="resize: none;" placeholder="If student has low Math index...">${whyWeak.math || ''}</textarea>
+              </div>
+              <div class="form-group">
+                <label>Weak Coding Warning Sub-text</label>
+                <textarea class="admin-input weak-code-msg" rows="1" style="resize: none;" placeholder="If student has low Coding index...">${whyWeak.code || ''}</textarea>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Weak Logic Warning Sub-text</label>
+                <textarea class="admin-input weak-logic-msg" rows="1" style="resize: none;" placeholder="If student has low Logic index...">${whyWeak.logic || ''}</textarea>
+              </div>
+              <div class="form-group">
+                <label>Weak Concept Warning Sub-text</label>
+                <textarea class="admin-input weak-concept-msg" rows="1" style="resize: none;" placeholder="If student has low Conceptual index...">${whyWeak.concept || ''}</textarea>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function addNewSubject() {
+      saveActiveInputValues();
+      activeSubjects.push({
+        code: '',
+        name: '',
+        credits: 4,
+        subtitle: '',
+        isEasy: false,
+        skills: { math: 0, code: 0, logic: 0, concept: 0, rote: 0 },
+        whyWeak: { math: '', code: '', logic: '', concept: '' },
+        tip: ''
+      });
+      renderSubjectsEditor();
+    }
+
+    function removeSubject(idx) {
+      saveActiveInputValues();
+      activeSubjects.splice(idx, 1);
+      renderSubjectsEditor();
+    }
+
+    function saveActiveInputValues() {
+      activeSubjects = activeSubjects.map((sub, index) => {
+        const card = document.getElementById(`sub-card-${index}`);
+        if (!card) return sub;
+
+        const name = card.querySelector('.sub-name-input').value.trim();
+        const code = card.querySelector('.sub-code-input').value.trim().toUpperCase();
+        const credits = parseInt(card.querySelector('.sub-credits-input').value) || 4;
+        const isEasy = card.querySelector('.sub-easy-input').checked;
+        const subtitle = card.querySelector('.sub-subtitle-input').value.trim();
+        const tip = card.querySelector('.sub-tip-input').value.trim();
+        const branch = card.querySelector('.sub-branch-input').value.trim();
+
+        const math = parseFloat(card.querySelector('.skill-math').value) || 0;
+        const codeSkill = parseFloat(card.querySelector('.skill-code').value) || 0;
+        const logic = parseFloat(card.querySelector('.skill-logic').value) || 0;
+        const concept = parseFloat(card.querySelector('.skill-concept').value) || 0;
+        const rote = parseFloat(card.querySelector('.skill-rote').value) || 0;
+
+        const mathMsg = card.querySelector('.weak-math-msg').value.trim();
+        const codeMsg = card.querySelector('.weak-code-msg').value.trim();
+        const logicMsg = card.querySelector('.weak-logic-msg').value.trim();
+        const conceptMsg = card.querySelector('.weak-concept-msg').value.trim();
+
+        return {
+          code, name, credits, subtitle, isEasy, tip, branch,
+          skills: { math, code: codeSkill, logic, concept, rote },
+          whyWeak: { math: mathMsg, code: codeMsg, logic: logicMsg, concept: conceptMsg }
+        };
+      });
+    }
+
+    async function deleteSemester(scope = 'branch') {
+      const stream   = document.getElementById('streamSelect').value;
+      const semester = document.getElementById('semInput').value;
+      if (!semester) { alert('Please specify a semester first.'); return; }
+
+      let confirmed = false;
+      let url = `${API}/admin/syllabus?semester=${encodeURIComponent(semester)}`;
+
+      if (scope === 'all') {
+        confirmed = confirm(
+          `⚠️ WARNING: Delete ALL subjects for Semester ${semester} across ALL branches?\n\n` +
+          `This will completely wipe out this semester's data from every single branch list. This cannot be undone. Are you sure?`
+        );
+        url += `&stream=all`;
+      } else {
+        if (!stream) { alert('Please select a stream first.'); return; }
+        confirmed = confirm(
+          `⚠️ Delete ALL subjects for:\n` +
+          `  Branch: ${stream}\n` +
+          `  Semester: ${semester}\n\n` +
+          `This cannot be undone. Are you sure?`
+        );
+        url += `&stream=${encodeURIComponent(stream)}`;
+      }
+
+      if (!confirmed) return;
+
+      try {
+        const r = await fetch(url, { method: 'DELETE' });
+        const res = await r.json();
+        if (res.success) {
+          let msg = `✅ Deleted ${res.deletedCount} subject(s) from `;
+          if (scope === 'all') {
+            msg += `Semester ${semester} across all branches: [${(res.branchesAffected || []).join(', ') || 'None'}].`;
+          } else {
+            msg += `branch ${stream} · Semester ${semester}.`;
+          }
+          alert(msg);
+          
+          // Clear active subjects in editor if current view matches deleted stream+sem
+          if (scope === 'all' || stream === document.getElementById('streamSelect').value) {
+            activeSubjects = [];
+            renderSubjectsEditor();
+          }
+          await loadStreams();
+        } else {
+          alert('❌ Delete failed: ' + (res.error || 'Server error'));
+        }
+      } catch(e) {
+        console.error(e);
+        alert('❌ Network error while deleting.');
+      }
+    }
+
+    async function saveSyllabus() {
+      saveActiveInputValues();
+
+      const stream = document.getElementById('streamSelect').value;
+      const semester = document.getElementById('semInput').value;
+
+      try {
+        const r2 = await fetch(`${API}/admin/syllabus`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ stream, semester, subjects: activeSubjects })
+        });
+        const res = await r2.json();
+        if (res.success) {
+          alert('Syllabus config saved successfully! 🎉');
+          await loadStreams();
+          loadSyllabus();
+        } else {
+          alert('Failed to save syllabus: ' + (res.error || 'Server error'));
+        }
+      } catch(e) {
+        console.error(e);
+        alert('Error saving syllabus config');
+      }
+    }
+
+    // ─────────────────────────────────────────────
+    //  BULK CREDITS ONLY UPLOADER (with semester validation)
+    // ─────────────────────────────────────────────
+    async function handleCreditCsvFile(input) {
+      const file = input.files[0];
+      if (!file) return;
+      document.getElementById('creditFileName').textContent = file.name;
+
+      try {
+        const rows = await readExcelOrCsv(file);
+        if (rows.length < 2) {
+          alert('Sheet is empty or missing data.');
+          return;
+        }
+
+        const headers = rows[0].map(h => String(h || '').trim().toLowerCase());
+        const codeIdx = headers.indexOf('code');
+        const credIdx = headers.indexOf('credits');
+        const semIdx = headers.indexOf('semester');
+
+        if (codeIdx === -1 || credIdx === -1) {
+          alert('Missing headers in file. Required columns: code, credits');
+          return;
+        }
+
+        saveActiveInputValues(); // preserve current edits
+        let matchedCount = 0;
+        let addedCount = 0;
+        let skippedCount = 0;
+        
+        const targetSemStr = String(document.getElementById('semInput').value).trim();
+
+        for (let i = 1; i < rows.length; i++) {
+          const cols = rows[i];
+          if (!cols || cols.length === 0) continue;
+
+          const subjectCode = String(cols[codeIdx] || '').trim().toUpperCase();
+          if (!subjectCode) continue;
+          
+          // Verify semester column if present in the spreadsheet
+          if (semIdx !== -1 && cols[semIdx] !== undefined) {
+            const rowSem = String(cols[semIdx]).trim();
+            const semMatch = rowSem.match(/\d+/);
+            const parsedSemNum = semMatch ? semMatch[0] : '';
+            if (parsedSemNum && parsedSemNum !== targetSemStr) {
+              skippedCount++;
+              continue; // skip rows belonging to other semesters
+            }
+          }
+
+          const credits = parseInt(cols[credIdx]) || 3;
+          const existing = activeSubjects.find(sub => sub.code === subjectCode);
+          if (existing) {
+            existing.credits = credits;
+            matchedCount++;
+          } else {
+            activeSubjects.push({
+              code: subjectCode,
+              name: `${subjectCode} Subject`,
+              credits: credits,
+              subtitle: '',
+              isEasy: false,
+              skills: { math: 0, code: 0, logic: 0, concept: 0, rote: 0 },
+              whyWeak: { math: '', code: '', logic: '', concept: '' },
+              tip: ''
+            });
+            addedCount++;
+          }
+        }
+
+        renderSubjectsEditor();
+        let skippedMsg = skippedCount > 0 ? ` (skipped ${skippedCount} rows matching other semesters)` : '';
+        alert(`Credits sheet processed!\n- Updated credits of ${matchedCount} existing subjects.\n- Created placeholders for ${addedCount} new subjects.${skippedMsg}\n\nNote: Click 'Save Syllabus Config' to apply changes.`);
+      } catch(e) {
+        console.error(e);
+        alert('Failed to parse Excel/CSV file.');
+      }
+    }
+
+    // ─────────────────────────────────────────────
+    //  BULK SUBJECTS WITH ATTRIBUTES UPLOADER
+    // ─────────────────────────────────────────────
+    function parseSemesterNumber(raw) {
+      if (!raw) return null;
+      const s = String(raw).toLowerCase().trim();
+      // handles: "3", "3rd", "3rd semester", "3 semester", "semester 3", "1st", "2cnd", "2nd"
+      const m = s.match(/\d+/);
+      return m ? m[0] : null;
+    }
+
+    async function handleSubjectCsvFile(input) {
+      const file = input.files[0];
+      if (!file) return;
+      document.getElementById('subjectFileName').textContent = file.name;
+
+      try {
+        const rows = await readExcelOrCsv(file);
+        if (rows.length < 2) { alert('Sheet is empty or missing data.'); return; }
+
+        const headers = rows[0].map(h => String(h || '').trim().toLowerCase());
+
+        // Detect double 'code' columns (1st = subject code, 2nd = coding skill weight)
+        let subjectCodeCol = -1, codingSkillCol = -1;
+        for (let i = 0; i < headers.length; i++) {
+          if (headers[i] === 'code') {
+            if (subjectCodeCol === -1) subjectCodeCol = i;
+            else codingSkillCol = i;
+          }
+        }
+
+        const nameIdx    = headers.indexOf('name');
+        const credIdx    = headers.indexOf('credits');
+        const subIdx     = headers.indexOf('subtitle');
+        const tipIdx     = headers.indexOf('tip');
+        const mathCol    = headers.indexOf('math');
+        const logicCol   = headers.indexOf('logic');
+        const conceptCol = headers.indexOf('concept');
+        const roteCol    = headers.indexOf('rote');
+        const branchCol  = headers.indexOf('branch');
+        const semCol     = headers.indexOf('semester');
+
+        if (subjectCodeCol === -1 || nameIdx === -1 || credIdx === -1) {
+          alert('Missing critical columns: "code", "name", "credits" are required.');
+          return;
+        }
+
+        // Fallback to whatever the admin has selected in the dropdowns
+        const fallbackStream   = document.getElementById('streamSelect').value;
+        const fallbackSemester = parseSemesterNumber(document.getElementById('semInput').value)
+                               || document.getElementById('semInput').value;
+
+        // ── Group rows by branch × semester ──────────────────────────────
+        // key = "BRANCH||SEM", value = { stream, semester, subjects[] }
+        const groups = {};
+
+        for (let i = 1; i < rows.length; i++) {
+          const cols = rows[i];
+          if (!cols || cols.length === 0) continue;
+
+          const codeValue   = String(cols[subjectCodeCol] || '').trim().toUpperCase();
+          if (!codeValue) continue;
+
+          const nameValue   = String(cols[nameIdx]  || '').trim();
+          const creditsVal  = parseInt(cols[credIdx]) || 4;
+          const subtitleVal = subIdx     !== -1 ? String(cols[subIdx]  || '').trim() : '';
+          const tipVal      = tipIdx     !== -1 ? String(cols[tipIdx]  || '').trim() : '';
+          const mathW       = mathCol    !== -1 ? parseFloat(cols[mathCol])    || 0 : 0;
+          const codeW       = codingSkillCol !== -1 ? parseFloat(cols[codingSkillCol]) || 0 : 0;
+          const logicW      = logicCol   !== -1 ? parseFloat(cols[logicCol])   || 0 : 0;
+          const conceptW    = conceptCol !== -1 ? parseFloat(cols[conceptCol]) || 0 : 0;
+          const roteW       = roteCol    !== -1 ? parseFloat(cols[roteCol])    || 0 : 0;
+
+          const rawBranch   = branchCol  !== -1 ? String(cols[branchCol] || '').trim() : '';
+          const rawSem      = semCol     !== -1 ? String(cols[semCol]    || '').trim() : '';
+          const semNum      = parseSemesterNumber(rawSem) || fallbackSemester;
+
+          const subject = {
+            code: codeValue, name: nameValue, credits: creditsVal,
+            subtitle: subtitleVal, isEasy: roteW > 0.8 || creditsVal < 3,
+            tip: tipVal, branch: rawBranch,
+            semester: parseInt(semNum) || null,
+            skills: { math: mathW, code: codeW, logic: logicW, concept: conceptW, rote: roteW },
+            whyWeak: {
+              math:    mathW    > 0 ? `shaky maths skills will make this ${nameValue} tough.`           : '',
+              code:    codeW    > 0 ? `weak programming foundation makes this subject a struggle.`       : '',
+              logic:   logicW   > 0 ? `logical reasoning issues will impact proofs in this subject.`    : '',
+              concept: conceptW > 0 ? `highly conceptual topic. requires deep intuitive understanding.` : ''
+            }
+          };
+
+          // Determine which branches this row belongs to
+          let targetBranches;
+          if (!rawBranch || rawBranch.toLowerCase() === 'general') {
+            // General / blank → goes to currently selected stream only
+            targetBranches = [fallbackStream];
+          } else {
+            // "CSE / MAE / ECE" → split on slash
+            targetBranches = rawBranch.split('/').map(b => b.trim().toUpperCase()).filter(Boolean);
+          }
+
+          for (const branchKey of targetBranches) {
+            const key = `${branchKey}||${semNum}`;
+            if (!groups[key]) groups[key] = { stream: branchKey, semester: semNum, subjects: [] };
+            groups[key].subjects.push(subject);
+          }
+        }
+
+        const groupList = Object.values(groups);
+        if (groupList.length === 0) { alert('Could not parse any subjects from sheet.'); return; }
+
+        // ── Save each branch×semester group via separate API calls ───────
+        let savedCount = 0, errorCount = 0;
+        const summary = [];
+
+        for (const g of groupList) {
+          try {
+            const r = await fetch(`${API}/admin/syllabus`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ stream: g.stream, semester: g.semester, subjects: g.subjects })
+            });
+            const res = await r.json();
+            if (res.success) {
+              savedCount++;
+              summary.push(`✅ ${g.stream}  ·  Semester ${g.semester}  →  ${g.subjects.length} subjects`);
+            } else {
+              errorCount++;
+              summary.push(`❌ ${g.stream}  ·  Semester ${g.semester}  →  ${res.error || 'failed'}`);
+            }
+          } catch(e) {
+            errorCount++;
+            summary.push(`❌ ${g.stream}  ·  Semester ${g.semester}  →  network error`);
+          }
+        }
+
+        await loadStreams();
+        loadSyllabus();
+
+        alert(
+          `Bulk upload complete! 🎉\n\n` +
+          `${summary.join('\n')}\n\n` +
+          `Saved: ${savedCount} group(s)` + (errorCount > 0 ? `   Errors: ${errorCount}` : '')
+        );
+
+        // Reflect in editor for whichever stream+sem the admin has selected
+        const currentStream = document.getElementById('streamSelect').value;
+        const currentSem    = document.getElementById('semInput').value;
+        const matching = groupList.find(g =>
+          g.stream === currentStream && String(g.semester) === String(parseSemesterNumber(currentSem) || currentSem)
+        );
+        if (matching) { activeSubjects = matching.subjects; renderSubjectsEditor(); }
+
+      } catch(e) {
+        console.error(e);
+        alert('Failed to parse Excel/CSV file: ' + e.message);
+      }
+    }
+
+
+    async function loadStreams() {
+      try {
+        const r = await fetch(`${API}/syllabus`);
+        const streams = await r.json();
+        const select = document.getElementById('streamSelect');
+        const currentVal = select.value || 'CSE';
+        
+        select.innerHTML = streams.map(str => {
+          let label = str;
+          if (str === 'CSE') label = 'CSE (Computer Science)';
+          else if (str === 'ECE') label = 'ECE (Electronics & Comm)';
+          else if (str === 'IT') label = 'IT (Information Tech)';
+          else if (str === 'EEE') label = 'EEE (Electrical & Electronics)';
+          else if (str === 'MAE') label = 'MAE (Mechanical & Auto)';
+          else label = `${str} (Custom)`;
+          
+          return `<option value="${str}">${label}</option>`;
+        }).join('');
+        
+        if (streams.includes(currentVal)) {
+          select.value = currentVal;
+        }
+      } catch(e) {
+        console.error('Failed to load streams dynamically:', e);
+      }
+    }
+
+    // Initial Load
+    loadStreams().then(() => {
+      loadEntries();
+    });
+  </script>
+</body>
+</html>

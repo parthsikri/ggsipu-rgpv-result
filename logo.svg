@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/20MathML" viewBox="0 0 400 150" width="400" height="150" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Cube Logo -->
+  <g transform="translate(20, 25)">
+    <path d="M50 0 L93.3 25 L93.3 75 L50 100 L6.7 75 L6.7 25 Z" fill="#6d28d9"/>
+    <path d="M50 0 L93.3 25 L50 50 L6.7 25 Z" fill="#8b5cf6"/>
+    <path d="M50 100 L93.3 75 L50 50 Z" fill="#5b21b6"/>
+    <path d="M50 100 L6.7 75 L50 50 Z" fill="#4c1d95"/>
+    <circle cx="50" cy="50" r="10" fill="#a78bfa"/>
+  </g>
+  <!-- Text -->
+  <text x="130" y="60" font-family="'Inter', 'Roboto', sans-serif" font-weight="900" font-size="32" fill="#e2e8f0">APNA ENGINEERING</text>
+  <text x="130" y="100" font-family="'Inter', 'Roboto', sans-serif" font-weight="700" font-size="28" fill="#a78bfa">WALLAH</text>
+</svg>

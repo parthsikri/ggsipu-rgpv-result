@@ -1,0 +1,28 @@
+# Debug/test files
+*.html.bak
+captcha*.png
+result_data.html
+login_*.html
+login_out.html
+login_response.html
+rgpv_home.html
+
+# Dev scripts (not needed in prod)
+do_login.mjs
+fetch_html.mjs
+fetch_result.mjs
+get_captcha.mjs
+probe.mjs
+step1_captcha.mjs
+step2_login.mjs
+step3_get_result.mjs
+test_login.mjs
+test_login2.mjs
+test_tracker.mjs
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Env
+.env

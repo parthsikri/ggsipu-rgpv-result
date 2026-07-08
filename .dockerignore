@@ -1,0 +1,10 @@
+.git
+.agents
+.gemini
+node_modules
+npm-debug.log
+.system_generated
+*.log
+Dockerfile
+docker-compose.yml
+README.md

@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  ggsipu-dashboard:
+    build: .
+    container_name: ggsipu_result_app
+    ports:
+      - "5000:5000"
+    restart: always
+    volumes:
+      # Persist syllabus database and approved leaderboard entries locally
+      - ./syllabus.json:/app/syllabus.json
+      - ./leaderboard.json:/app/leaderboard.json

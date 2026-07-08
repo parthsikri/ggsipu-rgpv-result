@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Apna Engineering – Result Analyzer</title>
+  <meta name="description" content="Check, analyze and get insights on your GGSIPU exam results. Subject-wise marks, SGPA, CGPA and personalized study recommendations." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css?v=12" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav id="navbar">
+    <div class="nav-inner">
+      <div class="nav-brand">
+        <img src="logo.svg" alt="Apna Engineering Wallah" class="brand-logo" />
+      </div>
+      <div class="nav-links">
+        <a href="#login-section">Check Results</a>
+        <a href="bheede.html" class="nav-bheede-btn">🤼 Aaja Bheede</a>
+        <a href="https://youtube.com/@apnaengineering" target="_blank" class="nav-yt">▶ YouTube</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- LOGIN SECTION -->
+  <section id="login-section" class="main-landing">
+    <h2 class="section-title">Check Your Results</h2>
+    <p class="section-sub" id="landingSub">Enter your GGSIPU credentials below to fetch your marksheet instantly.</p>
+    <div class="hero-bheede-cta">
+      <span class="hero-bheede-label">Got beef with a friend's SGPA?</span>
+      <a href="bheede.html" class="bheede-trigger-btn" style="font-size:.82rem;padding:.55rem 1.4rem;text-decoration:none;">🤼 Aaja Bheede</a>
+    </div>
+
+    <div class="login-card card" id="loginCard">
+      <div class="login-header-strip" id="loginHeaderStrip">
+        <img src="https://examweb.ggsipu.ac.in/web/images/ggsipulogo.png" alt="University Logo" class="ggsipu-logo" id="uniLogo" onerror="this.style.display='none'" />
+        <div>
+          <div class="login-uni-name" id="uniName">Guru Gobind Singh Indraprastha University</div>
+          <div class="login-uni-sub" id="uniSub">Examination Portal — Secure Access</div>
+        </div>
+      </div>
+
+      <form id="loginForm" autocomplete="off">
+        <!-- University Selection -->
+        <div class="form-group" style="margin-bottom: 1.25rem;">
+          <label for="universitySelect">Select University</label>
+          <select id="universitySelect" onchange="onUniversityChange()" style="width:100%; padding:0.75rem; border-radius:8px; background:var(--card-bg); border:1px solid var(--border); color:var(--text); font-weight: 500;">
+            <option value="ggsipu">GGSIPU (Guru Gobind Singh Indraprastha University)</option>
+            <option value="rgpv">RGPV (Rajiv Gandhi Proudyogiki Vishwavidyalaya)</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="enrollNo">Enrollment Number</label>
+            <input type="text" id="enrollNo" placeholder="e.g. 01414803125" maxlength="20" required />
+          </div>
+          
+          <!-- GGSIPU Password Field -->
+          <div class="form-group" id="passwordGroup">
+            <label for="password">Password</label>
+            <div class="pw-wrapper">
+              <input type="password" id="password" placeholder="Your portal password" required />
+              <button type="button" class="pw-toggle" onclick="togglePw()">👁</button>
+            </div>
+          </div>
+
+          <!-- RGPV Semester Field (Hidden by default) -->
+          <div class="form-group" id="semesterGroup" style="display:none;">
+            <label for="semesterSelect">Semester</label>
+            <select id="semesterSelect" style="width:100%; padding:0.75rem; border-radius:8px; background:var(--card-bg); border:1px solid var(--border); color:var(--text);">
+              <option value="1">1st Semester</option>
+              <option value="2">2nd Semester</option>
+              <option value="3" selected>3rd Semester</option>
+              <option value="4">4th Semester</option>
+              <option value="5">5th Semester</option>
+              <option value="6">6th Semester</option>
+              <option value="7">7th Semester</option>
+              <option value="8">8th Semester</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- RGPV Program & Scheme options (Hidden by default) -->
+        <div class="form-row" id="rgpvOptsGroup" style="display:none; margin-top: 1rem;">
+          <div class="form-group">
+            <label for="programSelect">Degree / Program</label>
+            <select id="programSelect" onchange="loadCaptcha()" style="width:100%; padding:0.75rem; border-radius:8px; background:var(--card-bg); border:1px solid var(--border); color:var(--text);">
+              <option value="24" selected>B.Tech.</option>
+              <option value="1">B.E.</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="schemeSelect">Scheme Type</label>
+            <select id="schemeSelect" style="width:100%; padding:0.75rem; border-radius:8px; background:var(--card-bg); border:1px solid var(--border); color:var(--text);">
+              <option value="G" selected>Grading (CBCS)</option>
+              <option value="M">Non-Grading</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="captcha-section">
+          <label>Security Captcha</label>
+          <div class="captcha-row">
+            <div class="captcha-img-wrap">
+              <img id="captchaImg" src="" alt="Captcha" />
+              <div class="captcha-loading" id="captchaLoading">
+                <div class="spinner"></div>
+                <span>Loading captcha...</span>
+              </div>
+            </div>
+            <button type="button" class="btn-refresh" id="refreshBtn" onclick="loadCaptcha()" title="Refresh Captcha">↻ Refresh</button>
+          </div>
+          <input type="text" id="captchaInput" placeholder="Type the code shown above" required autocomplete="off" />
+        </div>
+
+        <div class="form-note">Your password is hashed locally. We do not store your credentials.</div>
+
+        <button type="submit" class="btn-primary btn-full" id="loginBtn">
+          <span id="loginBtnText">Fetch My Results</span>
+          <div class="btn-spinner" id="loginSpinner" style="display:none;"></div>
+        </button>
+
+        <div class="error-msg" id="loginError" style="display:none;"></div>
+      </form>
+    </div>
+
+    <!-- Hidden session data -->
+    <input type="hidden" id="sessionId" value="" />
+  </section>
+
+  <!-- RESULTS SECTION -->
+  <section id="results-section" style="display:none;">
+
+    <!-- Student Info -->
+    <div class="student-info-card card" id="studentInfoCard">
+      <div class="student-avatar" id="studentAvatar">?</div>
+      <div class="student-details">
+        <div class="student-name" id="studentName">—</div>
+        <div class="student-meta" id="studentMeta">Enrollment: — | Branch: —</div>
+        <div class="student-batch" id="studentBatch">College: —</div>
+      </div>
+      <div class="student-actions">
+        <button class="btn-secondary" onclick="resetDashboard()">New Search</button>
+        <button class="btn-secondary" onclick="document.getElementById('certi-widget-trigger').click()">Certi Chamkao 🎓</button>
+        <button class="btn-secondary" onclick="window.print()">Print</button>
+      </div>
+    </div>
+
+    <!-- KPI Grid -->
+    <div class="kpi-grid" id="kpiGrid">
+      <div class="kpi-card card">
+        <div class="kpi-label">SGPA</div>
+        <div class="kpi-value" id="kpiSgpa">—</div>
+      </div>
+      <div class="kpi-card card">
+        <div class="kpi-label">CGPA</div>
+        <div class="kpi-value" id="kpiCgpa">—</div>
+      </div>
+      <div class="kpi-card card">
+        <div class="kpi-label">Percentage</div>
+        <div class="kpi-value" id="kpiPercent">—</div>
+      </div>
+      <div class="kpi-card card">
+        <div class="kpi-label">Status</div>
+        <div class="kpi-value" id="kpiStatus">—</div>
+      </div>
+      <div class="kpi-card card">
+        <div class="kpi-label">Subjects</div>
+        <div class="kpi-value" id="kpiSubjects">—</div>
+      </div>
+    </div>
+
+    <!-- Semester selector -->
+    <div class="sem-selector" id="semSelector" style="display:none;">
+      <div class="sem-label">Semester:</div>
+      <div class="sem-tabs" id="semTabs"></div>
+    </div>
+
+    <!-- Subject Cards Grid -->
+    <div class="subject-cards-header">
+      <div class="subject-cards-title">Subject Performance</div>
+      <input type="text" class="subject-search" id="subjectSearch" placeholder="Search subject..." oninput="filterCards(this.value)" />
+    </div>
+    <div class="subject-cards-grid" id="subjectCardsGrid"></div>
+
+  </section>
+
+  <!-- INSIGHTS SECTION -->
+  <section id="insights-section" style="display:none;">
+
+    <!-- Overall verdict -->
+    <div class="verdict-card card" id="verdictCard">
+      <div class="verdict-text">
+        <div class="verdict-title" id="verdictTitle">Analyzing your performance...</div>
+        <div class="verdict-sub" id="verdictSub"></div>
+      </div>
+    </div>
+
+    <!-- Near Miss Tracker -->
+    <div class="near-miss-header">
+      <div class="near-miss-title">Almost There 👀</div>
+      <div class="near-miss-sub">Subjects where just a few more pages could've flipped your grade</div>
+    </div>
+    <div id="pageTrackerContainer" class="pages-tracker-grid"></div>
+
+    <!-- Aaja Bheede Button -->
+    <div style="text-align:center;margin-top:1.5rem;">
+      <a href="bheede.html" class="bheede-trigger-btn" style="text-decoration:none;">🤼 Aaja Bheede</a>
+    </div>
+
+  </section>
+
+  <!-- Aaja Bheede lives at bheede.html -->
+
+  <!-- NEXT SEM RECOMMENDATION SECTION -->
+  <section id="rec-section" style="display:none;">
+    <div class="rec-eyebrow">NEXT SEMESTER</div>
+    <h2 class="section-title" style="margin-bottom:.4rem;">Next Sem Reality Check 🔍</h2>
+    <p class="section-sub">Based on your actual results across all sems — here's what's gonna need your real attention.</p>
+    <div class="skill-profile-row" id="skillProfileRow"></div>
+    <div class="rec-cards-grid" id="recCardsGrid"></div>
+  </section>
+
+  <!-- FEATURES / COMMUNITY -->
+
+  <section id="features">
+    <div class="ae-banner card">
+      <div class="ae-banner-content">
+        <div>
+          <h3>Join Apna Engineering Wallah Community</h3>
+          <p>Get access to GGSIPU-specific study materials, previous year papers, video lectures, and expert mentorship.</p>
+          <div class="ae-links">
+            <a href="https://youtube.com/@apnaengineering" target="_blank" class="ae-link ae-yt">YouTube Channel</a>
+            <a href="https://t.me/apnaengineering" target="_blank" class="ae-link ae-tg">Telegram Group</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-note">⚠️ This tool fetches data from the official GGSIPU portal on your behalf. We do not store your credentials.</div>
+      <div class="footer-copy">© 2025 Apna Engineering Wallah. Made with ❤️ for GGSIPU students.</div>
+    </div>
+  </footer>
+
+  <script src="app.js?v=12"></script>
+  <script src="certi-widget.js"></script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+        
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="../css/main.css" rel="stylesheet" type="text/css"/>
+        <link href="../css/header.css" rel="stylesheet" type="text/css"/>
+        <link href="../css/navbar.css" rel="stylesheet" type="text/css"/>
+        <link href="../css/student/sthome.css" rel="stylesheet" type="text/css"/>
+        <link href="../css/student/modern_form.css" rel="stylesheet" type="text/css"/>
+        <title>Home Page</title>
+    </head>
+    <body>
+        <div id="main">
+            <div id="header">
+                <span id="uname">Guru Gobind Singh Indraprastha University</span>
+<span id="uaddress">Dwarka Sector 16-C. New Delhi</span>
+<span id="heading">Examination Division</span>
+                      
+<nav class="navbar">
+    <ul class="nav-menu">
+        <li class="nav-item"><a href="../student/studenthome.jsp">Home</a></li>
+        <li class="nav-item"><a href="../student/profile.jsp">Profile</a></li>
+        <li class="nav-item"><a href="../changepasswd.jsp">Change Password</a></li>
+        <li class="nav-item"><a href="../Logout">Logout</a></li>
+    </ul>
+</nav>                
+            </div>
+            <div id="wrap">
+                <div id="leftarea"></div>
+                <div id="content">
+                    
+
+                    <br>
+                    <div class="link-container">
+
+                        
+                        <div class="button-group" style="justify-content: center; margin-bottom: 20px;">
+                            
+                            <button id="btnIntMarks" class="btn-submit">Internal Marks</button>
+                            
+                        </div>
+                        
+                    </div>                        
+                    <br>
+                    <div class="search-container">
+
+                        <form name="searchForm" method="post" action="searchProcess" id="searchForm" class="modern-form">
+
+                            <div class="input-group">
+                                <label for="euno">Semester/Annual</label>
+                                <div class="select-wrapper">
+                                    <select id="euno" name="euno">
+                                        <option value="">-- Select --</option>
+                                        
+                                        <option value="1">1</option>
+                                        
+                                        <option value="2">2</option>
+                                        
+                                        <option value="100">ALL</option>
+                                        
+                                    </select>
+                                    <span class="select-arrow">▼</span>
+                                </div>
+                            </div>
+
+                            <input type="hidden" name="searchMode" id="searchMode" value="2">
+
+                            <div class="button-group">
+                                <input type="submit" value="Get Result" class="btn-submit">
+                            </div>
+
+                        </form>
+                    </div>
+                    <div id="dataContainer">  
+
+
+                    </div>
+                    <div class="discrepancy-box">
+                        <span class="box-icon">&#9432;</span> <p>
+                            In case of any discrepancies found in the above data, please contact 
+                            <strong>Examination Division, GGSIP University</strong>.
+                        </p>
+                    </div>
+
+                    
+
+                </div>
+                <div id="rightarea"></div>
+            </div>
+        </div>
+        <script src="../js/framebuster.js"></script> 
+        <script src="../js/navbar.js"></script> 
+        <script src="../js/student/stdata.js"></script> 
+        
+            
+            <script src="../js/student/student_im.js"></script>
+            
+        
+        
+         
+    </body>
+</html>

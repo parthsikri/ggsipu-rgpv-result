@@ -1,0 +1,14 @@
+{
+  "name": "apna-engineering-result",
+  "version": "1.0.0",
+  "description": "GGSIPU & RGPV Result Analyzer",
+  "type": "module",
+  "main": "server.mjs",
+  "scripts": {
+    "start": "node server.mjs",
+    "dev": "node server.mjs"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
