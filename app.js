@@ -1297,13 +1297,19 @@ window.resetDashboard = function() {
 // ─────────────────────────────────────────────
 //  COMEBACK PLANNER
 // ─────────────────────────────────────────────
+const SCHEME_SEMS_CREDITS = {
+  'before_2025': [25, 25, 26, 26, 26, 26, 26, 20],
+  'after_2025':  [22, 22, 26, 26, 26, 26, 26, 20]
+};
+
 window.initComebackPlanner = function(data) {
   const isRealData = !!data;
   
   const completedInput = document.getElementById('cbCompletedSems');
   const currentInput = document.getElementById('cbCurrentCgpa');
+  const schemeSelect = document.getElementById('cbSchemeSelect');
   
-  if (completedInput && currentInput) {
+  if (completedInput && currentInput && schemeSelect) {
     if (isRealData) {
       completedInput.value = data.allSemesters.length;
       completedInput.readOnly = true;
@@ -1314,6 +1320,21 @@ window.initComebackPlanner = function(data) {
       currentInput.readOnly = true;
       currentInput.style.opacity = '0.7';
       currentInput.style.cursor = 'not-allowed';
+
+      // Detect and lock scheme based on GGSIPU enrollment year (last 2 digits)
+      let detectedScheme = 'before_2025';
+      if (data.stprofile && data.stprofile.nrollno) {
+        const roll = String(data.stprofile.nrollno).trim();
+        const yearStr = roll.slice(-2);
+        const year = parseInt(yearStr);
+        if (!isNaN(year) && year >= 25 && year < 90) {
+          detectedScheme = 'after_2025';
+        }
+      }
+      schemeSelect.value = detectedScheme;
+      schemeSelect.disabled = true;
+      schemeSelect.style.opacity = '0.7';
+      schemeSelect.style.cursor = 'not-allowed';
     } else {
       completedInput.value = 2;
       completedInput.readOnly = false;
@@ -1324,6 +1345,11 @@ window.initComebackPlanner = function(data) {
       currentInput.readOnly = false;
       currentInput.style.opacity = '1';
       currentInput.style.cursor = 'auto';
+
+      schemeSelect.value = 'before_2025';
+      schemeSelect.disabled = false;
+      schemeSelect.style.opacity = '1';
+      schemeSelect.style.cursor = 'auto';
     }
   }
 
@@ -1369,15 +1395,16 @@ window.onCompletedSemsChange = function() {
 window.calculateComeback = function() {
   const completedInput = document.getElementById('cbCompletedSems');
   const currentInput = document.getElementById('cbCurrentCgpa');
+  const schemeSelect = document.getElementById('cbSchemeSelect');
   
-  if (!completedInput || !currentInput) return;
+  if (!completedInput || !currentInput || !schemeSelect) return;
 
   const completedSems = parseInt(completedInput.value) || 2;
   const currentCgpa = parseFloat(currentInput.value) || 7.50;
   const targetCgpa = parseFloat(document.getElementById('cbTargetCgpa').value) || 8.50;
+  const scheme = schemeSelect.value || 'before_2025';
   
   const targetEndSem = parseInt(document.getElementById('cbTargetSems').value) || (completedSems + 1);
-  const plannedSems = Math.max(1, targetEndSem - completedSems);
 
   const valEl = document.getElementById('cbResultValue');
   const feedEl = document.getElementById('cbResultFeedback');
@@ -1388,14 +1415,31 @@ window.calculateComeback = function() {
     return;
   }
 
-  const totalSems = completedSems + plannedSems;
-  const reqTotalPoints = targetCgpa * totalSems;
-  const currentPoints = currentCgpa * completedSems;
+  // Get credits arrays for the selected scheme
+  const creditsList = SCHEME_SEMS_CREDITS[scheme] || SCHEME_SEMS_CREDITS['before_2025'];
+
+  // Sum credits up to completed semesters
+  let completedCredits = 0;
+  for (let i = 0; i < completedSems; i++) {
+    completedCredits += creditsList[i] || 25;
+  }
+
+  // Sum credits up to target end semester
+  let totalCredits = 0;
+  for (let i = 0; i < targetEndSem; i++) {
+    totalCredits += creditsList[i] || 25;
+  }
+
+  const plannedCredits = totalCredits - completedCredits;
+  const reqTotalPoints = targetCgpa * totalCredits;
+  const currentPoints = currentCgpa * completedCredits;
   const reqPoints = reqTotalPoints - currentPoints;
-  const reqSgpa = reqPoints / plannedSems;
+  
+  // Weighted SGPA calculation
+  const reqSgpa = reqPoints / plannedCredits;
 
   const detailHtml = `<div style="font-size:0.76rem;margin-bottom:0.6rem;opacity:0.75;line-height:1.4;">
-    To hit <strong>${targetCgpa.toFixed(2)} CGPA</strong> across <strong>${totalSems} semesters</strong> (starting from your current <strong>${currentCgpa.toFixed(2)} CGPA</strong> over <strong>${completedSems} sems</strong>):
+    To hit <strong>${targetCgpa.toFixed(2)} CGPA</strong> by <strong>Sem ${targetEndSem}</strong> (Scheme: <strong>${scheme === 'before_2025' ? 'Before 2025' : 'In/After 2025'}</strong>, requiring <strong>${plannedCredits} credits</strong> in upcoming semesters, starting from current <strong>${currentCgpa.toFixed(2)} CGPA</strong> over <strong>${completedCredits} credits</strong>):
   </div>`;
 
   if (reqSgpa > 10.0) {
