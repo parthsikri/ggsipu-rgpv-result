@@ -362,28 +362,29 @@ function getToneMessages(me, friend, mySgpa, theirSgpa, gap, best, totalPgs, rea
   const win = mySgpa >= theirSgpa;
   const absGap = Math.abs(gap).toFixed(2);
   const bestPageStr = best ? (best.pages % 1 === 0 ? best.pages : best.pages.toFixed(1)) : '0';
+  const shareUrl = window.location.origin + '/bheede.html';
 
   if (win) {
     return {
-      default: `Aaja Bheede Result\n\nBhai sunle ${friend} 🐍, bolra tha fail ho jaega aur khud top karne chala tha? Mera SGPA *${mySgpa.toFixed(2)}* aur tera *${theirSgpa.toFixed(2)}* hai. That's +${absGap} in my favour.\n\nW is W. Clear victory fr fr.\n\nCompare yours here:\nhttp://localhost:5000/bheede.html`,
-      toxic: `GET COOKED SAANP 🐍\n\nBhai ${friend}, scale check kar, 'kuch nahi padha' bolke top karne chale the? Mera SGPA *${mySgpa.toFixed(2)}* hai aur tera *${theirSgpa.toFixed(2)}*. \n\nGap is literally *${absGap}*. Next sem cheat sheets thoda aur details ke saath banana padega tereko.\n\nCheck stats:\nhttp://localhost:5000/bheede.html`,
-      humble: `Humble Flex 🐍\n\nHey ${friend}, just checked the results. Mera SGPA *${mySgpa.toFixed(2)}* aaya and tera *${theirSgpa.toFixed(2)}*.\n\nSach bolu toh bilkul nahi padha tha, pure semester games khele. God's grace ig.\n\nCompare details:\nhttp://localhost:5000/bheede.html`,
-      copium: `W is W 🐍\n\nBhai ${friend}, SGPA checking done. \nMera: *${mySgpa.toFixed(2)}*\nTera: *${theirSgpa.toFixed(2)}*\n\nSaanp ban ke chupke se padha fir bhi aage nahi nikal paya na. Best of luck for next sem! 👍\n\nhttp://localhost:5000/bheede.html`
+      default: `Aaja Bheede Result\n\nBhai sunle ${friend} 🐍, bolra tha fail ho jaega aur khud top karne chala tha? Mera SGPA *${mySgpa.toFixed(2)}* aur tera *${theirSgpa.toFixed(2)}* hai. That's +${absGap} in my favour.\n\nW is W. Clear victory fr fr.\n\nCompare yours here:\n${shareUrl}`,
+      toxic: `GET COOKED SAANP 🐍\n\nBhai ${friend}, scale check kar, 'kuch nahi padha' bolke top karne chale the? Mera SGPA *${mySgpa.toFixed(2)}* hai aur tera *${theirSgpa.toFixed(2)}*. \n\nGap is literally *${absGap}*. Next sem cheat sheets thoda aur details ke saath banana padega tereko.\n\nCheck stats:\n${shareUrl}`,
+      humble: `Humble Flex 🐍\n\nHey ${friend}, just checked the results. Mera SGPA *${mySgpa.toFixed(2)}* aaya and tera *${theirSgpa.toFixed(2)}*.\n\nSach bolu toh bilkul nahi padha tha, pure semester games khele. God's grace ig.\n\nCompare details:\n${shareUrl}`,
+      copium: `W is W 🐍\n\nBhai ${friend}, SGPA checking done. \nMera: *${mySgpa.toFixed(2)}*\nTera: *${theirSgpa.toFixed(2)}*\n\nSaanp ban ke chupke se padha fir bhi aage nahi nikal paya na. Best of luck for next sem! 👍\n\n${shareUrl}`
     };
   } else if (Math.abs(gap) < 0.05) {
     return {
-      default: `Aaja Bheede Result\n\n${me} vs ${friend} 🐍\nSGPA: *${mySgpa.toFixed(2)}* vs *${theirSgpa.toFixed(2)}*\n\nBhai hum basically twins hain. Bol rha tha kuch nahi padha, saari snake energy barabar ho gyi.\n\nCheck details:\nhttp://localhost:5000/bheede.html`,
-      toxic: `Perfect Mirror 🐍\n\nOye ${friend}, SGPA score matches: *${mySgpa.toFixed(2)}* vs *${theirSgpa.toFixed(2)}*.\n\nBasically zero difference. Chalo dono saanp barabar scale pe hain.\n\nhttp://localhost:5000/bheede.html`,
-      humble: `Close Match 🐍\n\nMera SGPA *${mySgpa.toFixed(2)}* and tera *${theirSgpa.toFixed(2)}*. We are on the same page bro. Let's study together next sem so we can both score higher!\n\nhttp://localhost:5000/bheede.html`,
-      copium: `Twins Copium 🐍\n\nMera *${mySgpa.toFixed(2)}* aur tera *${theirSgpa.toFixed(2)}*. Honestly, rounding difference holds us back, otherwise I was clearly ahead. Accept it.\n\nhttp://localhost:5000/bheede.html`
+      default: `Aaja Bheede Result\n\n${me} vs ${friend} 🐍\nSGPA: *${mySgpa.toFixed(2)}* vs *${theirSgpa.toFixed(2)}*\n\nBhai hum basically twins hain. Bol rha tha kuch nahi padha, saari snake energy barabar ho gyi.\n\nCheck details:\n${shareUrl}`,
+      toxic: `Perfect Mirror 🐍\n\nOye ${friend}, SGPA score matches: *${mySgpa.toFixed(2)}* vs *${theirSgpa.toFixed(2)}*.\n\nBasically zero difference. Chalo dono saanp barabar scale pe hain.\n\n${shareUrl}`,
+      humble: `Close Match 🐍\n\nMera SGPA *${mySgpa.toFixed(2)}* and tera *${theirSgpa.toFixed(2)}*. We are on the same page bro. Let's study together next sem so we can both score higher!\n\n${shareUrl}`,
+      copium: `Twins Copium 🐍\n\nMera *${mySgpa.toFixed(2)}* aur tera *${theirSgpa.toFixed(2)}*. Honestly, rounding difference holds us back, otherwise I was clearly ahead. Accept it.\n\n${shareUrl}`
     };
   } else {
     // Lose messages
     return {
-      default: `Bhai tu itna bada saanp nikla ki National Geographic wale bhi documentary bana dein 🐍😭\n\nHar baar bolta tha "bhai lag gaye, fail ho jaunga"\n\nAur result ke baad pata chala banda chupke se top kar gaya 💀\n\nIdhar ${best ? best.s.name : 'one subject'} mein bas ${bestPageStr} pages aur likh deta toh SGPA ${best ? best.potentialSgpa.toFixed(2) : '9.18'} ho jaati 😭\n\nKoi na, agle sem tu topper nahi rahega... competition officially activate ho chuka hai 😈🔥\n\nCompare yours:\nhttp://localhost:5000/bheede.html`,
-      toxic: `Bhai tu toh professional scammer nikla 😭🐍\n\nExam ke pehle:\n"bhai pakka fail"\n\nResult ke baad:\n*tops the class*\n\nYe wahi baat ho gayi ki aadmi lottery jeet ke bole "thoda sa profit hua hai" 💀\n\nWaise ${best ? best.s.name : 'one subject'} mein ${bestPageStr} pages aur likh deta toh SGPA ${best ? best.potentialSgpa.toFixed(2) : '9.18'} touch kar leti 😭\n\nAgle sem answer sheet bharne ki machine banke aaunga 😤🔥\n\nhttp://localhost:5000/bheede.html`,
-      humble: `Bhai tera "fail ho jaunga" aur mera "kal se padhunga" dono ek hi category ke jhooth hain 😭💀\n\nHar baar rona-dhona karta tha aur chupke se topper nikla 🐍\n\nIdhar ${bestPageStr} pages ki kami ne ${best ? best.potentialSgpa.toFixed(2) : '9.18'} SGPA uda di 😭\n\nKoi na, agle sem comeback nahi... direct revenge arc shuru hoga 😈🔥\n\nhttp://localhost:5000/bheede.html`,
-      copium: `Bhai tere "fail ho jaunga" wale statements par ab consumer court mein case hona chahiye 😭🐍\n\nFalse advertising ke charges lagenge 💀\n\nPoore sem tension di aur end mein topper nikla banda 📈\n\nBhai tu padhai ka Rohit Sharma nikla 😭\nPoora sem lagta hai out ho jayega...\nAur result ke time century thok deta hai 💀🔥\n\nhttp://localhost:5000/bheede.html`
+      default: `Bhai tu itna bada saanp nikla ki National Geographic wale bhi documentary bana dein 🐍😭\n\nHar baar bolta tha "bhai lag gaye, fail ho jaunga"\n\nAur result ke baad pata chala banda chupke se top kar gaya 💀\n\nIdhar ${best ? best.s.name : 'one subject'} mein bas ${bestPageStr} pages aur likh deta toh SGPA ${best ? best.potentialSgpa.toFixed(2) : '9.18'} ho jaati 😭\n\nKoi na, agle sem tu topper nahi rahega... competition officially activate ho chuka hai 😈🔥\n\nCompare yours:\n${shareUrl}`,
+      toxic: `Bhai tu toh professional scammer nikla 😭🐍\n\nExam ke pehle:\n"bhai pakka fail"\n\nResult ke baad:\n*tops the class*\n\nYe wahi baat ho gayi ki aadmi lottery jeet ke bole "thoda sa profit hua hai" 💀\n\nWaise ${best ? best.s.name : 'one subject'} mein ${bestPageStr} pages aur likh deta toh SGPA ${best ? best.potentialSgpa.toFixed(2) : '9.18'} touch kar leti 😭\n\nAgle sem answer sheet bharne ki machine banke aaunga 😤🔥\n\n${shareUrl}`,
+      humble: `Bhai tera "fail ho jaunga" aur mera "kal se padhunga" dono ek hi category ke jhooth hain 😭💀\n\nHar baar rona-dhona karta tha aur chupke se topper nikla 🐍\n\nIdhar ${bestPageStr} pages ki kami ne ${best ? best.potentialSgpa.toFixed(2) : '9.18'} SGPA uda di 😭\n\nKoi na, agle sem comeback nahi... direct revenge arc shuru hoga 😈🔥\n\n${shareUrl}`,
+      copium: `Bhai tere "fail ho jaunga" wale statements par ab consumer court mein case hona chahiye 😭🐍\n\nFalse advertising ke charges lagenge 💀\n\nPoore sem tension di aur end mein topper nikla banda 📈\n\nBhai tu padhai ka Rohit Sharma nikla 😭\nPoora sem lagta hai out ho jayega...\nAur result ke time century thok deta hai 💀🔥\n\n${shareUrl}`
     };
   }
 }

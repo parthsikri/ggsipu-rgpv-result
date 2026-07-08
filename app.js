@@ -3,7 +3,7 @@
    app.js – Full Build v12
    ═══════════════════════════════════════════ */
 
-const API = 'http://localhost:5000/api';
+const API = window.location.origin + '/api';
 let currentData = null;
 
 let dynamicCredits = {};

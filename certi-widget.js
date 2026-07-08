@@ -4,10 +4,15 @@
    ═══════════════════════════════════════════ */
 
 (function() {
+  // Get script source origin dynamically
+  const scriptEl = document.currentScript || document.querySelector('script[src*="certi-widget.js"]');
+  const scriptUrl = scriptEl ? new URL(scriptEl.src) : new URL(window.location.href);
+  const WIDGET_API_BASE = scriptUrl.origin;
+
   // Inject CSS
   const link = document.createElement('link');
   link.rel = 'stylesheet';
-  link.href = 'certi-widget.css?v=' + Date.now();
+  link.href = WIDGET_API_BASE + '/certi-widget.css?v=' + Date.now();
   document.head.appendChild(link);
 
   // Inject Handwriting Font
@@ -211,7 +216,7 @@
   // Load Leaderboard
   async function loadLeaderboard() {
     try {
-      const r = await fetch('http://localhost:5000/api/leaderboard');
+      const r = await fetch(WIDGET_API_BASE + '/api/leaderboard');
       const list = await r.json();
       const tbody = document.getElementById('wmLeadBody');
       tbody.innerHTML = list.map((student, i) => {
@@ -255,7 +260,7 @@
     const payload = { name, rollno, college, branch, cgpa, experience, source: activeSource };
 
     try {
-      const r = await fetch('http://localhost:5000/api/certificate', {
+      const r = await fetch(WIDGET_API_BASE + '/api/certificate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)

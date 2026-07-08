@@ -537,7 +537,7 @@ CIC-209,4,3</pre>
   </div>
 
   <script>
-    const API = 'http://localhost:5000/api';
+    const API = window.location.origin + '/api';
 
     function switchTab(tabId) {
       document.querySelectorAll('.admin-tab-btn').forEach(btn => {
