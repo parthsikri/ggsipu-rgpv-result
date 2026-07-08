@@ -399,8 +399,16 @@ function renderDashboard(data) {
     document.getElementById('kpiPercent').textContent = maxMarks > 0 ? Math.round((totalMarks/maxMarks)*100)+'%' : '—';
   }
 
-  document.getElementById('kpiStatus').textContent =
-    failCount === 0 && passCount > 0 ? 'PASS ✅' : failCount > 0 ? `${failCount} BACK ⚠️` : '—';
+  const statusEl = document.getElementById('kpiStatus');
+  if (statusEl) {
+    if (failCount === 0 && passCount > 0) {
+      statusEl.innerHTML = '<span style="color:#22c55e;">PASS ✅</span>';
+    } else if (failCount > 0) {
+      statusEl.innerHTML = `<span style="color:#ef4444; font-weight: 700;">${failCount} BACK ⚠️</span>`;
+    } else {
+      statusEl.textContent = '—';
+    }
+  }
   document.getElementById('kpiSubjects').textContent = subjects.length || '—';
 
   // Semester tabs
@@ -444,13 +452,77 @@ window.loadSem = function(semNum) {
   if (!sd) return;
   currentData.subjects = sd.subjects;
   currentData.sgpa     = sd.sgpa;
+
   document.querySelectorAll('.sem-tab').forEach(t => {
     t.classList.toggle('active', t.textContent.trim().startsWith('Sem '+semNum));
   });
 
+  // Calculate cumulative CGPA up to this semester semNum
+  let cgpaUpTo = currentData.cgpa; // Fallback
+  const semsUpTo = currentData.allSemesters.filter(s => s.semester <= semNum);
+  
+  let totalCredits = 0;
+  let totalPoints = 0;
+  
+  semsUpTo.forEach(sem => {
+    let semCredits = 0;
+    let semPoints = 0;
+    sem.subjects.forEach(sub => {
+      const cr = sub.credit || sub.credits || 3;
+      semCredits += cr;
+      semPoints += cr * (sub.gp || 0);
+    });
+    if (semCredits > 0) {
+      totalCredits += semCredits;
+      totalPoints += semPoints;
+    } else {
+      totalCredits += 1;
+      totalPoints += sem.sgpa;
+    }
+  });
+
+  if (totalCredits > 0) {
+    if (currentData.isRGPV) {
+      cgpaUpTo = sd.cgpa || (totalPoints / totalCredits);
+    } else {
+      cgpaUpTo = Math.round((totalPoints / totalCredits) * 100) / 100;
+    }
+  }
+
+  // Update SGPA and CGPA KPIs on top
+  document.getElementById('kpiSgpa').textContent = sd.sgpa ? sd.sgpa.toFixed(2) : '—';
+  document.getElementById('kpiCgpa').textContent = cgpaUpTo ? cgpaUpTo.toFixed(2) : '—';
+
+  // Update Percentage KPI
+  if (currentData.isRGPV) {
+    const rgpvPct = sd.sgpa ? Math.round(sd.sgpa * 10) + '%' : '—';
+    document.getElementById('kpiPercent').textContent = rgpvPct;
+  } else {
+    const totalMarks = sd.subjects.reduce((a,s)=>a+s.total,0);
+    const maxMarks   = sd.subjects.reduce((a,s)=>a+s.max,0);
+    document.getElementById('kpiPercent').textContent = maxMarks > 0 ? Math.round((totalMarks/maxMarks)*100)+'%' : '—';
+  }
+
+  // Update Status KPI (semester-specific)
+  const failCount  = sd.subjects.filter(s => s.result === 'F' || s.gp === 0).length;
+  const passCount  = sd.subjects.filter(s => s.result === 'P' && s.gp > 0).length;
+  const statusEl = document.getElementById('kpiStatus');
+  if (statusEl) {
+    if (failCount === 0 && passCount > 0) {
+      statusEl.innerHTML = '<span style="color:#22c55e;">PASS ✅</span>';
+    } else if (failCount > 0) {
+      statusEl.innerHTML = `<span style="color:#ef4444; font-weight: 700;">${failCount} BACK ⚠️</span>`;
+    } else {
+      statusEl.textContent = '—';
+    }
+  }
+
+  // Update Subjects KPI
+  document.getElementById('kpiSubjects').textContent = sd.subjects.length || '—';
+
   if (currentData.isRGPV) {
     renderRGPVSubjectCards(sd.subjects);
-    renderRGPVInsights(sd.subjects, sd.sgpa, currentData.cgpa);
+    renderRGPVInsights(sd.subjects, sd.sgpa, cgpaUpTo);
   } else {
     const { cwSum, tcred, nearMisses } = computeNearMisses(sd.subjects);
     renderSubjectCards(sd.subjects, nearMisses);
@@ -458,7 +530,7 @@ window.loadSem = function(semNum) {
   }
 
   // Update recommendations dynamically for the next semester of selected semester
-  renderRecommendations(currentData.allSemesters, currentData.cgpa, currentData.studentInfo.programme, semNum);
+  renderRecommendations(currentData.allSemesters, cgpaUpTo, currentData.studentInfo.programme, semNum);
 };
 
 // ─────────────────────────────────────────────
