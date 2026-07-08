@@ -81,7 +81,7 @@ function onUniversityChange() {
     semesterGroup.style.display = 'block';
     rgpvOptsGroup.style.display = 'flex';
     
-    logo.src = 'https://result.rgpv.ac.in/result/images/logo.png';
+    logo.src = 'rgpvlogo.png';
     logo.style.display = 'block';
     uniName.textContent = 'Rajiv Gandhi Proudyogiki Vishwavidyalaya';
     uniSub.textContent = 'RGPV Exam Portal — Results Verification';
@@ -93,7 +93,7 @@ function onUniversityChange() {
     semesterGroup.style.display = 'none';
     rgpvOptsGroup.style.display = 'none';
     
-    logo.src = 'https://examweb.ggsipu.ac.in/web/images/ggsipulogo.png';
+    logo.src = 'ggsipulogo.png';
     logo.style.display = 'block';
     uniName.textContent = 'Guru Gobind Singh Indraprastha University';
     uniSub.textContent = 'Examination Portal — Secure Access';
