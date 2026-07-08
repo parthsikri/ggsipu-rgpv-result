@@ -1298,18 +1298,50 @@ window.resetDashboard = function() {
 //  COMEBACK PLANNER
 // ─────────────────────────────────────────────
 window.initComebackPlanner = function(data) {
-  const completedSems = data.allSemesters.length;
-  const currentCgpa = data.cgpa;
+  const isRealData = !!data;
+  
+  const completedInput = document.getElementById('cbCompletedSems');
+  const currentInput = document.getElementById('cbCurrentCgpa');
+  
+  if (completedInput && currentInput) {
+    if (isRealData) {
+      completedInput.value = data.allSemesters.length;
+      completedInput.readOnly = true;
+      completedInput.style.opacity = '0.7';
+      completedInput.style.cursor = 'not-allowed';
+      
+      currentInput.value = data.cgpa.toFixed(2);
+      currentInput.readOnly = true;
+      currentInput.style.opacity = '0.7';
+      currentInput.style.cursor = 'not-allowed';
+    } else {
+      completedInput.value = 2;
+      completedInput.readOnly = false;
+      completedInput.style.opacity = '1';
+      completedInput.style.cursor = 'auto';
+      
+      currentInput.value = '7.50';
+      currentInput.readOnly = false;
+      currentInput.style.opacity = '1';
+      currentInput.style.cursor = 'auto';
+    }
+  }
+
+  // Trigger rebuild of dropdown based on current completed sems value
+  onCompletedSemsChange();
+};
+
+window.onCompletedSemsChange = function() {
+  const completedInput = document.getElementById('cbCompletedSems');
+  if (!completedInput) return;
+  
+  let completedSems = parseInt(completedInput.value) || 2;
+  if (completedSems < 1) completedSems = 1;
+  if (completedSems > 7) completedSems = 7;
+  completedInput.value = completedSems; // Clamp value
+  
   const maxSems = 8;
   const remSems = Math.max(1, maxSems - completedSems);
-
-  // Set status labels
-  document.getElementById('cbCompletedSems').textContent = completedSems;
-  document.getElementById('cbCurrentCgpa').textContent = currentCgpa.toFixed(2);
-  
-  // Clean target labels
-  const cbRemLbl = document.getElementById('cbRemSemsLbl');
-  if (cbRemLbl) cbRemLbl.textContent = remSems;
 
   // Build target sems dropdown (values are the target end semester numbers, e.g. 3, 4, 8)
   const select = document.getElementById('cbTargetSems');
@@ -1319,7 +1351,6 @@ window.initComebackPlanner = function(data) {
       const targetSem = completedSems + i;
       const isLast = (i === remSems);
       
-      // Get ordinal suffix (e.g. 3rd, 4th, 8th)
       let suffix = 'th';
       if (targetSem === 1) suffix = 'st';
       else if (targetSem === 2) suffix = 'nd';
@@ -1331,22 +1362,19 @@ window.initComebackPlanner = function(data) {
     }
     select.innerHTML = optionsHtml;
   }
-
-  // Set default target CGPA to be slightly higher than current
-  const targetInput = document.getElementById('cbTargetCgpa');
-  if (targetInput) {
-    targetInput.value = Math.min(10.0, Math.max(8.0, currentCgpa + 0.5)).toFixed(1);
-  }
-
-  document.getElementById('comeback-section').style.display = 'block';
+  
   calculateComeback();
 };
 
 window.calculateComeback = function() {
-  if (!currentData) return;
-  const completedSems = currentData.allSemesters.length;
-  const currentCgpa = currentData.cgpa;
-  const targetCgpa = parseFloat(document.getElementById('cbTargetCgpa').value) || 8.5;
+  const completedInput = document.getElementById('cbCompletedSems');
+  const currentInput = document.getElementById('cbCurrentCgpa');
+  
+  if (!completedInput || !currentInput) return;
+
+  const completedSems = parseInt(completedInput.value) || 2;
+  const currentCgpa = parseFloat(currentInput.value) || 7.50;
+  const targetCgpa = parseFloat(document.getElementById('cbTargetCgpa').value) || 8.50;
   
   const targetEndSem = parseInt(document.getElementById('cbTargetSems').value) || (completedSems + 1);
   const plannedSems = Math.max(1, targetEndSem - completedSems);
@@ -1409,3 +1437,4 @@ window.calculateComeback = function() {
 // ─────────────────────────────────────────────
 loadCaptcha();
 loadDynamicCredits();
+initComebackPlanner(null); // Init with manual mode by default on page load
