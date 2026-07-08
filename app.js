@@ -1306,16 +1306,27 @@ window.initComebackPlanner = function(data) {
   // Set status labels
   document.getElementById('cbCompletedSems').textContent = completedSems;
   document.getElementById('cbCurrentCgpa').textContent = currentCgpa.toFixed(2);
-  document.getElementById('cbRemSemsLbl').textContent = remSems;
+  
+  // Clean target labels
+  const cbRemLbl = document.getElementById('cbRemSemsLbl');
+  if (cbRemLbl) cbRemLbl.textContent = remSems;
 
-  // Build target sems dropdown
+  // Build target sems dropdown (values are the target end semester numbers, e.g. 3, 4, 8)
   const select = document.getElementById('cbTargetSems');
   if (select) {
     let optionsHtml = '';
     for (let i = 1; i <= remSems; i++) {
+      const targetSem = completedSems + i;
       const isLast = (i === remSems);
-      optionsHtml += `<option value="${i}" ${isLast ? 'selected' : ''}>
-        Next ${i} Semester${i > 1 ? 's' : ''} ${isLast ? '(all remaining)' : ''}
+      
+      // Get ordinal suffix (e.g. 3rd, 4th, 8th)
+      let suffix = 'th';
+      if (targetSem === 1) suffix = 'st';
+      else if (targetSem === 2) suffix = 'nd';
+      else if (targetSem === 3) suffix = 'rd';
+
+      optionsHtml += `<option value="${targetSem}" ${isLast ? 'selected' : ''}>
+        By ${targetSem}${suffix} Semester ${isLast ? '(Graduation)' : ''}
       </option>`;
     }
     select.innerHTML = optionsHtml;
@@ -1336,7 +1347,9 @@ window.calculateComeback = function() {
   const completedSems = currentData.allSemesters.length;
   const currentCgpa = currentData.cgpa;
   const targetCgpa = parseFloat(document.getElementById('cbTargetCgpa').value) || 8.5;
-  const plannedSems = parseInt(document.getElementById('cbTargetSems').value) || 1;
+  
+  const targetEndSem = parseInt(document.getElementById('cbTargetSems').value) || (completedSems + 1);
+  const plannedSems = Math.max(1, targetEndSem - completedSems);
 
   const valEl = document.getElementById('cbResultValue');
   const feedEl = document.getElementById('cbResultFeedback');
