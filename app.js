@@ -1353,35 +1353,40 @@ window.calculateComeback = function() {
   const reqPoints = reqTotalPoints - currentPoints;
   const reqSgpa = reqPoints / plannedSems;
 
+  const detailHtml = `<div style="font-size:0.76rem;margin-bottom:0.6rem;opacity:0.75;line-height:1.4;">
+    To hit <strong>${targetCgpa.toFixed(2)} CGPA</strong> across <strong>${totalSems} semesters</strong> (starting from your current <strong>${currentCgpa.toFixed(2)} CGPA</strong> over <strong>${completedSems} sems</strong>):
+  </div>`;
+
   if (reqSgpa > 10.0) {
     valEl.textContent = '☠️';
     valEl.style.color = '#ef4444';
-    feedEl.innerHTML = `Required: <strong>${reqSgpa.toFixed(2)} SGPA</strong>.<br/>
+    feedEl.innerHTML = `${detailHtml}Required Average: <strong style="color:#ef4444;font-size:1.1rem;">${reqSgpa.toFixed(2)} SGPA</strong>/sem.<br/>
       <span style="color:#ef4444;font-weight:700;">bhai, drop out plan ready karo or target CGPA change karo, 10+ SGPA is not possible in this universe 😭</span>`;
   } else if (reqSgpa > 9.5) {
     valEl.textContent = reqSgpa.toFixed(2);
     valEl.style.color = '#fb923c';
-    feedEl.innerHTML = `Required: <strong>${reqSgpa.toFixed(2)} SGPA</strong>.<br/>
+    feedEl.innerHTML = `${detailHtml}Required Average: <strong style="color:#fb923c;font-size:1.1rem;">${reqSgpa.toFixed(2)} SGPA</strong>/sem.<br/>
       <span style="color:#fb923c;font-weight:700;">pure semester lock-in krna padega 🔒. library mein hi tent lagalo, continuous 9.5+ is extreme grind mode!</span>`;
   } else if (reqSgpa > 8.0) {
     valEl.textContent = reqSgpa.toFixed(2);
     valEl.style.color = '#60a5fa';
-    feedEl.innerHTML = `Required: <strong>${reqSgpa.toFixed(2)} SGPA</strong>.<br/>
+    feedEl.innerHTML = `${detailHtml}Required Average: <strong style="color:#60a5fa;font-size:1.1rem;">${reqSgpa.toFixed(2)} SGPA</strong>/sem.<br/>
       doable but effort lagana padega. regular classes attend karo aur exam sheets fully bharo! 📈`;
   } else if (reqSgpa > 5.0) {
     valEl.textContent = reqSgpa.toFixed(2);
     valEl.style.color = '#22c55e';
-    feedEl.innerHTML = `Required: <strong>${reqSgpa.toFixed(2)} SGPA</strong>.<br/>
+    feedEl.innerHTML = `${detailHtml}Required Average: <strong style="color:#22c55e;font-size:1.1rem;">${reqSgpa.toFixed(2)} SGPA</strong>/sem.<br/>
       araam se ho jaega. last night study and bhaiya ke imp topics read karlo. secure status. 😎`;
   } else if (reqSgpa > 0) {
-    valEl.textContent = Math.max(4.0, reqSgpa).toFixed(2);
+    const displaySgpa = Math.max(4.0, reqSgpa);
+    valEl.textContent = displaySgpa.toFixed(2);
     valEl.style.color = '#10b981';
-    feedEl.innerHTML = `Required: <strong>${Math.max(4.0, reqSgpa).toFixed(2)} SGPA</strong>.<br/>
+    feedEl.innerHTML = `${detailHtml}Required Average: <strong style="color:#10b981;font-size:1.1rem;">${displaySgpa.toFixed(2)} SGPA</strong>/sem.<br/>
       bhai, target set kiya ya mazak? bas exam hall mein attendance lagani hai, pass ho jaoge!`;
   } else {
     valEl.textContent = '0.00';
     valEl.style.color = '#34d399';
-    feedEl.innerHTML = `Already Achieved! 🎉<br/>
+    feedEl.innerHTML = `${detailHtml}Already Achieved! 🎉<br/>
       agle sems mein zero SGPA le aao toh bhi target reach ho jayega. relax and chill! 🏝️`;
   }
 };
