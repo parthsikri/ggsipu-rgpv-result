@@ -100,7 +100,7 @@
         <div class="wm-cert-box" id="wmCertDisplay">
           <div class="wm-cert-watermark">AEW</div>
 
-          <!-- LEFT PANEL -->
+          <!-- LEFT COLUMN: What & Who -->
           <div class="wm-cert-left">
             <div class="wm-cert-brand">
               <img src="aew_logo.png" alt="AEW" class="wm-cert-logo" crossorigin="anonymous" />
@@ -112,6 +112,19 @@
             <div class="wm-cert-presented">This certificate is proudly presented to</div>
             <div class="wm-cert-name" id="wmCertName">Vartika</div>
             <div class="wm-cert-sem-line">in <strong id="wmCertSem">Sem-2 End Term · IPU</strong></div>
+          </div>
+
+          <!-- VERTICAL DIVIDER 1 -->
+          <div class="wm-cert-vdivider"></div>
+
+          <!-- MIDDLE COLUMN: How (Student Experience Story & Signatures) -->
+          <div class="wm-cert-mid">
+            <div class="wm-cert-quote-label">student's experience</div>
+            <div class="wm-cert-feedback-container">
+              <span class="wm-cert-quote-mark">“</span>
+              <div class="wm-cert-feedback" id="wmCertFeedback">bohot badhiya notes and topics the bhaiya ke, full support mila!</div>
+              <span class="wm-cert-quote-mark" style="text-align: right; display: block; margin-top: -10px;">”</span>
+            </div>
 
             <!-- Signatures -->
             <div class="wm-cert-sigs">
@@ -131,10 +144,10 @@
             </div>
           </div>
 
-          <!-- VERTICAL DIVIDER -->
+          <!-- VERTICAL DIVIDER 2 -->
           <div class="wm-cert-vdivider"></div>
 
-          <!-- RIGHT PANEL -->
+          <!-- RIGHT COLUMN: Score & Rewards -->
           <div class="wm-cert-right">
             <div class="wm-cert-cgpa-label">secured a brilliant</div>
             <div class="wm-cert-cgpa-value"><span id="wmCertCgpa">9.14</span></div>
@@ -348,6 +361,10 @@
         document.getElementById('wmCertDecor').textContent = decorText;
         document.getElementById('wmCertCustomMsg').textContent = customMsg;
         
+        // Truncate long feedback to fit aesthetic layout nicely
+        const cleanExp = experience.length > 150 ? experience.substring(0, 147) + '...' : experience;
+        document.getElementById('wmCertFeedback').textContent = cleanExp;
+        
         certBox.style.display = 'flex'; // 16:9 flex layout
         document.getElementById('wmCertActions').style.display = 'flex';
 
@@ -368,36 +385,35 @@
           }
           
           const certBox = document.getElementById('wmCertDisplay');
-          const actions = certBox.querySelector('.wm-cert-actions');
           
-          // Hide actions to prevent buttons in output image
-          if (actions) actions.style.display = 'none';
-
-          // Set temporary styles to avoid rounded-corner clipping or double borders
+          // Force layout to desktop landscape mode so output image is always clean 16:9
+          certBox.classList.add('wm-force-desktop-landscape');
           const originalShadow = certBox.style.boxShadow;
           certBox.style.boxShadow = 'none';
 
-          html2canvas(certBox, {
-            backgroundColor: '#09090b',
-            scale: 3, // Ultra-sharp 3x resolution for high-definition sharing!
-            useCORS: true,
-            logging: false
-          }).then(canvas => {
-            // Restore actions and shadow style
-            if (actions) actions.style.display = 'flex';
-            certBox.style.boxShadow = originalShadow;
-
-            // Trigger direct PNG image file download
-            const link = document.createElement('a');
-            link.download = `${name.toLowerCase().replace(/\s+/g, '_')}_hustle_certificate.png`;
-            link.href = canvas.toDataURL('image/png');
-            link.click();
-          }).catch(err => {
-            console.error('Failed to export certificate image:', err);
-            // Fallback to simple print
-            if (actions) actions.style.display = 'flex';
-            window.print();
-          });
+          setTimeout(() => {
+            html2canvas(certBox, {
+              backgroundColor: '#09090b',
+              scale: 3, // Ultra-sharp 3x resolution for high-definition sharing!
+              useCORS: true,
+              logging: false
+            }).then(canvas => {
+              // Restore layout styles
+              certBox.classList.remove('wm-force-desktop-landscape');
+              certBox.style.boxShadow = originalShadow;
+  
+              // Trigger direct PNG image file download
+              const link = document.createElement('a');
+              link.download = `${name.toLowerCase().replace(/\s+/g, '_')}_hustle_certificate.png`;
+              link.href = canvas.toDataURL('image/png');
+              link.click();
+            }).catch(err => {
+              console.error('Failed to export certificate image:', err);
+              certBox.classList.remove('wm-force-desktop-landscape');
+              certBox.style.boxShadow = originalShadow;
+              window.print();
+            });
+          }, 100);
         };
 
         // Reload leaderboard list

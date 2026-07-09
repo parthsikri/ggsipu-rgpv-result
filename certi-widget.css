@@ -197,86 +197,132 @@
 /* ── LEFT PANEL ─────────────────────────────────────── */
 .wm-cert-left {
   flex: 1.1;
-  padding: 1.75rem 1.5rem 1.5rem;
+  padding: 1.75rem 1.25rem 1.5rem;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   position: relative;
   z-index: 1;
   text-align: left;
+  flex: 0.95;
 }
 .wm-cert-brand {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.4rem;
+  gap: 0.4rem;
+  margin-bottom: 0.75rem;
 }
 .wm-cert-logo {
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
   border-radius: 4px;
   object-fit: contain;
 }
 .wm-cert-brand-text {
-  font-size: 0.62rem;
+  font-size: 0.58rem;
   font-weight: 800;
   color: #a1a1aa;
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 .wm-cert-decor {
-  font-size: 0.52rem;
-  letter-spacing: 0.28em;
+  font-size: 0.5rem;
+  letter-spacing: 0.25em;
   color: #6366f1;
   text-transform: uppercase;
   font-weight: 700;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.3rem;
 }
 .wm-cert-title {
-  font-size: 1.15rem;
+  font-size: 1.05rem;
   font-weight: 900;
   color: #a78bfa;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   line-height: 1.2;
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.5rem;
 }
 .wm-cert-divider {
-  width: 40px;
+  width: 35px;
   height: 2px;
   background: linear-gradient(90deg, #6366f1, transparent);
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.5rem;
 }
 .wm-cert-presented {
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   color: #71717a;
   margin-bottom: 0.2rem;
 }
 .wm-cert-name {
-  font-size: 1.7rem;
+  font-size: 1.5rem;
   font-weight: 900;
   color: #fff;
   text-transform: none !important;
-  text-shadow: 0 0 12px rgba(99,102,241,0.3);
+  text-shadow: 0 0 10px rgba(99,102,241,0.25);
   line-height: 1.1;
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.2rem;
 }
 .wm-cert-sem-line {
-  font-size: 0.63rem;
+  font-size: 0.6rem;
   color: #71717a;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0;
 }
 .wm-cert-sem-line strong { color: #a1a1aa; font-weight: 700; }
 
-/* Signature row inside left panel */
+/* ── MIDDLE COLUMN (Experience & Sigs) ───────────────── */
+.wm-cert-mid {
+  flex: 1.15;
+  padding: 1.75rem 1rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+.wm-cert-quote-label {
+  font-size: 0.52rem;
+  letter-spacing: 0.2em;
+  color: #6366f1;
+  text-transform: uppercase;
+  font-weight: 800;
+  margin-bottom: 0.25rem;
+}
+.wm-cert-feedback-container {
+  position: relative;
+  width: 100%;
+  max-width: 250px;
+  margin: 0 auto;
+}
+.wm-cert-quote-mark {
+  font-size: 2.2rem;
+  line-height: 1;
+  font-family: Georgia, serif;
+  color: rgba(99, 102, 241, 0.25);
+  display: block;
+  text-align: left;
+  height: 12px;
+}
+.wm-cert-feedback {
+  font-size: 0.68rem;
+  color: #d1d5db;
+  font-style: italic;
+  line-height: 1.4;
+  text-align: center;
+  padding: 0 0.5rem;
+  font-weight: 500;
+  word-break: break-word;
+}
 .wm-cert-sigs {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: flex-end;
-  gap: 1.5rem;
+  gap: 1.25rem;
   margin-top: auto;
+  width: 100%;
 }
 .wm-cert-sig-block {
   display: flex;
@@ -285,46 +331,47 @@
   gap: 0.15rem;
   min-width: 0;
 }
-.wm-cert-sig-spacer { height: 2.5rem; display: block; }
+.wm-cert-sig-spacer { height: 1.8rem; display: block; }
 .wm-cert-sig-verified {
-  font-size: 0.52rem;
+  font-size: 0.48rem;
   font-weight: 900;
   color: #10b981;
-  border: 1.5px solid #10b981;
-  padding: 1px 6px;
+  border: 1px solid #10b981;
+  padding: 1px 5px;
   border-radius: 3px;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   white-space: nowrap;
+  margin-bottom: 2px;
 }
 .wm-cert-sig-line {
-  width: 80px;
-  height: 1.5px;
+  width: 75px;
+  height: 1px;
   background: linear-gradient(90deg, transparent, #6366f1, transparent);
   flex-shrink: 0;
 }
 .wm-cert-sig-name {
-  font-size: 0.6rem;
+  font-size: 0.55rem;
   font-weight: 800;
   color: #fff;
   text-transform: none !important;
   white-space: nowrap;
 }
 .wm-cert-sig-title {
-  font-size: 0.52rem;
+  font-size: 0.48rem;
   color: #71717a;
   text-transform: none !important;
   white-space: nowrap;
 }
 .wm-cert-sig-handwritten {
   font-family: 'Mr De Haviland', cursive;
-  font-size: 2.4rem;
+  font-size: 2.1rem;
   color: #818cf8;
   transform: rotate(-5deg);
   display: inline-block;
   margin-bottom: -10px;
   text-transform: none !important;
-  text-shadow: 0 0 10px rgba(99,102,241,0.3);
+  text-shadow: 0 0 10px rgba(99,102,241,0.25);
   line-height: 1;
   white-space: nowrap;
 }
@@ -335,14 +382,14 @@
   background: linear-gradient(180deg, transparent, #6366f1, transparent);
   align-self: stretch;
   flex-shrink: 0;
-  opacity: 0.35;
+  opacity: 0.25;
   z-index: 1;
 }
 
 /* ── RIGHT PANEL ─────────────────────────────────────── */
 .wm-cert-right {
   flex: 0.9;
-  padding: 1.75rem 1.5rem 1.5rem;
+  padding: 1.75rem 1rem 1.5rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -350,14 +397,7 @@
   position: relative;
   z-index: 1;
   text-align: center;
-  gap: 0.2rem;
-}
-.wm-cert-cgpa-label {
-  font-size: 0.6rem;
-  color: #71717a;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-}
+  gap: 0.15rem;
 .wm-cert-cgpa-value {
   font-size: 5rem;
   font-weight: 900;
@@ -416,6 +456,8 @@
 .silver-cert .wm-cert-aewian { color: rgba(156,163,175,0.55) !important; }
 .silver-cert .wm-cert-cgpa-value { color: #cbd5e1 !important; text-shadow: 0 0 30px rgba(156,163,175,0.4) !important; }
 .silver-cert .wm-cert-cgpa-unit { color: #9ca3af !important; }
+.silver-cert .wm-cert-quote-label { color: #cbd5e1 !important; }
+.silver-cert .wm-cert-quote-mark { color: rgba(203, 213, 225, 0.25) !important; }
 
 /* ══ GOLD OVERRIDES ════════════════════════════════════ */
 .gold-cert {
@@ -434,6 +476,8 @@
 .gold-cert .wm-cert-aewian { color: rgba(251,191,36,0.65) !important; }
 .gold-cert .wm-cert-cgpa-value { color: #fbbf24 !important; text-shadow: 0 0 30px rgba(251,191,36,0.5) !important; }
 .gold-cert .wm-cert-cgpa-unit { color: #f59e0b !important; }
+.gold-cert .wm-cert-quote-label { color: #fbbf24 !important; }
+.gold-cert .wm-cert-quote-mark { color: rgba(251, 191, 36, 0.25) !important; }
 
 
 .wm-cert-actions {
@@ -578,61 +622,94 @@
 /* ── Mobile Responsive Fixes ─────────────────────────────────────────── */
 @media (max-width: 600px) {
   #certi-modal-content {
-    padding: 1.25rem 1rem;
+    padding: 1.25rem 0.75rem;
     border-radius: 12px;
     max-height: 95vh;
   }
 
-  .wm-cert-box {
-    padding: 1.75rem 1rem !important;
+  /* Mobile preview is vertical/auto-height for comfortable reading */
+  .wm-cert-box:not(.wm-force-desktop-landscape) {
+    flex-direction: column !important;
+    aspect-ratio: auto !important;
+    padding: 1.5rem 1rem !important;
   }
 
-  .wm-cert-title {
-    font-size: 1rem !important;
-    letter-spacing: 0.03em;
+  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-left,
+  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-mid,
+  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-right {
+    flex: none !important;
+    width: 100% !important;
+    padding: 1rem 0 !important;
+    text-align: center !important;
   }
 
-  .wm-cert-name {
-    font-size: 1.7rem !important;
-    padding: 0 1rem 0.35rem !important;
+  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-left {
+    align-items: center !important;
   }
 
-  /* Force signatures ALWAYS horizontal on mobile */
-  .wm-cert-sigs {
+  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-brand {
+    justify-content: center !important;
+  }
+
+  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-divider {
+    margin: 0.5rem auto !important;
+  }
+
+  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-vdivider {
+    width: 100% !important;
+    height: 1px !important;
+    background: linear-gradient(90deg, transparent, #6366f1, transparent) !important;
+    margin: 0.5rem 0 !important;
+  }
+
+  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-feedback-container {
+    max-width: 100% !important;
+  }
+
+  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-sigs {
+    margin-top: 1rem !important;
+    justify-content: center !important;
+    gap: 1.5rem !important;
     flex-direction: row !important;
-    justify-content: space-between !important;
-    align-items: flex-end !important;
     flex-wrap: nowrap !important;
-    padding: 0 0.25rem !important;
-    gap: 0.25rem !important;
   }
 
-  .wm-cert-sig-block {
+  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-sig-block {
     flex: 1 !important;
     min-width: 0 !important;
     align-items: center !important;
   }
 
-  .wm-cert-sig-handwritten {
+  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-sig-handwritten {
     font-size: 2rem !important;
     margin-bottom: -10px !important;
   }
 
-  .wm-cert-sig-line {
+  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-sig-line {
     width: 70px !important;
   }
 
-  .wm-cert-sig-name {
+  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-sig-name {
     font-size: 0.6rem !important;
   }
 
-  .wm-cert-sig-title {
+  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-sig-title {
     font-size: 0.5rem !important;
   }
 
-  .wm-cert-aewian {
-    font-size: 0.55rem !important;
-    letter-spacing: 0.1em !important;
+  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-aewian {
+    margin-top: 1.25rem !important;
+  }
+
+  /* Scale font-sizes down slightly on mobile preview */
+  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-title {
+    font-size: 1.05rem !important;
+  }
+  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-name {
+    font-size: 1.5rem !important;
+  }
+  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-cgpa-value {
+    font-size: 4rem !important;
   }
 
   .wm-cert-actions {
@@ -640,8 +717,60 @@
     align-items: stretch !important;
     gap: 0.5rem !important;
   }
-
   .wm-cert-action-btn {
     justify-content: center !important;
   }
 }
+
+/* Force Desktop Landscape styles during html2canvas download */
+.wm-cert-box.wm-force-desktop-landscape {
+  display: flex !important;
+  flex-direction: row !important;
+  aspect-ratio: 16 / 9 !important;
+  width: 800px !important;
+  height: 450px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-radius: 12px !important;
+  box-sizing: border-box !important;
+}
+.wm-cert-box.wm-force-desktop-landscape .wm-cert-left {
+  flex: 0.95 !important;
+  padding: 1.75rem 1.25rem 1.5rem !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  text-align: left !important;
+}
+.wm-cert-box.wm-force-desktop-landscape .wm-cert-mid {
+  flex: 1.15 !important;
+  padding: 1.75rem 1rem 1.5rem !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  text-align: center !important;
+}
+.wm-cert-box.wm-force-desktop-landscape .wm-cert-right {
+  flex: 0.9 !important;
+  padding: 1.75rem 1rem 1.5rem !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+  text-align: center !important;
+}
+.wm-cert-box.wm-force-desktop-landscape .wm-cert-vdivider {
+  width: 1px !important;
+  height: auto !important;
+  background: linear-gradient(180deg, transparent, #6366f1, transparent) !important;
+  align-self: stretch !important;
+  opacity: 0.25 !important;
+}
+.wm-cert-box.wm-force-desktop-landscape .wm-cert-sigs {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: center !important;
+  gap: 1.25rem !important;
+}
+
