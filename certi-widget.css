@@ -194,40 +194,76 @@
 .wm-cert-desc { font-size: 0.82rem; color: #a1a1aa; line-height: 1.6; max-width: 440px; margin: 0 auto 2rem; text-transform: lowercase; }
 .wm-cert-desc strong { color: #fff; font-family: ui-monospace, SFMono-Regular, monospace; }
 
-/* Signature row — always horizontal even on mobile */
+/* ── Signature Section ──────────────────────────────────────────────── */
 .wm-cert-sigs {
   display: flex;
-  flex-direction: row !important;
+  flex-direction: row;
   justify-content: space-between;
   align-items: flex-end;
-  padding: 0 0.5rem;
-  gap: 0.5rem;
+  padding: 0 0.75rem;
+  gap: 1rem;
+  flex-wrap: nowrap; /* NEVER wrap — always side by side */
+  overflow: hidden;
 }
 .wm-cert-sig-block {
+  flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.25rem;
-  min-width: 0;
-  flex: 1;
+  gap: 0.2rem;
+}
+/* Spacer on left block to match signature height on right */
+.wm-cert-sig-spacer {
+  height: 3.5rem; /* matches approx height of handwritten sig */
+  display: block;
+}
+/* Green verified badge */
+.wm-cert-sig-verified {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 900;
+  color: #10b981;
+  border: 1.5px solid #10b981;
+  padding: 2px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
 }
 .wm-cert-sig-line {
   width: 90px;
   height: 1.5px;
-  background: linear-gradient(90deg, transparent, #6366f1, transparent); /* Brand indigo line */
+  background: linear-gradient(90deg, transparent, #6366f1, transparent);
+  flex-shrink: 0;
 }
-.wm-cert-sig-name { font-size: 0.68rem; font-weight: 800; color: #fff; text-transform: none !important; white-space: nowrap; }
-.wm-cert-sig-title { font-size: 0.56rem; color: #71717a; text-transform: none !important; white-space: nowrap; text-align: center; }
+.wm-cert-sig-name {
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #fff;
+  text-transform: none !important;
+  white-space: nowrap;
+  text-align: center;
+}
+.wm-cert-sig-title {
+  font-size: 0.55rem;
+  color: #71717a;
+  text-transform: none !important;
+  white-space: nowrap;
+  text-align: center;
+}
+/* Parth Sikri handwritten signature */
 .wm-cert-sig-handwritten {
   font-family: 'Mr De Haviland', cursive;
-  font-size: 2.6rem !important;
+  font-size: 2.8rem;
   color: #818cf8;
-  margin-bottom: -12px;
+  transform: rotate(-5deg);
   display: inline-block;
+  margin-bottom: -12px;
   text-transform: none !important;
-  text-shadow: 1px 1px 1px rgba(0,0,0,0.5), 0 0 8px rgba(99, 102, 241, 0.35);
-  letter-spacing: 0.02em;
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.4), 0 0 10px rgba(99,102,241,0.3);
   line-height: 1;
+  white-space: nowrap;
 }
 
 /* proud to be AEWian badge */

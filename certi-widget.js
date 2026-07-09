@@ -114,13 +114,14 @@
 
           <div class="wm-cert-sigs">
             <div class="wm-cert-sig-block">
-              <div class="wm-cert-sig-verified" style="font-family: 'Inter', sans-serif; font-size: 0.64rem; font-weight: 900; color: #10b981; border: 1.5px solid #10b981; padding: 2px 8px; border-radius: 4px; margin-bottom: 12px; letter-spacing: 0.12em; text-transform: uppercase;">AEW Verified</div>
+              <div class="wm-cert-sig-spacer"></div>
+              <div class="wm-cert-sig-verified">AEW Verified</div>
               <div class="wm-cert-sig-line"></div>
               <div class="wm-cert-sig-name">Apna Engineering Wallah</div>
               <div class="wm-cert-sig-title">Verification Team</div>
             </div>
             <div class="wm-cert-sig-block">
-              <div class="wm-cert-sig-handwritten" style="color: #818cf8; transform: rotate(-5.5deg); font-size: 3.1rem; font-family: 'Mr De Haviland', cursive; margin-bottom: -15px;">Parth Sikri</div>
+              <div class="wm-cert-sig-handwritten">Parth Sikri</div>
               <div class="wm-cert-sig-line"></div>
               <div class="wm-cert-sig-name">Parth Sikri</div>
               <div class="wm-cert-sig-title">Founder, Apna Engineering Wallah</div>
