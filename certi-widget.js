@@ -102,6 +102,10 @@
 
           <!-- LEFT PANEL -->
           <div class="wm-cert-left">
+            <div class="wm-cert-brand">
+              <img src="aew_logo.png" alt="AEW" class="wm-cert-logo" crossorigin="anonymous" />
+              <span class="wm-cert-brand-text">Apna Engineering Wallah</span>
+            </div>
             <div class="wm-cert-decor" id="wmCertDecor">official token of hustle</div>
             <div class="wm-cert-title">Certificate of<br>Academic Hustle</div>
             <div class="wm-cert-divider"></div>
