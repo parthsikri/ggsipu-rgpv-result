@@ -236,10 +236,13 @@
 
 /* Print Mode Layout overrides */
 @media print {
-  body > * {
+  body.certi-modal-open > *:not(#certi-widget-container) {
     display: none !important;
   }
-  #certi-modal-overlay {
+  body.certi-modal-open #certi-widget-container {
+    display: block !important;
+  }
+  body.certi-modal-open #certi-modal-overlay {
     display: flex !important;
     position: absolute !important;
     top: 0; left: 0; width: 100%; height: auto;
@@ -248,7 +251,7 @@
     padding: 0 !important;
     margin: 0 !important;
   }
-  #certi-modal-content {
+  body.certi-modal-open #certi-modal-content {
     background: none !important;
     border: none !important;
     box-shadow: none !important;
@@ -258,10 +261,16 @@
     overflow: visible !important;
     width: 100% !important;
   }
-  .wm-title, .wm-sub, .wm-form, .wm-lead-title, .wm-lead-table, #certi-modal-close, .wm-cert-actions {
+  body.certi-modal-open .wm-title, 
+  body.certi-modal-open .wm-sub, 
+  body.certi-modal-open .wm-form, 
+  body.certi-modal-open .wm-lead-title, 
+  body.certi-modal-open .wm-lead-table, 
+  body.certi-modal-open #certi-modal-close, 
+  body.certi-modal-open .wm-cert-actions {
     display: none !important;
   }
-  .wm-cert-box {
+  body.certi-modal-open .wm-cert-box {
     display: block !important;
     border: 3px solid #6366f1 !important;
     background: #ffffff !important;
@@ -277,25 +286,25 @@
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
-  .wm-cert-box * {
+  body.certi-modal-open .wm-cert-box * {
     color: #000000 !important;
     border-color: #e4e4e7 !important;
   }
-  .wm-cert-decor {
+  body.certi-modal-open .wm-cert-decor {
     color: #6366f1 !important;
   }
-  .wm-cert-title {
+  body.certi-modal-open .wm-cert-title {
     background: none !important;
     -webkit-text-fill-color: initial !important;
     color: #4f46e5 !important;
   }
-  .wm-cert-sig-handwritten {
+  body.certi-modal-open .wm-cert-sig-handwritten {
     color: #4f46e5 !important;
   }
-  .wm-cert-sig-line {
+  body.certi-modal-open .wm-cert-sig-line {
     background: #000000 !important;
   }
-  .wm-cert-watermark {
+  body.certi-modal-open .wm-cert-watermark {
     display: none !important;
   }
 }

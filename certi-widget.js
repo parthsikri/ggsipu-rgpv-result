@@ -23,6 +23,7 @@
 
   // Inject DOM Elements
   const container = document.createElement('div');
+  container.id = 'certi-widget-container';
   container.innerHTML = `
     <!-- Trigger Button -->
     <button id="certi-widget-trigger">
@@ -176,14 +177,19 @@
   // Show/Hide Modal
   trigger.addEventListener('click', () => {
     overlay.style.display = 'flex';
+    document.body.classList.add('certi-modal-open');
     prefillForm();
     loadLeaderboard();
   });
   closeBtn.addEventListener('click', () => {
     overlay.style.display = 'none';
+    document.body.classList.remove('certi-modal-open');
   });
   overlay.addEventListener('click', (e) => {
-    if (e.target === overlay) overlay.style.display = 'none';
+    if (e.target === overlay) {
+      overlay.style.display = 'none';
+      document.body.classList.remove('certi-modal-open');
+    }
   });
 
   // Pre-fill Logic
