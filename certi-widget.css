@@ -50,9 +50,9 @@
   background: #121214;
   border: 2px solid #27272a;
   border-radius: 16px;
-  max-width: 650px;
+  max-width: 850px;
   width: 100%;
-  max-height: 90vh;
+  max-height: 92vh;
   overflow-y: auto;
   padding: 2rem;
   box-sizing: border-box;
@@ -152,319 +152,270 @@
 .wm-opt-title { font-size: 0.8rem; font-weight: 800; color: #fff; margin-bottom: 0.25rem; text-transform: lowercase; }
 .wm-opt-desc { font-size: 0.7rem; color: #71717a; line-height: 1.35; }
 
-/* Certificate Card Frame */
+/* ══════════════════════════════════════════════════════════
+   CERTIFICATE CARD — 16:9 Landscape Layout
+   ══════════════════════════════════════════════════════════ */
 .wm-cert-box {
-  display: none;
-  margin-bottom: 1.5rem;
+  display: none; /* shown via JS as flex */
+  aspect-ratio: 16 / 9;
+  width: 100%;
   background: #09090b;
   border: 2px solid #6366f1;
-  padding: 2.5rem 1.75rem;
   border-radius: 12px;
   position: relative;
-  text-align: center;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 20px rgba(99, 102, 241, 0.15);
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6), 0 0 30px rgba(99,102,241,0.15);
+  margin-bottom: 1rem;
+  /* Two-column flex layout */
+  flex-direction: row;
+  align-items: stretch;
 }
+/* Inner dashed border decoration */
 .wm-cert-box::before {
-  content: ''; position: absolute;
-  top: 8px; left: 8px; right: 8px; bottom: 8px;
-  border: 1px dashed rgba(99, 102, 241, 0.25);
-  border-radius: 8px; pointer-events: none;
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border: 1px dashed rgba(99,102,241,0.2);
+  border-radius: 8px;
+  pointer-events: none;
+  z-index: 0;
 }
+/* Big watermark in background */
 .wm-cert-watermark {
-  position: absolute; top: 52%; left: 50%;
-  transform: translate(-50%, -50%) rotate(-12deg);
-  font-size: 4rem; font-weight: 900;
-  color: rgba(99, 102, 241, 0.02);
-  pointer-events: none; user-select: none;
-  text-transform: lowercase; white-space: nowrap;
-}
-.wm-cert-decor { font-size: 0.6rem; letter-spacing: 0.3em; color: #6366f1; text-transform: uppercase; margin-bottom: 1.25rem; font-weight: 700; }
-.wm-cert-title {
-  font-size: 1.25rem; font-weight: 900;
-  color: #a78bfa; /* Clean brand purple/indigo text */
-  margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 0.05em;
-}
-.wm-cert-name {
-  font-size: 2.2rem; font-weight: 900; color: #fff;
-  border-bottom: 2px solid #6366f1; /* Brand Bluish Indigo line */
-  display: inline-block; padding: 0 2rem 0.4rem;
-  margin-bottom: 1.5rem; text-transform: none !important; /* Proper capitalization */
-  text-shadow: 0 0 10px rgba(99, 102, 241, 0.25);
-}
-/* Brand bar with logo + name */
-.wm-cert-brand-bar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.6rem;
-  margin-bottom: 1.5rem;
-}
-.wm-cert-brand-logo {
-  width: 36px;
-  height: 36px;
-  border-radius: 6px;
-  object-fit: contain;
-}
-.wm-cert-brand-name {
-  font-size: 0.78rem;
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) rotate(-15deg);
+  font-size: 9rem;
   font-weight: 900;
-  color: #fff;
-  letter-spacing: 0.02em;
-}
-.wm-cert-presented {
-  font-size: 0.75rem;
-  color: #71717a;
-  margin-bottom: 0.4rem;
-  text-transform: none;
-}
-/* Hero CGPA block */
-.wm-cert-cgpa-hero {
-  margin: 0.5rem auto 1.5rem;
-  padding: 1rem 1.5rem;
-  border: 1px solid rgba(99,102,241,0.2);
-  border-radius: 10px;
-  background: rgba(99,102,241,0.05);
-  display: inline-block;
-  min-width: 220px;
-}
-.wm-cert-cgpa-label {
-  font-size: 0.7rem;
-  color: #71717a;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-bottom: 0.2rem;
-}
-.wm-cert-cgpa-value {
-  font-size: 3.5rem;
-  font-weight: 900;
-  color: #6366f1;
-  line-height: 1;
-  letter-spacing: -0.02em;
-  text-shadow: 0 0 20px rgba(99,102,241,0.4);
-}
-.wm-cert-cgpa-unit {
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: #818cf8;
-  vertical-align: top;
-  margin-top: 0.6rem;
-  display: inline-block;
-}
-.wm-cert-cgpa-sem {
-  font-size: 0.72rem;
-  color: #a1a1aa;
-  margin-top: 0.4rem;
-  text-transform: none;
-}
-.wm-cert-cgpa-sem strong {
-  color: #fff;
-}
-/* Custom quote msg */
-.wm-cert-custom-msg {
-  font-size: 0.8rem;
-  color: #f59e0b;
-  font-style: italic;
-  margin: 0 auto 1.5rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  line-height: 1.4;
-  max-width: 420px;
-}
-/* Powered by — curiosity driver */
-.wm-cert-powered {
-  font-size: 0.72rem;
-  color: #71717a;
-  margin: 0.5rem auto 1.75rem;
-  line-height: 1.6;
-}
-.wm-cert-powered-brand {
-  font-weight: 900;
-  color: #a78bfa;
-}
-.wm-cert-powered-hint {
-  color: #52525b;
-  font-size: 0.65rem;
-}
-/* URL footer */
-.wm-cert-url {
-  font-size: 0.6rem;
-  color: rgba(99,102,241,0.4);
-  letter-spacing: 0.1em;
-  margin-top: 0.5rem;
-  margin-bottom: 0;
-  font-weight: 700;
+  color: rgba(99,102,241,0.025);
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+  z-index: 0;
 }
 
-/* ── Signature Section ──────────────────────────────────────────────── */
+/* ── LEFT PANEL ─────────────────────────────────────── */
+.wm-cert-left {
+  flex: 1.1;
+  padding: 1.75rem 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
+  text-align: left;
+}
+.wm-cert-decor {
+  font-size: 0.52rem;
+  letter-spacing: 0.28em;
+  color: #6366f1;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+}
+.wm-cert-title {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #a78bfa;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+  margin-bottom: 0.6rem;
+}
+.wm-cert-divider {
+  width: 40px;
+  height: 2px;
+  background: linear-gradient(90deg, #6366f1, transparent);
+  margin-bottom: 0.6rem;
+}
+.wm-cert-presented {
+  font-size: 0.65rem;
+  color: #71717a;
+  margin-bottom: 0.2rem;
+}
+.wm-cert-name {
+  font-size: 1.7rem;
+  font-weight: 900;
+  color: #fff;
+  text-transform: none !important;
+  text-shadow: 0 0 12px rgba(99,102,241,0.3);
+  line-height: 1.1;
+  margin-bottom: 0.3rem;
+}
+.wm-cert-sem-line {
+  font-size: 0.63rem;
+  color: #71717a;
+  margin-bottom: 0.75rem;
+}
+.wm-cert-sem-line strong { color: #a1a1aa; font-weight: 700; }
+
+/* Signature row inside left panel */
 .wm-cert-sigs {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
   align-items: flex-end;
-  padding: 0 0.75rem;
-  gap: 1rem;
-  flex-wrap: nowrap; /* NEVER wrap — always side by side */
-  overflow: hidden;
+  gap: 1.5rem;
+  margin-top: auto;
 }
 .wm-cert-sig-block {
-  flex: 1;
-  min-width: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.2rem;
+  gap: 0.15rem;
+  min-width: 0;
 }
-/* Spacer on left block to match signature height on right */
-.wm-cert-sig-spacer {
-  height: 3.5rem; /* matches approx height of handwritten sig */
-  display: block;
-}
-/* Green verified badge */
+.wm-cert-sig-spacer { height: 2.5rem; display: block; }
 .wm-cert-sig-verified {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.6rem;
+  font-size: 0.52rem;
   font-weight: 900;
   color: #10b981;
   border: 1.5px solid #10b981;
-  padding: 2px 8px;
-  border-radius: 4px;
-  letter-spacing: 0.12em;
+  padding: 1px 6px;
+  border-radius: 3px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   white-space: nowrap;
 }
 .wm-cert-sig-line {
-  width: 90px;
+  width: 80px;
   height: 1.5px;
   background: linear-gradient(90deg, transparent, #6366f1, transparent);
   flex-shrink: 0;
 }
 .wm-cert-sig-name {
-  font-size: 0.68rem;
+  font-size: 0.6rem;
   font-weight: 800;
   color: #fff;
   text-transform: none !important;
   white-space: nowrap;
-  text-align: center;
 }
 .wm-cert-sig-title {
-  font-size: 0.55rem;
+  font-size: 0.52rem;
   color: #71717a;
   text-transform: none !important;
   white-space: nowrap;
-  text-align: center;
 }
-/* Parth Sikri handwritten signature */
 .wm-cert-sig-handwritten {
   font-family: 'Mr De Haviland', cursive;
-  font-size: 2.8rem;
+  font-size: 2.4rem;
   color: #818cf8;
   transform: rotate(-5deg);
   display: inline-block;
-  margin-bottom: -12px;
+  margin-bottom: -10px;
   text-transform: none !important;
-  text-shadow: 1px 1px 1px rgba(0,0,0,0.4), 0 0 10px rgba(99,102,241,0.3);
+  text-shadow: 0 0 10px rgba(99,102,241,0.3);
   line-height: 1;
   white-space: nowrap;
 }
 
-/* proud to be AEWian badge */
-.wm-cert-aewian {
-  font-size: 0.65rem;
-  color: rgba(99, 102, 241, 0.6);
+/* ── VERTICAL DIVIDER ────────────────────────────────── */
+.wm-cert-vdivider {
+  width: 1px;
+  background: linear-gradient(180deg, transparent, #6366f1, transparent);
+  align-self: stretch;
+  flex-shrink: 0;
+  opacity: 0.35;
+  z-index: 1;
+}
+
+/* ── RIGHT PANEL ─────────────────────────────────────── */
+.wm-cert-right {
+  flex: 0.9;
+  padding: 1.75rem 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  gap: 0.2rem;
+}
+.wm-cert-cgpa-label {
+  font-size: 0.6rem;
+  color: #71717a;
   text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+.wm-cert-cgpa-value {
+  font-size: 5rem;
+  font-weight: 900;
+  color: #6366f1;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  text-shadow: 0 0 30px rgba(99,102,241,0.5);
+}
+.wm-cert-cgpa-unit {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #818cf8;
   letter-spacing: 0.15em;
-  margin: 0.5rem auto 1.5rem;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+.wm-cert-custom-msg {
+  font-size: 0.68rem;
+  color: #f59e0b;
+  font-style: italic;
+  font-weight: 700;
+  line-height: 1.5;
+  max-width: 200px;
+  text-align: center;
+  margin-top: 0.25rem;
+}
+.wm-cert-aewian {
+  font-size: 0.55rem;
+  color: rgba(99,102,241,0.55);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
   font-weight: 800;
-  display: block;
+  margin-top: auto;
+}
+.wm-cert-url {
+  font-size: 0.5rem;
+  color: rgba(99,102,241,0.3);
+  letter-spacing: 0.08em;
+  font-weight: 700;
 }
 
-/* 🏆 SILVER CERTIFICATE OVERRIDES (70+ words or 9.2+ CGPA) */
+/* ══ SILVER OVERRIDES ══════════════════════════════════ */
 .silver-cert {
-  border: 2.5px solid #9ca3af !important;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.6), 0 0 20px rgba(156, 163, 175, 0.22) !important;
+  border-color: #9ca3af !important;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6), 0 0 30px rgba(156,163,175,0.2) !important;
 }
-.silver-cert::before {
-  border-color: rgba(156, 163, 175, 0.25) !important;
-}
-.silver-cert .wm-cert-decor {
-  color: #cbd5e1 !important;
-}
-.silver-cert .wm-cert-title {
-  color: #cbd5e1 !important;
-  background: none !important;
-  -webkit-text-fill-color: initial !important;
-}
-.silver-cert .wm-cert-name {
-  border-bottom-color: #cbd5e1 !important;
-  text-shadow: 0 0 10px rgba(156, 163, 175, 0.25) !important;
-}
-.silver-cert .wm-cert-sig-handwritten {
-  color: #cbd5e1 !important;
-  text-shadow: 1px 1px 1px rgba(0,0,0,0.5), 0 0 8px rgba(156, 163, 175, 0.3) !important;
-}
-.silver-cert .wm-cert-sig-line {
-  background: linear-gradient(90deg, transparent, #cbd5e1, transparent) !important;
-}
-.silver-cert .wm-cert-aewian {
-  color: rgba(156, 163, 175, 0.6) !important;
-}
-.silver-cert .wm-cert-watermark {
-  color: rgba(156, 163, 175, 0.03) !important;
-}
-
-/* 👑 GOLD CERTIFICATE OVERRIDES (100+ words or 9.5+ CGPA) */
-.gold-cert {
-  border: 2.5px solid #fbbf24 !important;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.6), 0 0 25px rgba(251, 191, 36, 0.28) !important;
-}
-.gold-cert::before {
-  border-color: rgba(251, 191, 36, 0.25) !important;
-}
-.gold-cert .wm-cert-decor {
-  color: #fbbf24 !important;
-  text-shadow: 0 0 8px rgba(251, 191, 36, 0.15);
-}
-.gold-cert .wm-cert-title {
-  color: #fbbf24 !important;
-  background: none !important;
-  -webkit-text-fill-color: initial !important;
-}
-.gold-cert .wm-cert-name {
-  border-bottom-color: #fbbf24 !important;
-  text-shadow: 0 0 10px rgba(251, 191, 36, 0.3) !important;
-}
-.gold-cert .wm-cert-sig-handwritten {
-  color: #fbbf24 !important;
-  text-shadow: 1px 1px 1px rgba(0,0,0,0.5), 0 0 8px rgba(251, 191, 36, 0.35) !important;
-}
-.gold-cert .wm-cert-sig-line {
-  background: linear-gradient(90deg, transparent, #fbbf24, transparent) !important;
-}
-.gold-cert .wm-cert-aewian {
-  color: rgba(251, 191, 36, 0.7) !important;
-  text-shadow: 0 0 4px rgba(251, 191, 36, 0.2);
-}
-.gold-cert .wm-cert-watermark {
-  color: rgba(251, 191, 36, 0.04) !important;
-}
-.gold-cert .wm-cert-cgpa-hero {
-  border-color: rgba(251,191,36,0.3) !important;
-  background: rgba(251,191,36,0.05) !important;
-}
-.gold-cert .wm-cert-cgpa-value {
-  color: #fbbf24 !important;
-  text-shadow: 0 0 20px rgba(251,191,36,0.4) !important;
-}
-.gold-cert .wm-cert-cgpa-unit { color: #f59e0b !important; }
-.silver-cert .wm-cert-cgpa-hero {
-  border-color: rgba(156,163,175,0.3) !important;
-  background: rgba(156,163,175,0.05) !important;
-}
-.silver-cert .wm-cert-cgpa-value {
-  color: #cbd5e1 !important;
-  text-shadow: 0 0 20px rgba(156,163,175,0.3) !important;
-}
+.silver-cert::before { border-color: rgba(156,163,175,0.2) !important; }
+.silver-cert .wm-cert-watermark { color: rgba(156,163,175,0.03) !important; }
+.silver-cert .wm-cert-decor { color: #cbd5e1 !important; }
+.silver-cert .wm-cert-title { color: #cbd5e1 !important; }
+.silver-cert .wm-cert-name { text-shadow: 0 0 12px rgba(156,163,175,0.3) !important; }
+.silver-cert .wm-cert-divider { background: linear-gradient(90deg, #cbd5e1, transparent) !important; }
+.silver-cert .wm-cert-vdivider { background: linear-gradient(180deg, transparent, #cbd5e1, transparent) !important; }
+.silver-cert .wm-cert-sig-handwritten { color: #cbd5e1 !important; text-shadow: 0 0 8px rgba(156,163,175,0.3) !important; }
+.silver-cert .wm-cert-sig-line { background: linear-gradient(90deg, transparent, #cbd5e1, transparent) !important; }
+.silver-cert .wm-cert-aewian { color: rgba(156,163,175,0.55) !important; }
+.silver-cert .wm-cert-cgpa-value { color: #cbd5e1 !important; text-shadow: 0 0 30px rgba(156,163,175,0.4) !important; }
 .silver-cert .wm-cert-cgpa-unit { color: #9ca3af !important; }
+
+/* ══ GOLD OVERRIDES ════════════════════════════════════ */
+.gold-cert {
+  border-color: #fbbf24 !important;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6), 0 0 35px rgba(251,191,36,0.25) !important;
+}
+.gold-cert::before { border-color: rgba(251,191,36,0.25) !important; }
+.gold-cert .wm-cert-watermark { color: rgba(251,191,36,0.04) !important; }
+.gold-cert .wm-cert-decor { color: #fbbf24 !important; }
+.gold-cert .wm-cert-title { color: #fbbf24 !important; }
+.gold-cert .wm-cert-name { text-shadow: 0 0 12px rgba(251,191,36,0.35) !important; }
+.gold-cert .wm-cert-divider { background: linear-gradient(90deg, #fbbf24, transparent) !important; }
+.gold-cert .wm-cert-vdivider { background: linear-gradient(180deg, transparent, #fbbf24, transparent) !important; }
+.gold-cert .wm-cert-sig-handwritten { color: #fbbf24 !important; text-shadow: 0 0 8px rgba(251,191,36,0.35) !important; }
+.gold-cert .wm-cert-sig-line { background: linear-gradient(90deg, transparent, #fbbf24, transparent) !important; }
+.gold-cert .wm-cert-aewian { color: rgba(251,191,36,0.65) !important; }
+.gold-cert .wm-cert-cgpa-value { color: #fbbf24 !important; text-shadow: 0 0 30px rgba(251,191,36,0.5) !important; }
+.gold-cert .wm-cert-cgpa-unit { color: #f59e0b !important; }
+
 
 .wm-cert-actions {
   display: flex;

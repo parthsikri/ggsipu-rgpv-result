@@ -98,58 +98,58 @@
 
         <!-- Certificate Container -->
         <div class="wm-cert-box" id="wmCertDisplay">
-          <div class="wm-cert-watermark">apna engineering</div>
+          <div class="wm-cert-watermark">AEW</div>
 
-          <div class="wm-cert-brand-bar">
-            <img src="aew_logo.png" alt="Apna Engineering Wallah" class="wm-cert-brand-logo" crossorigin="anonymous" />
-            <div class="wm-cert-brand-name">Apna Engineering Wallah</div>
+          <!-- LEFT PANEL -->
+          <div class="wm-cert-left">
+            <div class="wm-cert-decor" id="wmCertDecor">official token of hustle</div>
+            <div class="wm-cert-title">Certificate of<br>Academic Hustle</div>
+            <div class="wm-cert-divider"></div>
+            <div class="wm-cert-presented">This certificate is proudly presented to</div>
+            <div class="wm-cert-name" id="wmCertName">Vartika</div>
+            <div class="wm-cert-sem-line">in <strong id="wmCertSem">Sem-2 End Term · IPU</strong></div>
+
+            <!-- Signatures -->
+            <div class="wm-cert-sigs">
+              <div class="wm-cert-sig-block">
+                <div class="wm-cert-sig-spacer"></div>
+                <div class="wm-cert-sig-verified">AEW Verified</div>
+                <div class="wm-cert-sig-line"></div>
+                <div class="wm-cert-sig-name">Apna Engineering Wallah</div>
+                <div class="wm-cert-sig-title">Verification Team</div>
+              </div>
+              <div class="wm-cert-sig-block">
+                <div class="wm-cert-sig-handwritten">Parth Sikri</div>
+                <div class="wm-cert-sig-line"></div>
+                <div class="wm-cert-sig-name">Parth Sikri</div>
+                <div class="wm-cert-sig-title">Founder, AEW</div>
+              </div>
+            </div>
           </div>
 
-          <div class="wm-cert-decor">official token of hustle</div>
-          <div class="wm-cert-title">Certificate of Academic Hustle</div>
+          <!-- VERTICAL DIVIDER -->
+          <div class="wm-cert-vdivider"></div>
 
-          <div class="wm-cert-presented">This certificate is proudly presented to</div>
-          <div class="wm-cert-name" id="wmCertName">Vartika</div>
-
-          <div class="wm-cert-cgpa-hero">
+          <!-- RIGHT PANEL -->
+          <div class="wm-cert-right">
             <div class="wm-cert-cgpa-label">secured a brilliant</div>
-            <div class="wm-cert-cgpa-value"><span id="wmCertCgpa">9.14</span> <span class="wm-cert-cgpa-unit">CGPA</span></div>
-            <div class="wm-cert-cgpa-sem">in <strong id="wmCertSem">Sem-2 End Term · IPU</strong></div>
-          </div>
+            <div class="wm-cert-cgpa-value"><span id="wmCertCgpa">9.14</span></div>
+            <div class="wm-cert-cgpa-unit">CGPA</div>
 
-          <div id="wmCertCustomMsg" class="wm-cert-custom-msg"></div>
+            <div id="wmCertCustomMsg" class="wm-cert-custom-msg"></div>
 
-          <div class="wm-cert-powered">
-            <span class="wm-cert-powered-label">studied smart with</span>
-            <span class="wm-cert-powered-brand">Apna Engineering Wallah</span>
-            <span class="wm-cert-powered-hint">— bhaiya ke important topics 🔥</span>
-          </div>
-
-          <div class="wm-cert-sigs">
-            <div class="wm-cert-sig-block">
-              <div class="wm-cert-sig-spacer"></div>
-              <div class="wm-cert-sig-verified">AEW Verified</div>
-              <div class="wm-cert-sig-line"></div>
-              <div class="wm-cert-sig-name">Apna Engineering Wallah</div>
-              <div class="wm-cert-sig-title">Verification Team</div>
-            </div>
-            <div class="wm-cert-sig-block">
-              <div class="wm-cert-sig-handwritten">Parth Sikri</div>
-              <div class="wm-cert-sig-line"></div>
-              <div class="wm-cert-sig-name">Parth Sikri</div>
-              <div class="wm-cert-sig-title">Founder, Apna Engineering Wallah</div>
-            </div>
-          </div>
-
-          <div class="wm-cert-aewian">proud to be AEWian 💙</div>
-          <div class="wm-cert-url">results.apnaengineeringwallah.in</div>
-
-          <div class="wm-cert-actions">
-            <button class="wm-cert-action-btn primary" id="wmPrintBtn">⬇ Download PNG</button>
-            <a class="wm-cert-action-btn linkedin" id="wmLinkedInBtn" href="#" target="_blank">in Share on LinkedIn</a>
-            <a class="wm-cert-action-btn" id="wmWaBtn" href="#" target="_blank">📲 WhatsApp</a>
+            <div class="wm-cert-aewian">proud to be AEWian 💙</div>
+            <div class="wm-cert-url">results.apnaengineeringwallah.in</div>
           </div>
         </div>
+
+        <!-- Action buttons OUTSIDE cert box so they don't appear in PNG -->
+        <div class="wm-cert-actions" id="wmCertActions">
+          <button class="wm-cert-action-btn primary" id="wmPrintBtn">⬇ Download PNG</button>
+          <a class="wm-cert-action-btn linkedin" id="wmLinkedInBtn" href="#" target="_blank">in LinkedIn</a>
+          <a class="wm-cert-action-btn" id="wmWaBtn" href="#" target="_blank">📲 WhatsApp</a>
+        </div>
+
 
         <!-- Leaderboard -->
         <div class="wm-lead-title">certified hustlers leaderboard</div>
@@ -341,10 +341,12 @@
 
         const certBox = document.getElementById('wmCertDisplay');
         certBox.className = 'wm-cert-box ' + (certType === 'gold' ? 'gold-cert' : (certType === 'silver' ? 'silver-cert' : ''));
-        certBox.querySelector('.wm-cert-decor').textContent = decorText;
+        document.getElementById('wmCertDecor').textContent = decorText;
         document.getElementById('wmCertCustomMsg').textContent = customMsg;
         
-        certBox.style.display = 'block';
+        certBox.style.display = 'flex'; // 16:9 flex layout
+        document.getElementById('wmCertActions').style.display = 'flex';
+
 
         // Bind share buttons
         const siteUrl = window.location.origin + '/';
