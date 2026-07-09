@@ -261,6 +261,9 @@
     overflow: visible !important;
     width: 100% !important;
   }
+  body.certi-modal-open {
+    background: #09090b !important;
+  }
   body.certi-modal-open .wm-title, 
   body.certi-modal-open .wm-sub, 
   body.certi-modal-open .wm-form, 
@@ -273,8 +276,7 @@
   body.certi-modal-open .wm-cert-box {
     display: block !important;
     border: 3px solid #6366f1 !important;
-    background: #ffffff !important;
-    color: #000000 !important;
+    background: #09090b !important;
     box-shadow: none !important;
     padding: 4rem 3rem !important;
     margin: 2rem auto !important;
@@ -287,8 +289,17 @@
     print-color-adjust: exact;
   }
   body.certi-modal-open .wm-cert-box * {
-    color: #000000 !important;
-    border-color: #e4e4e7 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  body.certi-modal-open .wm-cert-name {
+    color: #ffffff !important;
+  }
+  body.certi-modal-open .cert-presented,
+  body.certi-modal-open .wm-cert-desc,
+  body.certi-modal-open .wm-cert-sig-name,
+  body.certi-modal-open .wm-cert-sig-title {
+    color: #a1a1aa !important;
   }
   body.certi-modal-open .wm-cert-decor {
     color: #6366f1 !important;
@@ -296,15 +307,20 @@
   body.certi-modal-open .wm-cert-title {
     background: none !important;
     -webkit-text-fill-color: initial !important;
-    color: #4f46e5 !important;
+    color: #a78bfa !important;
   }
   body.certi-modal-open .wm-cert-sig-handwritten {
-    color: #4f46e5 !important;
+    color: #6366f1 !important;
   }
   body.certi-modal-open .wm-cert-sig-line {
-    background: #000000 !important;
+    background: #27272a !important;
+    height: 1px !important;
   }
   body.certi-modal-open .wm-cert-watermark {
-    display: none !important;
+    display: block !important;
+    color: rgba(99, 102, 241, 0.05) !important;
+  }
+  body.certi-modal-open #wmCertCustomMsg {
+    color: #f59e0b !important;
   }
 }
