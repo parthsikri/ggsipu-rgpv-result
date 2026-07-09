@@ -186,10 +186,11 @@
   margin-bottom: 1.5rem; text-transform: lowercase; letter-spacing: -0.02em;
 }
 .wm-cert-name {
-  font-size: 2rem; font-weight: 900; color: #fff;
-  border-bottom: 2px solid #27272a;
-  display: inline-block; padding: 0 1.5rem 0.4rem;
-  margin-bottom: 1.5rem; text-transform: lowercase;
+  font-size: 2.2rem; font-weight: 900; color: #fff;
+  border-bottom: 2px solid #6366f1; /* Brand Bluish Indigo line */
+  display: inline-block; padding: 0 2rem 0.4rem;
+  margin-bottom: 1.5rem; text-transform: none !important; /* Proper capitalization */
+  text-shadow: 0 0 10px rgba(99, 102, 241, 0.25);
 }
 .wm-cert-desc { font-size: 0.82rem; color: #a1a1aa; line-height: 1.6; max-width: 440px; margin: 0 auto 2rem; text-transform: lowercase; }
 .wm-cert-desc strong { color: #fff; font-family: ui-monospace, SFMono-Regular, monospace; }
@@ -208,6 +209,81 @@
   text-transform: none !important; /* Keep capitalization clean */
   text-shadow: 1px 1px 1px rgba(0,0,0,0.5), 0 0 8px rgba(99, 102, 241, 0.3);
   letter-spacing: 0.02em;
+}
+
+/* proud to be AEWian badge */
+.wm-cert-aewian {
+  font-size: 0.65rem;
+  color: rgba(99, 102, 241, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin: 0.5rem auto 1.5rem;
+  font-weight: 800;
+  display: block;
+}
+
+/* 🏆 SILVER CERTIFICATE OVERRIDES (70+ words or 9.2+ CGPA) */
+.silver-cert {
+  border: 2.5px solid #9ca3af !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6), 0 0 20px rgba(156, 163, 175, 0.22) !important;
+}
+.silver-cert::before {
+  border-color: rgba(156, 163, 175, 0.25) !important;
+}
+.silver-cert .wm-cert-decor {
+  color: #cbd5e1 !important;
+}
+.silver-cert .wm-cert-title {
+  background: linear-gradient(135deg, #fff 40%, #9ca3af 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+.silver-cert .wm-cert-name {
+  border-bottom-color: #cbd5e1 !important;
+  text-shadow: 0 0 10px rgba(156, 163, 175, 0.25) !important;
+}
+.silver-cert .wm-cert-sig-handwritten {
+  color: #cbd5e1 !important;
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.5), 0 0 8px rgba(156, 163, 175, 0.3) !important;
+}
+.silver-cert .wm-cert-aewian {
+  color: rgba(156, 163, 175, 0.6) !important;
+}
+.silver-cert .wm-cert-watermark {
+  color: rgba(156, 163, 175, 0.03) !important;
+}
+
+/* 👑 GOLD CERTIFICATE OVERRIDES (100+ words or 9.5+ CGPA) */
+.gold-cert {
+  border: 2.5px solid #fbbf24 !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6), 0 0 25px rgba(251, 191, 36, 0.28) !important;
+}
+.gold-cert::before {
+  border-color: rgba(251, 191, 36, 0.25) !important;
+}
+.gold-cert .wm-cert-decor {
+  color: #fbbf24 !important;
+  text-shadow: 0 0 8px rgba(251, 191, 36, 0.15);
+}
+.gold-cert .wm-cert-title {
+  background: linear-gradient(135deg, #fff 40%, #fbbf24 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+.gold-cert .wm-cert-name {
+  border-bottom-color: #fbbf24 !important;
+  text-shadow: 0 0 10px rgba(251, 191, 36, 0.3) !important;
+}
+.gold-cert .wm-cert-sig-handwritten {
+  color: #fbbf24 !important;
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.5), 0 0 8px rgba(251, 191, 36, 0.35) !important;
+}
+.gold-cert .wm-cert-aewian {
+  color: rgba(251, 191, 36, 0.7) !important;
+  text-shadow: 0 0 4px rgba(251, 191, 36, 0.2);
+}
+.gold-cert .wm-cert-watermark {
+  color: rgba(251, 191, 36, 0.04) !important;
 }
 
 .wm-cert-actions { display: flex; gap: 0.75rem; justify-content: center; margin-top: 1rem; }

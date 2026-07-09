@@ -127,6 +127,8 @@
             </div>
           </div>
 
+          <div class="wm-cert-aewian">proud to be AEWian 💙</div>
+
           <div class="wm-cert-actions">
             <button class="wm-cert-action-btn primary" id="wmPrintBtn">Download Certificate (PNG)</button>
             <a class="wm-cert-action-btn" id="wmWaBtn" href="#" target="_blank">Share on WhatsApp</a>
@@ -295,18 +297,37 @@
         } catch(err) {}
         document.getElementById('wmCertSem').textContent = `sem-${semNum} end term exams ipu`;
 
-        // 2. Dynamic Custom Message Acc to CGPA
+        // 2. Dynamic Classification (Gold, Silver, Normal)
+        const wordCount = experience.split(/\s+/).filter(w => w.length > 0).length;
+        
+        let certType = 'normal';
         let customMsg = '';
-        if (cgpa >= 9.0) {
-          customMsg = '"academic absolute beast. you are genuinely built different. keep cooking!"';
-        } else if (cgpa >= 7.5) {
-          customMsg = '"solid prep. clean execution. you are locking in and moving up."';
+        let decorText = 'official token of hustle';
+        
+        if (wordCount >= 100 || cgpa >= 9.5) {
+          certType = 'gold';
+          decorText = 'true loyal supporter & academic elite';
+          customMsg = '"you are truely a loyal supporter. academic absolute beast. you are genuinely built different. keep cooking!"';
+        } else if (wordCount >= 70 || cgpa >= 9.2) {
+          certType = 'silver';
+          decorText = 'outstanding contributor & academic star';
+          customMsg = '"outstanding contributor & academic star. solid prep. clean execution. you are locking in and moving up."';
         } else {
-          customMsg = '"saved by bhaiya\'s topics this time. next sem is a fresh start — let\'s lock in early!"';
+          decorText = 'official token of hustle';
+          if (cgpa >= 9.0) {
+            customMsg = '"academic absolute beast. you are genuinely built different. keep cooking!"';
+          } else if (cgpa >= 7.5) {
+            customMsg = '"solid prep. clean execution. you are locking in and moving up."';
+          } else {
+            customMsg = '"saved by bhaiya\'s topics this time. next sem is a fresh start — let\'s lock in early!"';
+          }
         }
+
+        const certBox = document.getElementById('wmCertDisplay');
+        certBox.className = 'wm-cert-box ' + (certType === 'gold' ? 'gold-cert' : (certType === 'silver' ? 'silver-cert' : ''));
+        certBox.querySelector('.wm-cert-decor').textContent = decorText;
         document.getElementById('wmCertCustomMsg').textContent = customMsg;
         
-        const certBox = document.getElementById('wmCertDisplay');
         certBox.style.display = 'block';
 
         // Bind WhatsApp links
