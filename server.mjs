@@ -847,6 +847,66 @@ function findSubjectNameInSyllabus(code, syllabusData) {
     }
 
 
+    // ── GET /api/diagnose-db ──────────────────────────────────────────
+    if (url.pathname === '/api/diagnose-db' && req.method === 'GET') {
+      const dbUrl = process.env.FIREBASE_DB_URL || null;
+      let firebaseReadStatus = 'not configured';
+      let firebaseWriteStatus = 'not configured';
+      let firebaseData = null;
+      let localDataSize = 0;
+      let localDataCount = 0;
+      
+      const dbPath = path.join(__dirname, 'leaderboard.json');
+      if (fs.existsSync(dbPath)) {
+        try {
+          const raw = fs.readFileSync(dbPath, 'utf8');
+          localDataSize = raw.length;
+          const parsed = JSON.parse(raw);
+          localDataCount = parsed.length;
+        } catch(e) {
+          localDataSize = -1;
+        }
+      }
+
+      if (dbUrl) {
+        try {
+          const res = await fetch(`${dbUrl.replace(/\/$/, '')}/leaderboard.json`);
+          firebaseReadStatus = res.ok ? `OK (${res.status})` : `Failed (${res.status})`;
+          if (res.ok) {
+            firebaseData = await res.json();
+          }
+        } catch(e) {
+          firebaseReadStatus = `Error: ${e.message}`;
+        }
+
+        try {
+          const testData = [{ name: 'diag-test', timestamp: Date.now() }];
+          const res = await fetch(`${dbUrl.replace(/\/$/, '')}/diag_test.json`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(testData)
+          });
+          firebaseWriteStatus = res.ok ? `OK (${res.status})` : `Failed (${res.status})`;
+        } catch(e) {
+          firebaseWriteStatus = `Error: ${e.message}`;
+        }
+      }
+
+      sendJSON(res, 200, {
+        firebase_configured: !!dbUrl,
+        firebase_url_masked: dbUrl ? dbUrl.substring(0, 20) + '...' : null,
+        firebase_read: firebaseReadStatus,
+        firebase_write: firebaseWriteStatus,
+        firebase_data: firebaseData,
+        local_data: {
+          exists: fs.existsSync(dbPath),
+          size: localDataSize,
+          count: localDataCount
+        }
+      });
+      return;
+    }
+
     if (url.pathname === '/api/leaderboard' && req.method === 'GET') {
       const data = await getLeaderboardData();
       // Only return approved entries to public leaderboard
