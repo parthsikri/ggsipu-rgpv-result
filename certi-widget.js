@@ -355,8 +355,7 @@
             backgroundColor: '#09090b',
             scale: 3, // Ultra-sharp 3x resolution for high-definition sharing!
             useCORS: true,
-            logging: false,
-            allowTaint: true
+            logging: false
           }).then(canvas => {
             // Restore actions and shadow style
             if (actions) actions.style.display = 'flex';

@@ -930,7 +930,10 @@ function findSubjectNameInSyllabus(code, syllabusData) {
     const full = path.join(__dirname, filePath);
     if (fs.existsSync(full) && fs.statSync(full).isFile()) {
       const ext = path.extname(full);
-      res.writeHead(200, { 'Content-Type': mime(ext) });
+      res.writeHead(200, { 
+        'Content-Type': mime(ext),
+        ...corsHeaders()
+      });
       res.end(fs.readFileSync(full));
     } else {
       res.writeHead(404); res.end('Not Found');
