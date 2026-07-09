@@ -98,19 +98,32 @@
 
         <!-- Certificate Container -->
         <div class="wm-cert-box" id="wmCertDisplay">
-          <img src="aew_logo.png" alt="Apna Engineering" style="width: 140px; height: auto; margin: 0 auto 1.25rem; display: block; border-radius: 8px;" />
           <div class="wm-cert-watermark">apna engineering</div>
-          <div class="wm-cert-decor">official token of hustle</div>
-          <div class="wm-cert-title">certificate of academic hustle</div>
-          
-          <div class="cert-presented" style="font-size:.78rem;color:#71717a;margin-bottom:.5rem;">this token is proudly presented to</div>
-          <div class="wm-cert-name" id="wmCertName">vartika</div>
-          
-          <div class="wm-cert-desc">
-            for securing a brilliant grade of <strong id="wmCertCgpa">9.14</strong> <strong>CGPA</strong> in <strong id="wmCertSem">sem-2 end term exams ipu</strong>.
+
+          <div class="wm-cert-brand-bar">
+            <img src="aew_logo.png" alt="Apna Engineering Wallah" class="wm-cert-brand-logo" crossorigin="anonymous" />
+            <div class="wm-cert-brand-name">Apna Engineering Wallah</div>
           </div>
 
-          <div id="wmCertCustomMsg" style="font-size:0.8rem;color:#f59e0b;font-style:italic;margin:-1rem auto 1.5rem;font-weight:700;letter-spacing:0.02em;text-transform:lowercase;line-height:1.4;max-width:440px;"></div>
+          <div class="wm-cert-decor">official token of hustle</div>
+          <div class="wm-cert-title">Certificate of Academic Hustle</div>
+
+          <div class="wm-cert-presented">This certificate is proudly presented to</div>
+          <div class="wm-cert-name" id="wmCertName">Vartika</div>
+
+          <div class="wm-cert-cgpa-hero">
+            <div class="wm-cert-cgpa-label">secured a brilliant</div>
+            <div class="wm-cert-cgpa-value"><span id="wmCertCgpa">9.14</span> <span class="wm-cert-cgpa-unit">CGPA</span></div>
+            <div class="wm-cert-cgpa-sem">in <strong id="wmCertSem">Sem-2 End Term · IPU</strong></div>
+          </div>
+
+          <div id="wmCertCustomMsg" class="wm-cert-custom-msg"></div>
+
+          <div class="wm-cert-powered">
+            <span class="wm-cert-powered-label">studied smart with</span>
+            <span class="wm-cert-powered-brand">Apna Engineering Wallah</span>
+            <span class="wm-cert-powered-hint">— bhaiya ke important topics 🔥</span>
+          </div>
 
           <div class="wm-cert-sigs">
             <div class="wm-cert-sig-block">
@@ -129,10 +142,12 @@
           </div>
 
           <div class="wm-cert-aewian">proud to be AEWian 💙</div>
+          <div class="wm-cert-url">results.apnaengineeringwallah.in</div>
 
           <div class="wm-cert-actions">
-            <button class="wm-cert-action-btn primary" id="wmPrintBtn">Download Certificate (PNG)</button>
-            <a class="wm-cert-action-btn" id="wmWaBtn" href="#" target="_blank">Share on WhatsApp</a>
+            <button class="wm-cert-action-btn primary" id="wmPrintBtn">⬇ Download PNG</button>
+            <a class="wm-cert-action-btn linkedin" id="wmLinkedInBtn" href="#" target="_blank">in Share on LinkedIn</a>
+            <a class="wm-cert-action-btn" id="wmWaBtn" href="#" target="_blank">📲 WhatsApp</a>
           </div>
         </div>
 
@@ -331,9 +346,13 @@
         
         certBox.style.display = 'block';
 
-        // Bind WhatsApp links
-        const waMsg = `🎓 *Apna Engineering Hustle Certificate* 🎓\n\nMujhe mil gaya Apna Engineering Hustle Certificate *${cgpa.toFixed(2)}* CGPA secure karne ke liye, powered by *${activeSource}*! \n\nCheck yours here:\n${window.location.origin}/`;
+        // Bind share buttons
+        const siteUrl = window.location.origin + '/';
+        const waMsg = `🏆 *I just got my Apna Engineering Wallah Hustle Certificate!*\n\nSecured *${cgpa.toFixed(2)} CGPA* in ${document.getElementById('wmCertSem').textContent}!\n\nStudied smart with *Apna Engineering Wallah* — bhaiya ke important topics ne kaam aa gaye! 🔥\n\nCheck your result & get yours too:\n${siteUrl}`;
         document.getElementById('wmWaBtn').href = `https://wa.me/?text=${encodeURIComponent(waMsg)}`;
+
+        const liText = `🏆 Proud to share — I secured ${cgpa.toFixed(2)} CGPA in my semester exams!\n\nStudied smart using Apna Engineering Wallah's important topics & resources. Bhaiya ke notes ne genuinely carried the semester! 🔥\n\nIf you're an engineering student, check out their result portal:\n${siteUrl}\n\n#ApnaEngineeringWallah #Engineering #IPU #AcademicHustle #ResultTime`;
+        document.getElementById('wmLinkedInBtn').href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(siteUrl)}&title=${encodeURIComponent('Apna Engineering Wallah Hustle Certificate')}&summary=${encodeURIComponent(liText)}`;
         
         // Bind Exporter button
         document.getElementById('wmPrintBtn').onclick = () => {
