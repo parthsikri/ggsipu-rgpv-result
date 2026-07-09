@@ -15,11 +15,16 @@
   link.href = WIDGET_API_BASE + '/certi-widget.css?v=' + Date.now();
   document.head.appendChild(link);
 
-  // Inject Handwriting Font
+  // Inject Handwriting Fonts (Caveat + Alex Brush for calligraphic signature)
   const fontLink = document.createElement('link');
   fontLink.rel = 'stylesheet';
-  fontLink.href = 'https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap';
+  fontLink.href = 'https://fonts.googleapis.com/css2?family=Alex+Brush&family=Caveat:wght@700&display=swap';
   document.head.appendChild(fontLink);
+
+  // Inject html2canvas library for high-resolution image snapshots
+  const html2canvasScript = document.createElement('script');
+  html2canvasScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+  document.head.appendChild(html2canvasScript);
 
   // Inject DOM Elements
   const container = document.createElement('div');
@@ -109,12 +114,13 @@
 
           <div class="wm-cert-sigs">
             <div class="wm-cert-sig-block">
+              <div class="wm-cert-sig-handwritten" style="color: #a5b4fc; transform: rotate(-1.5deg); font-size: 1.8rem; font-family: 'Alex Brush', cursive;">Verified</div>
               <div class="wm-cert-sig-line"></div>
               <div class="wm-cert-sig-name">apna engineering</div>
               <div class="wm-cert-sig-title">verification team</div>
             </div>
             <div class="wm-cert-sig-block">
-              <div class="wm-cert-sig-handwritten">parth sikri</div>
+              <div class="wm-cert-sig-handwritten" style="color: #818cf8; transform: rotate(-4deg); font-size: 2rem; font-family: 'Alex Brush', cursive;">Parth Sikri</div>
               <div class="wm-cert-sig-line"></div>
               <div class="wm-cert-sig-name">parth sikri</div>
               <div class="wm-cert-sig-title">founder, apna engineering</div>
@@ -122,7 +128,7 @@
           </div>
 
           <div class="wm-cert-actions">
-            <button class="wm-cert-action-btn primary" id="wmPrintBtn">Print / Save PDF</button>
+            <button class="wm-cert-action-btn primary" id="wmPrintBtn">Download Certificate (PNG)</button>
             <a class="wm-cert-action-btn" id="wmWaBtn" href="#" target="_blank">Share on WhatsApp</a>
           </div>
         </div>
@@ -304,12 +310,48 @@
         certBox.style.display = 'block';
 
         // Bind WhatsApp links
-        const waMsg = `🎓 *Apna Engineering Hustle Certificate* 🎓\n\nMujhe mil gaya Apna Engineering Hustle Certificate *${cgpa.toFixed(2)}* CGPA secure karne ke liye, powered by *${activeSource}*! \n\nCheck yours here:\nhttp://localhost:5000/`;
+        const waMsg = `🎓 *Apna Engineering Hustle Certificate* 🎓\n\nMujhe mil gaya Apna Engineering Hustle Certificate *${cgpa.toFixed(2)}* CGPA secure karne ke liye, powered by *${activeSource}*! \n\nCheck yours here:\n${window.location.origin}/`;
         document.getElementById('wmWaBtn').href = `https://wa.me/?text=${encodeURIComponent(waMsg)}`;
         
-        // Bind Print button
+        // Bind Exporter button
         document.getElementById('wmPrintBtn').onclick = () => {
-          window.print();
+          if (typeof html2canvas === 'undefined') {
+            alert('Loading certificate exporter... please wait a second and try again.');
+            return;
+          }
+          
+          const certBox = document.getElementById('wmCertDisplay');
+          const actions = certBox.querySelector('.wm-cert-actions');
+          
+          // Hide actions to prevent buttons in output image
+          if (actions) actions.style.display = 'none';
+
+          // Set temporary styles to avoid rounded-corner clipping or double borders
+          const originalShadow = certBox.style.boxShadow;
+          certBox.style.boxShadow = 'none';
+
+          html2canvas(certBox, {
+            backgroundColor: '#09090b',
+            scale: 3, // Ultra-sharp 3x resolution for high-definition sharing!
+            useCORS: true,
+            logging: false,
+            allowTaint: true
+          }).then(canvas => {
+            // Restore actions and shadow style
+            if (actions) actions.style.display = 'flex';
+            certBox.style.boxShadow = originalShadow;
+
+            // Trigger direct PNG image file download
+            const link = document.createElement('a');
+            link.download = `${name.toLowerCase().replace(/\s+/g, '_')}_hustle_certificate.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+          }).catch(err => {
+            console.error('Failed to export certificate image:', err);
+            // Fallback to simple print
+            if (actions) actions.style.display = 'flex';
+            window.print();
+          });
         };
 
         // Reload leaderboard list
