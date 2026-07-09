@@ -181,9 +181,8 @@
 .wm-cert-decor { font-size: 0.6rem; letter-spacing: 0.3em; color: #6366f1; text-transform: uppercase; margin-bottom: 1.25rem; font-weight: 700; }
 .wm-cert-title {
   font-size: 1.25rem; font-weight: 900;
-  background: linear-gradient(135deg, #fff 40%, #818cf8 100%);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  margin-bottom: 1.5rem; text-transform: lowercase; letter-spacing: -0.02em;
+  color: #a78bfa; /* Clean brand purple/indigo text */
+  margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 0.05em;
 }
 .wm-cert-name {
   font-size: 2.2rem; font-weight: 900; color: #fff;
@@ -234,9 +233,9 @@
   color: #cbd5e1 !important;
 }
 .silver-cert .wm-cert-title {
-  background: linear-gradient(135deg, #fff 40%, #9ca3af 100%) !important;
-  -webkit-background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
+  color: #cbd5e1 !important;
+  background: none !important;
+  -webkit-text-fill-color: initial !important;
 }
 .silver-cert .wm-cert-name {
   border-bottom-color: #cbd5e1 !important;
@@ -266,9 +265,9 @@
   text-shadow: 0 0 8px rgba(251, 191, 36, 0.15);
 }
 .gold-cert .wm-cert-title {
-  background: linear-gradient(135deg, #fff 40%, #fbbf24 100%) !important;
-  -webkit-background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
+  color: #fbbf24 !important;
+  background: none !important;
+  -webkit-text-fill-color: initial !important;
 }
 .gold-cert .wm-cert-name {
   border-bottom-color: #fbbf24 !important;
