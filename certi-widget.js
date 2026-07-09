@@ -18,7 +18,7 @@
   // Inject Handwriting Fonts (Caveat + Alex Brush for calligraphic signature)
   const fontLink = document.createElement('link');
   fontLink.rel = 'stylesheet';
-  fontLink.href = 'https://fonts.googleapis.com/css2?family=Alex+Brush&family=Caveat:wght@700&display=swap';
+  fontLink.href = 'https://fonts.googleapis.com/css2?family=Alex+Brush&family=Caveat:wght@700&family=Mr+De+Haviland&display=swap';
   document.head.appendChild(fontLink);
 
   // Inject html2canvas library for high-resolution image snapshots
@@ -114,16 +114,16 @@
 
           <div class="wm-cert-sigs">
             <div class="wm-cert-sig-block">
-              <div class="wm-cert-sig-handwritten" style="color: #a5b4fc; transform: rotate(-1.5deg); font-size: 1.8rem; font-family: 'Alex Brush', cursive;">Verified</div>
+              <div class="wm-cert-sig-verified" style="font-family: 'Inter', sans-serif; font-size: 0.64rem; font-weight: 900; color: #10b981; border: 1.5px solid #10b981; padding: 2px 8px; border-radius: 4px; margin-bottom: 12px; letter-spacing: 0.12em; text-transform: uppercase;">AEW Verified</div>
               <div class="wm-cert-sig-line"></div>
-              <div class="wm-cert-sig-name">apna engineering</div>
-              <div class="wm-cert-sig-title">verification team</div>
+              <div class="wm-cert-sig-name">Apna Engineering Wallah</div>
+              <div class="wm-cert-sig-title">Verification Team</div>
             </div>
             <div class="wm-cert-sig-block">
-              <div class="wm-cert-sig-handwritten" style="color: #818cf8; transform: rotate(-4deg); font-size: 2rem; font-family: 'Alex Brush', cursive;">Parth Sikri</div>
+              <div class="wm-cert-sig-handwritten" style="color: #818cf8; transform: rotate(-5.5deg); font-size: 3.1rem; font-family: 'Mr De Haviland', cursive; margin-bottom: -15px;">Parth Sikri</div>
               <div class="wm-cert-sig-line"></div>
-              <div class="wm-cert-sig-name">parth sikri</div>
-              <div class="wm-cert-sig-title">founder, apna engineering</div>
+              <div class="wm-cert-sig-name">Parth Sikri</div>
+              <div class="wm-cert-sig-title">Founder, Apna Engineering Wallah</div>
             </div>
           </div>
 
