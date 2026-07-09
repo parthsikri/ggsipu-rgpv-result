@@ -98,66 +98,43 @@
 
         <!-- Certificate Container -->
         <div class="wm-cert-box" id="wmCertDisplay">
-          <div class="wm-cert-watermark">AEW</div>
+          <div class="wm-cert-watermark">apna engineering</div>
 
-          <!-- LEFT COLUMN: What & Who -->
-          <div class="wm-cert-left">
-            <div class="wm-cert-brand">
-              <img src="aew_logo.png" alt="AEW" class="wm-cert-logo" crossorigin="anonymous" />
-              <span class="wm-cert-brand-text">Apna Engineering Wallah</span>
-            </div>
-            <div class="wm-cert-decor" id="wmCertDecor">official token of hustle</div>
-            <div class="wm-cert-title">Certificate of<br>Academic Hustle</div>
-            <div class="wm-cert-divider"></div>
-            <div class="wm-cert-presented">This certificate is proudly presented to</div>
-            <div class="wm-cert-name" id="wmCertName">Vartika</div>
-            <div class="wm-cert-sem-line">in <strong id="wmCertSem">Sem-2 End Term · IPU</strong></div>
+          <img src="aew_logo.png" alt="Apna Engineering Wallah" class="wm-cert-logo-top" crossorigin="anonymous" />
+
+          <div class="wm-cert-decor" id="wmCertDecor">official token of hustle</div>
+          <div class="wm-cert-title">certificate of academic hustle</div>
+          
+          <div class="wm-cert-presented">this token is proudly presented to</div>
+          
+          <div class="wm-cert-name-container">
+            <div class="wm-cert-name" id="wmCertName">saniya</div>
+            <div class="wm-cert-name-line"></div>
+          </div>
+          
+          <div class="wm-cert-desc">
+            for securing a brilliant grade of <strong id="wmCertCgpa">8.18</strong> <strong>cgpa</strong> in <strong id="wmCertSem">sem-2 end term exams ipu</strong>.
           </div>
 
-          <!-- VERTICAL DIVIDER 1 -->
-          <div class="wm-cert-vdivider"></div>
+          <div id="wmCertCustomMsg" class="wm-cert-custom-msg">"solid prep. clean execution. you are locking in and moving up."</div>
 
-          <!-- MIDDLE COLUMN: How (Student Experience Story & Signatures) -->
-          <div class="wm-cert-mid">
-            <div class="wm-cert-quote-label">student's experience</div>
-            <div class="wm-cert-feedback-container">
-              <span class="wm-cert-quote-mark">“</span>
-              <div class="wm-cert-feedback" id="wmCertFeedback">bohot badhiya notes and topics the bhaiya ke, full support mila!</div>
-              <span class="wm-cert-quote-mark" style="text-align: right; display: block; margin-top: -10px;">”</span>
+          <!-- Signatures -->
+          <div class="wm-cert-sigs">
+            <div class="wm-cert-sig-block">
+              <div class="wm-cert-sig-verified">AEW Verified</div>
+              <div class="wm-cert-sig-line"></div>
+              <div class="wm-cert-sig-name">Apna Engineering Wallah</div>
+              <div class="wm-cert-sig-title">Verification Team</div>
             </div>
-
-            <!-- Signatures -->
-            <div class="wm-cert-sigs">
-              <div class="wm-cert-sig-block">
-                <div class="wm-cert-sig-spacer"></div>
-                <div class="wm-cert-sig-verified">AEW Verified</div>
-                <div class="wm-cert-sig-line"></div>
-                <div class="wm-cert-sig-name">Apna Engineering Wallah</div>
-                <div class="wm-cert-sig-title">Verification Team</div>
-              </div>
-              <div class="wm-cert-sig-block">
-                <div class="wm-cert-sig-handwritten">Parth Sikri</div>
-                <div class="wm-cert-sig-line"></div>
-                <div class="wm-cert-sig-name">Parth Sikri</div>
-                <div class="wm-cert-sig-title">Founder, AEW</div>
-              </div>
+            <div class="wm-cert-sig-block">
+              <div class="wm-cert-sig-handwritten">Parth Sikri</div>
+              <div class="wm-cert-sig-line"></div>
+              <div class="wm-cert-sig-name">Parth Sikri</div>
+              <div class="wm-cert-sig-title">Founder, Apna Engineering Wallah</div>
             </div>
           </div>
 
-          <!-- VERTICAL DIVIDER 2 -->
-          <div class="wm-cert-vdivider"></div>
-
-          <!-- RIGHT COLUMN: Score & Rewards -->
-          <div class="wm-cert-right">
-            <div class="wm-cert-cgpa-label">secured a brilliant</div>
-            <div class="wm-cert-cgpa-value"><span id="wmCertCgpa">9.14</span></div>
-            <div class="wm-cert-cgpa-unit">CGPA</div>
-
-            <div id="wmCertCustomMsg" class="wm-cert-custom-msg"></div>
-
-            <div class="wm-cert-aewian">proud to be AEWian 💙</div>
-            <div class="wm-cert-url">results.apnaengineeringwallah.in</div>
-          </div>
+          <div class="wm-cert-aewian">proud to be AEWian 💙</div>
         </div>
 
         <!-- Action buttons OUTSIDE cert box so they don't appear in PNG -->
@@ -360,10 +337,6 @@
         certBox.className = 'wm-cert-box ' + (certType === 'gold' ? 'gold-cert' : (certType === 'silver' ? 'silver-cert' : ''));
         document.getElementById('wmCertDecor').textContent = decorText;
         document.getElementById('wmCertCustomMsg').textContent = customMsg;
-        
-        // Truncate long feedback to fit aesthetic layout nicely
-        const cleanExp = experience.length > 150 ? experience.substring(0, 147) + '...' : experience;
-        document.getElementById('wmCertFeedback').textContent = cleanExp;
         
         certBox.style.display = 'flex'; // 16:9 flex layout
         document.getElementById('wmCertActions').style.display = 'flex';

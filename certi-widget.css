@@ -183,146 +183,133 @@
 /* Big watermark in background */
 .wm-cert-watermark {
   position: absolute;
+/* Certificate Card Frame — 16:9 Landscape Centered Design */
+.wm-cert-box {
+  display: none; /* shown via JS as flex */
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  background: #09090b;
+  border: 2px solid #6366f1;
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6), 0 0 30px rgba(99,102,241,0.15);
+  margin-bottom: 1rem;
+  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  padding: 1.75rem 2rem 1.25rem;
+  box-sizing: border-box;
+  text-align: center;
+}
+/* Inner dashed border decoration */
+.wm-cert-box::before {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border: 1px dashed rgba(99,102,241,0.2);
+  border-radius: 8px;
+  pointer-events: none;
+  z-index: 0;
+}
+/* Big watermark in background */
+.wm-cert-watermark {
+  position: absolute;
   top: 50%; left: 50%;
-  transform: translate(-50%, -50%) rotate(-15deg);
-  font-size: 9rem;
+  transform: translate(-50%, -50%) rotate(-12deg);
+  font-size: 5.5rem;
   font-weight: 900;
-  color: rgba(99,102,241,0.025);
+  color: rgba(99,102,241,0.02);
   pointer-events: none;
   user-select: none;
   white-space: nowrap;
   z-index: 0;
+  text-transform: lowercase;
 }
 
-/* ── LEFT PANEL ─────────────────────────────────────── */
-.wm-cert-left {
-  flex: 1.1;
-  padding: 1.75rem 1.25rem 1.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  position: relative;
+.wm-cert-logo-top {
+  width: 110px;
+  height: auto;
+  border-radius: 6px;
   z-index: 1;
-  text-align: left;
-  flex: 0.95;
 }
-.wm-cert-brand {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  margin-bottom: 0.75rem;
-}
-.wm-cert-logo {
-  width: 20px;
-  height: 20px;
-  border-radius: 4px;
-  object-fit: contain;
-}
-.wm-cert-brand-text {
-  font-size: 0.58rem;
-  font-weight: 800;
-  color: #a1a1aa;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
+
 .wm-cert-decor {
-  font-size: 0.5rem;
-  letter-spacing: 0.25em;
+  font-size: 0.58rem;
+  letter-spacing: 0.22em;
   color: #6366f1;
   text-transform: uppercase;
   font-weight: 700;
-  margin-bottom: 0.3rem;
+  z-index: 1;
 }
+
 .wm-cert-title {
-  font-size: 1.05rem;
+  font-size: 1.15rem;
   font-weight: 900;
   color: #a78bfa;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  line-height: 1.2;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.15rem;
+  z-index: 1;
 }
-.wm-cert-divider {
-  width: 35px;
-  height: 2px;
-  background: linear-gradient(90deg, #6366f1, transparent);
-  margin-bottom: 0.5rem;
-}
+
 .wm-cert-presented {
-  font-size: 0.62rem;
+  font-size: 0.7rem;
   color: #71717a;
-  margin-bottom: 0.2rem;
+  z-index: 1;
+}
+
+.wm-cert-name-container {
+  display: inline-block;
+  z-index: 1;
 }
 .wm-cert-name {
-  font-size: 1.5rem;
+  font-size: 2.1rem;
   font-weight: 900;
   color: #fff;
   text-transform: none !important;
   text-shadow: 0 0 10px rgba(99,102,241,0.25);
-  line-height: 1.1;
-  margin-bottom: 0.2rem;
-}
-.wm-cert-sem-line {
-  font-size: 0.6rem;
-  color: #71717a;
-  margin-bottom: 0;
-}
-.wm-cert-sem-line strong { color: #a1a1aa; font-weight: 700; }
-
-/* ── MIDDLE COLUMN (Experience & Sigs) ───────────────── */
-.wm-cert-mid {
-  flex: 1.15;
-  padding: 1.75rem 1rem 1.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  position: relative;
-  z-index: 1;
-  text-align: center;
-}
-.wm-cert-quote-label {
-  font-size: 0.52rem;
-  letter-spacing: 0.2em;
-  color: #6366f1;
-  text-transform: uppercase;
-  font-weight: 800;
-  margin-bottom: 0.25rem;
-}
-.wm-cert-feedback-container {
-  position: relative;
-  width: 100%;
-  max-width: 250px;
-  margin: 0 auto;
-}
-.wm-cert-quote-mark {
-  font-size: 2.2rem;
   line-height: 1;
-  font-family: Georgia, serif;
-  color: rgba(99, 102, 241, 0.25);
-  display: block;
-  text-align: left;
-  height: 12px;
 }
-.wm-cert-feedback {
-  font-size: 0.68rem;
-  color: #d1d5db;
+.wm-cert-name-line {
+  width: 140px;
+  height: 2px;
+  background: #6366f1;
+  margin: 0.2rem auto 0;
+}
+
+.wm-cert-desc {
+  font-size: 0.78rem;
+  color: #a1a1aa;
+  max-width: 480px;
+  line-height: 1.45;
+  z-index: 1;
+}
+.wm-cert-desc strong {
+  color: #fff;
+}
+
+.wm-cert-custom-msg {
+  font-size: 0.78rem;
+  color: #f59e0b;
   font-style: italic;
-  line-height: 1.4;
-  text-align: center;
-  padding: 0 0.5rem;
-  font-weight: 500;
-  word-break: break-word;
+  font-weight: 700;
+  max-width: 480px;
+  z-index: 1;
+  margin-bottom: 0.4rem;
 }
+
+/* ── Signature Section ──────────────────────────────────────────────── */
 .wm-cert-sigs {
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: center;
-  align-items: flex-end;
-  gap: 1.25rem;
-  margin-top: auto;
+  justify-content: space-between;
   width: 100%;
+  max-width: 440px;
+  z-index: 1;
+  margin-top: 0.15rem;
 }
 .wm-cert-sig-block {
   display: flex;
@@ -331,112 +318,42 @@
   gap: 0.15rem;
   min-width: 0;
 }
-.wm-cert-sig-spacer { height: 1.8rem; display: block; }
 .wm-cert-sig-verified {
-  font-size: 0.48rem;
+  font-size: 0.52rem;
   font-weight: 900;
   color: #10b981;
-  border: 1px solid #10b981;
-  padding: 1px 5px;
-  border-radius: 3px;
+  border: 1.5px solid #10b981;
+  padding: 1px 6px;
+  border-radius: 4px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  margin-bottom: 4px;
   white-space: nowrap;
-  margin-bottom: 2px;
 }
 .wm-cert-sig-line {
-  width: 75px;
-  height: 1px;
+  width: 80px;
+  height: 1.5px;
   background: linear-gradient(90deg, transparent, #6366f1, transparent);
   flex-shrink: 0;
 }
 .wm-cert-sig-name {
-  font-size: 0.55rem;
+  font-size: 0.6rem;
   font-weight: 800;
   color: #fff;
   text-transform: none !important;
   white-space: nowrap;
 }
 .wm-cert-sig-title {
-  font-size: 0.48rem;
+  font-size: 0.52rem;
   color: #71717a;
   text-transform: none !important;
-  white-space: nowrap;
-}
-.wm-cert-sig-handwritten {
-  font-family: 'Mr De Haviland', cursive;
-  font-size: 2.1rem;
-  color: #818cf8;
-  transform: rotate(-5deg);
-  display: inline-block;
-  margin-bottom: -10px;
-  text-transform: none !important;
-  text-shadow: 0 0 10px rgba(99,102,241,0.25);
-  line-height: 1;
-  white-space: nowrap;
-}
-
-/* ── VERTICAL DIVIDER ────────────────────────────────── */
-.wm-cert-vdivider {
-  width: 1px;
-  background: linear-gradient(180deg, transparent, #6366f1, transparent);
-  align-self: stretch;
-  flex-shrink: 0;
-  opacity: 0.25;
-  z-index: 1;
-}
-
-/* ── RIGHT PANEL ─────────────────────────────────────── */
-.wm-cert-right {
-  flex: 0.9;
-  padding: 1.75rem 1rem 1.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  z-index: 1;
-  text-align: center;
-  gap: 0.15rem;
-.wm-cert-cgpa-value {
-  font-size: 5rem;
-  font-weight: 900;
-  color: #6366f1;
-  line-height: 1;
-  letter-spacing: -0.03em;
-  text-shadow: 0 0 30px rgba(99,102,241,0.5);
-}
-.wm-cert-cgpa-unit {
-  font-size: 1rem;
-  font-weight: 700;
-  color: #818cf8;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  margin-bottom: 0.5rem;
-}
-.wm-cert-custom-msg {
-  font-size: 0.68rem;
-  color: #f59e0b;
-  font-style: italic;
-  font-weight: 700;
-  line-height: 1.5;
-  max-width: 200px;
-  text-align: center;
-  margin-top: 0.25rem;
-}
 .wm-cert-aewian {
-  font-size: 0.55rem;
-  color: rgba(99,102,241,0.55);
+  font-size: 0.6rem;
+  color: rgba(99, 102, 241, 0.6);
   text-transform: uppercase;
   letter-spacing: 0.12em;
   font-weight: 800;
-  margin-top: auto;
-}
-.wm-cert-url {
-  font-size: 0.5rem;
-  color: rgba(99,102,241,0.3);
-  letter-spacing: 0.08em;
-  font-weight: 700;
+  z-index: 1;
 }
 
 /* ══ SILVER OVERRIDES ══════════════════════════════════ */
@@ -449,15 +366,10 @@
 .silver-cert .wm-cert-decor { color: #cbd5e1 !important; }
 .silver-cert .wm-cert-title { color: #cbd5e1 !important; }
 .silver-cert .wm-cert-name { text-shadow: 0 0 12px rgba(156,163,175,0.3) !important; }
-.silver-cert .wm-cert-divider { background: linear-gradient(90deg, #cbd5e1, transparent) !important; }
-.silver-cert .wm-cert-vdivider { background: linear-gradient(180deg, transparent, #cbd5e1, transparent) !important; }
+.silver-cert .wm-cert-name-line { background: #cbd5e1 !important; }
 .silver-cert .wm-cert-sig-handwritten { color: #cbd5e1 !important; text-shadow: 0 0 8px rgba(156,163,175,0.3) !important; }
 .silver-cert .wm-cert-sig-line { background: linear-gradient(90deg, transparent, #cbd5e1, transparent) !important; }
 .silver-cert .wm-cert-aewian { color: rgba(156,163,175,0.55) !important; }
-.silver-cert .wm-cert-cgpa-value { color: #cbd5e1 !important; text-shadow: 0 0 30px rgba(156,163,175,0.4) !important; }
-.silver-cert .wm-cert-cgpa-unit { color: #9ca3af !important; }
-.silver-cert .wm-cert-quote-label { color: #cbd5e1 !important; }
-.silver-cert .wm-cert-quote-mark { color: rgba(203, 213, 225, 0.25) !important; }
 
 /* ══ GOLD OVERRIDES ════════════════════════════════════ */
 .gold-cert {
@@ -469,15 +381,11 @@
 .gold-cert .wm-cert-decor { color: #fbbf24 !important; }
 .gold-cert .wm-cert-title { color: #fbbf24 !important; }
 .gold-cert .wm-cert-name { text-shadow: 0 0 12px rgba(251,191,36,0.35) !important; }
-.gold-cert .wm-cert-divider { background: linear-gradient(90deg, #fbbf24, transparent) !important; }
-.gold-cert .wm-cert-vdivider { background: linear-gradient(180deg, transparent, #fbbf24, transparent) !important; }
+.gold-cert .wm-cert-name-line { background: #fbbf24 !important; }
 .gold-cert .wm-cert-sig-handwritten { color: #fbbf24 !important; text-shadow: 0 0 8px rgba(251,191,36,0.35) !important; }
 .gold-cert .wm-cert-sig-line { background: linear-gradient(90deg, transparent, #fbbf24, transparent) !important; }
-.gold-cert .wm-cert-aewian { color: rgba(251,191,36,0.65) !important; }
-.gold-cert .wm-cert-cgpa-value { color: #fbbf24 !important; text-shadow: 0 0 30px rgba(251,191,36,0.5) !important; }
-.gold-cert .wm-cert-cgpa-unit { color: #f59e0b !important; }
-.gold-cert .wm-cert-quote-label { color: #fbbf24 !important; }
-.gold-cert .wm-cert-quote-mark { color: rgba(251, 191, 36, 0.25) !important; }
+.gold-cert .wm-cert-aewian { color: rgba(251, 191, 36, 0.65) !important; }
+
 
 
 .wm-cert-actions {
@@ -622,94 +530,83 @@
 /* ── Mobile Responsive Fixes ─────────────────────────────────────────── */
 @media (max-width: 600px) {
   #certi-modal-content {
-    padding: 1.25rem 0.75rem;
+    padding: 1rem 0.5rem;
     border-radius: 12px;
     max-height: 95vh;
   }
 
-  /* Mobile preview is vertical/auto-height for comfortable reading */
   .wm-cert-box:not(.wm-force-desktop-landscape) {
-    flex-direction: column !important;
-    aspect-ratio: auto !important;
-    padding: 1.5rem 1rem !important;
+    padding: 0.75rem 1rem !important;
   }
 
-  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-left,
-  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-mid,
-  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-right {
-    flex: none !important;
-    width: 100% !important;
-    padding: 1rem 0 !important;
-    text-align: center !important;
+  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-logo-top {
+    width: 80px !important;
   }
 
-  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-left {
-    align-items: center !important;
+  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-decor {
+    font-size: 0.48rem !important;
+    letter-spacing: 0.15em !important;
   }
 
-  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-brand {
-    justify-content: center !important;
+  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-title {
+    font-size: 0.9rem !important;
+    margin-bottom: 0.1rem !important;
   }
 
-  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-divider {
-    margin: 0.5rem auto !important;
-  }
-
-  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-vdivider {
-    width: 100% !important;
-    height: 1px !important;
-    background: linear-gradient(90deg, transparent, #6366f1, transparent) !important;
-    margin: 0.5rem 0 !important;
-  }
-
-  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-feedback-container {
-    max-width: 100% !important;
-  }
-
-  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-sigs {
-    margin-top: 1rem !important;
-    justify-content: center !important;
-    gap: 1.5rem !important;
-    flex-direction: row !important;
-    flex-wrap: nowrap !important;
-  }
-
-  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-sig-block {
-    flex: 1 !important;
-    min-width: 0 !important;
-    align-items: center !important;
-  }
-
-  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-sig-handwritten {
-    font-size: 2rem !important;
-    margin-bottom: -10px !important;
-  }
-
-  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-sig-line {
-    width: 70px !important;
-  }
-
-  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-sig-name {
+  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-presented {
     font-size: 0.6rem !important;
   }
 
-  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-sig-title {
-    font-size: 0.5rem !important;
-  }
-
-  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-aewian {
-    margin-top: 1.25rem !important;
-  }
-
-  /* Scale font-sizes down slightly on mobile preview */
-  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-title {
-    font-size: 1.05rem !important;
-  }
   .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-name {
     font-size: 1.5rem !important;
   }
-  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-cgpa-value {
-    font-size: 4rem !important;
+
+  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-name-line {
+    width: 90px !important;
+    margin: 0.1rem auto 0.4rem !important;
+  }
+
+  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-desc {
+    font-size: 0.62rem !important;
+    max-width: 320px !important;
+    line-height: 1.3 !important;
+  }
+
+  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-custom-msg {
+    font-size: 0.62rem !important;
+    max-width: 320px !important;
+    margin-bottom: 0.2rem !important;
+  }
+
+  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-sigs {
+    max-width: 320px !important;
+    margin-top: 0.1rem !important;
+  }
+
+  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-sig-verified {
+    font-size: 0.45rem !important;
+    padding: 1px 4px !important;
+  }
+
+  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-sig-line {
+    width: 60px !important;
+  }
+
+  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-sig-name {
+    font-size: 0.5rem !important;
+  }
+
+  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-sig-title {
+    font-size: 0.45rem !important;
+  }
+
+  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-sig-handwritten {
+    font-size: 1.7rem !important;
+    margin-bottom: -8px !important;
+  }
+
+  .wm-cert-box:not(.wm-force-desktop-landscape) .wm-cert-aewian {
+    font-size: 0.5rem !important;
   }
 
   .wm-cert-actions {
@@ -722,55 +619,76 @@
   }
 }
 
-/* Force Desktop Landscape styles during html2canvas download */
+/* Force Desktop Landscape dimensions during image download */
 .wm-cert-box.wm-force-desktop-landscape {
   display: flex !important;
-  flex-direction: row !important;
+  flex-direction: column !important;
   aspect-ratio: 16 / 9 !important;
   width: 800px !important;
   height: 450px !important;
-  padding: 0 !important;
+  padding: 1.75rem 2rem 1.25rem !important;
   margin: 0 !important;
   border-radius: 12px !important;
   box-sizing: border-box !important;
-}
-.wm-cert-box.wm-force-desktop-landscape .wm-cert-left {
-  flex: 0.95 !important;
-  padding: 1.75rem 1.25rem 1.5rem !important;
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: center !important;
-  text-align: left !important;
-}
-.wm-cert-box.wm-force-desktop-landscape .wm-cert-mid {
-  flex: 1.15 !important;
-  padding: 1.75rem 1rem 1.5rem !important;
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: space-between !important;
+  justify-content: space-around !important;
   align-items: center !important;
-  text-align: center !important;
 }
-.wm-cert-box.wm-force-desktop-landscape .wm-cert-right {
-  flex: 0.9 !important;
-  padding: 1.75rem 1rem 1.5rem !important;
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: center !important;
-  align-items: center !important;
-  text-align: center !important;
+.wm-cert-box.wm-force-desktop-landscape .wm-cert-logo-top {
+  width: 110px !important;
 }
-.wm-cert-box.wm-force-desktop-landscape .wm-cert-vdivider {
-  width: 1px !important;
-  height: auto !important;
-  background: linear-gradient(180deg, transparent, #6366f1, transparent) !important;
-  align-self: stretch !important;
-  opacity: 0.25 !important;
+.wm-cert-box.wm-force-desktop-landscape .wm-cert-decor {
+  font-size: 0.58rem !important;
+  letter-spacing: 0.22em !important;
+}
+.wm-cert-box.wm-force-desktop-landscape .wm-cert-title {
+  font-size: 1.15rem !important;
+}
+.wm-cert-box.wm-force-desktop-landscape .wm-cert-presented {
+  font-size: 0.7rem !important;
+}
+.wm-cert-box.wm-force-desktop-landscape .wm-cert-name {
+  font-size: 2.1rem !important;
+}
+.wm-cert-box.wm-force-desktop-landscape .wm-cert-name-line {
+  width: 140px !important;
+  margin: 0.2rem auto 0 !important;
+}
+.wm-cert-box.wm-force-desktop-landscape .wm-cert-desc {
+  font-size: 0.78rem !important;
+  max-width: 480px !important;
+  line-height: 1.45 !important;
+}
+.wm-cert-box.wm-force-desktop-landscape .wm-cert-custom-msg {
+  font-size: 0.78rem !important;
+  max-width: 480px !important;
+  margin-bottom: 0.4rem !important;
 }
 .wm-cert-box.wm-force-desktop-landscape .wm-cert-sigs {
   display: flex !important;
   flex-direction: row !important;
-  justify-content: center !important;
-  gap: 1.25rem !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  max-width: 440px !important;
 }
+.wm-cert-box.wm-force-desktop-landscape .wm-cert-sig-verified {
+  font-size: 0.52rem !important;
+  padding: 1px 6px !important;
+}
+.wm-cert-box.wm-force-desktop-landscape .wm-cert-sig-line {
+  width: 80px !important;
+}
+.wm-cert-box.wm-force-desktop-landscape .wm-cert-sig-name {
+  font-size: 0.6rem !important;
+}
+.wm-cert-box.wm-force-desktop-landscape .wm-cert-sig-title {
+  font-size: 0.52rem !important;
+}
+.wm-cert-box.wm-force-desktop-landscape .wm-cert-sig-handwritten {
+  font-size: 2.3rem !important;
+  margin-bottom: -10px !important;
+}
+.wm-cert-box.wm-force-desktop-landscape .wm-cert-aewian {
+  font-size: 0.6rem !important;
+}
+
 
