@@ -858,7 +858,7 @@ footer {
   .subject-cards-grid { grid-template-columns: 1fr; }
   .subject-search { width: 100%; }
   .nav-inner { height: 56px; }
-  .nav-brand { margin-left: -32px; }
+  .nav-brand { margin-left: -15px; }
   .brand-logo { height: 85px; margin-top: -15px; margin-bottom: -15px; }
 }
 @media (max-width: 400px) {
