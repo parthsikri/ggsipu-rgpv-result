@@ -991,11 +991,17 @@ function findSubjectNameInSyllabus(code, syllabusData) {
   <meta property="og:image:height" content="675" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="${host}/certifications/${rollno}" />
-  <meta http-equiv="refresh" content="3;url=/" />
 </head>
-<body style="background:#09090b;color:#fff;font-family:sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;margin:0;text-align:center;padding:1rem;">
-  <img src="/certifications/${rollno}.png" style="max-width:90%;max-height:80vh;border-radius:12px;box-shadow:0 15px 45px rgba(0,0,0,0.8);border:2px solid #6366f1;" />
-  <p style="margin-top:20px;color:#a1a1aa;font-size:0.9rem;">Redirecting to Apna Engineering Wallah...</p>
+<body style="background:#09090b;color:#fff;font-family:'Inter',sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;margin:0;text-align:center;padding:2rem;box-sizing:border-box;">
+  <div style="max-width:800px;width:100%;display:flex;flex-direction:column;align-items:center;gap:1.5rem;">
+    <h2 style="font-weight:800;letter-spacing:-0.03em;margin:0;background:linear-gradient(135deg,#fff 0%,#c7d2fe 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:1.8rem;">academic hustle verified credentials</h2>
+    <img src="/certifications/${rollno}.png" style="width:100%;max-width:750px;height:auto;border-radius:12px;box-shadow:0 20px 50px rgba(0,0,0,0.85);border:2px solid #6366f1;z-index:2;" />
+    
+    <div style="display:flex;gap:1rem;margin-top:1rem;flex-wrap:wrap;justify-content:center;">
+      <a href="/" style="display:inline-flex;align-items:center;padding:0.75rem 1.5rem;background:#6366f1;color:#fff;text-decoration:none;border-radius:8px;font-weight:800;font-size:0.9rem;box-shadow:0 4px 15px rgba(99,102,241,0.3);transition:transform 0.2s;">check your own results 🎓</a>
+      <a href="https://youtube.com/@apnaipuwallah" target="_blank" style="display:inline-flex;align-items:center;padding:0.75rem 1.5rem;background:#18181b;color:#a1a1aa;text-decoration:none;border-radius:8px;font-weight:700;font-size:0.9rem;border:1px solid #27272a;transition:transform 0.2s;">visit youtube channel ▶</a>
+    </div>
+  </div>
 </body>
 </html>`);
       return;
