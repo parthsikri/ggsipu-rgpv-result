@@ -67,7 +67,7 @@ a:hover { color: var(--indigo-300); }
   background: rgba(9,9,11,.85);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border);
-  padding: 0 2rem;
+  padding: 0 1rem;
 }
 .nav-inner {
   max-width: 1100px; margin: 0 auto;
@@ -75,8 +75,8 @@ a:hover { color: var(--indigo-300); }
   justify-content: space-between;
   height: 60px;
 }
-.nav-brand { display: flex; align-items: center; }
-.brand-logo { height: 38px; width: auto; object-fit: contain; }
+.nav-brand { display: flex; align-items: center; margin-left: -5px; }
+.brand-logo { height: 46px; width: auto; object-fit: contain; }
 .nav-links { display: flex; align-items: center; gap: 1.5rem; font-size: .9rem; }
 .nav-links a { color: var(--text-secondary); font-weight: 500; }
 .nav-links a:hover { color: var(--text-primary); }
