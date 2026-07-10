@@ -575,26 +575,26 @@ function computeNearMisses(subjects) {
 //  SUBJECT CARDS
 // ─────────────────────────────────────────────
 const INTERNAL_REMARKS = [
-  'teacher se lafda mat karna next sem 🙏',
-  'assignments and files are free marks, lock them in 😅',
-  'internals score is crying right now, save it fr',
-  'bhaiya ke notes are your only hope now 😭',
-  '75% attendance rules are real, don\'t skip class bro',
-  'practical files submitted late = instant rip 💀',
+  'teacher se lafda kar baithe kya? 🙏',
+  'assignments submit nahi kiye the kya? 😅',
+  'internals score to dekh kar dil ro raha hai bro',
+  'bhaiya ke notes hi bacha sakte hain ab 😭',
+  'attendance short thi ya internals mein so rahe the? 💀',
+  'practical file time par de dete toh didi/bhaiya bacha lete!',
 ];
 
 // Low-internal specific remarks
 const LOW_EXT_REMARKS = [
   'externals ne le li, average internals se kaam nahi chala 😑',
-  'externals checked out early, next sem pehle se padhna start kar dena!',
+  'exam hall mein thoda aur likh dete toh clutch ho jata',
   'bhai externals dekh ke dil dukha 💔',
-  'shaky externals theory, next sem bhaiya ke topics early start kar lena!',
+  'theory thoda aur padh lena next sem, varna fail ho jaoge',
 ];
 
 // High internals matrix arrays (85%+)
 const HIGH_INT_EXC_EXT = [
   'dono jagah aag laga di! absolute cooking 🌟',
-  'sheet check karne wala bhi hairaan ho gaya! clean sweep 💯',
+  'sheet check karne wala bhi bol raha hoga - kya likha hai bhai! 💯',
   'bhaiya is proud of you, pure semester to top maar diya 🔥',
 ];
 const HIGH_INT_AVG_EXT = [
@@ -604,8 +604,8 @@ const HIGH_INT_AVG_EXT = [
 ];
 const HIGH_INT_LOW_EXT = [
   'itne solid internals par externals ne game bigad diya 💔',
-  'internals aag the par externals paani ho gaye, next sem theory lock in 🔒',
-  'internal score toh badiya tha par externals mein choke ho gaye!',
+  'internals aag the par externals paani ho gaye, next sem theory padh liyo 🔒',
+  'internal score toh badiya tha par externals mein choke ho gaye 💀',
 ];
 
 // Average internals matrix arrays (70% - 84.9%)
@@ -621,14 +621,22 @@ const AVG_INT_AVG_EXT = [
 ];
 const AVG_INT_LOW_EXT = [
   'externals ne le li, average internals se kaam nahi chala 😑',
-  'externals dekh kar dil dukha, target theory next sem!',
+  'externals dekh kar dil dukha 💔',
   'shaky externals theory, bhaiya ke topics next sem pehle hi padh lena!',
 ];
 
 function getInternalRemark(s, isBestTheory) {
   if (s.credit < 2) return null;
-  if (isBestTheory) {
-    return 'teacher se toh dost banliye 🤝';
+  
+  // Safeguard 1: Do not roast top tier students
+  if (s.grade === 'O' || s.grade === 'A+') {
+    if (isBestTheory) return 'teacher se toh dost banliye 🤝';
+    return 'absolute topper behavior! cooked 🌟';
+  }
+
+  // Safeguard 2: Skip internal checks for subjects evaluated purely externally
+  if (s.internal === 0 && s.external > 0) {
+    return null;
   }
   
   const intMax = s.max === 100 ? 40 : 30;
