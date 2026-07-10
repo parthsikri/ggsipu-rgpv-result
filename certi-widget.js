@@ -122,6 +122,8 @@
 
           <div id="wmCertCustomMsg" class="wm-cert-custom-msg">"solid prep. clean execution. you are locking in and moving up."</div>
 
+          <div id="wmCertPrepTag" class="wm-cert-prep-tag"></div>
+
           <!-- Signatures -->
           <div class="wm-cert-sigs">
             <div class="wm-cert-sig-block">
@@ -341,6 +343,14 @@
         certBox.className = 'wm-cert-box ' + (certType === 'gold' ? 'gold-cert' : (certType === 'silver' ? 'silver-cert' : ''));
         document.getElementById('wmCertDecor').textContent = decorText;
         document.getElementById('wmCertCustomMsg').textContent = customMsg;
+        
+        const prepTagEl = document.getElementById('wmCertPrepTag');
+        if (activeSource === "Bhaiya's Important Topics") {
+          prepTagEl.textContent = "bhaiya's imp topics rocked! ⚡";
+          prepTagEl.style.display = 'block';
+        } else {
+          prepTagEl.style.display = 'none';
+        }
         
         certBox.style.display = 'flex'; // 16:9 flex layout
         document.getElementById('wmCertActions').style.display = 'flex';

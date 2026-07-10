@@ -347,6 +347,22 @@
   font-weight: 800;
   z-index: 1;
 }
+.wm-cert-prep-tag {
+  display: none;
+  font-size: 0.52rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #a78bfa;
+  background: rgba(139, 92, 246, 0.08);
+  padding: 3px 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(139, 92, 246, 0.15);
+  z-index: 1;
+  margin: 0.4rem auto 0;
+  text-align: center;
+  max-width: fit-content;
+}
 
 /* ══ SILVER OVERRIDES ══════════════════════════════════ */
 .silver-cert {
@@ -366,6 +382,11 @@
 .silver-cert .wm-cert-sig-handwritten { color: #cbd5e1 !important; text-shadow: 0 0 8px rgba(156,163,175,0.3) !important; }
 .silver-cert .wm-cert-sig-line { background: linear-gradient(90deg, transparent, #cbd5e1, transparent) !important; }
 .silver-cert .wm-cert-aewian { color: rgba(156,163,175,0.55) !important; }
+.silver-cert .wm-cert-prep-tag {
+  color: #cbd5e1 !important;
+  background: rgba(203, 213, 225, 0.08) !important;
+  border-color: rgba(203, 213, 225, 0.15) !important;
+}
 
 /* ══ GOLD OVERRIDES ════════════════════════════════════ */
 .gold-cert {
@@ -385,6 +406,11 @@
 .gold-cert .wm-cert-sig-handwritten { color: #fbbf24 !important; text-shadow: 0 0 8px rgba(251,191,36,0.35) !important; }
 .gold-cert .wm-cert-sig-line { background: linear-gradient(90deg, transparent, #fbbf24, transparent) !important; }
 .gold-cert .wm-cert-aewian { color: rgba(251, 191, 36, 0.65) !important; }
+.gold-cert .wm-cert-prep-tag {
+  color: #fbbf24 !important;
+  background: rgba(251, 191, 36, 0.08) !important;
+  border-color: rgba(251, 191, 36, 0.18) !important;
+}
 
 
 
