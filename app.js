@@ -575,54 +575,54 @@ function computeNearMisses(subjects) {
 //  SUBJECT CARDS
 // ─────────────────────────────────────────────
 const INTERNAL_REMARKS = [
-  'teacher se banake rakho 🙏',
-  'assignments never hurt 😅',
-  'internals can save you fr',
-  'bhaiya/didi se notes le lo 😭',
-  'attendance bhi count hoti hai bro',
-  'practical file on time dena 💀',
+  'teacher se lafda mat karna next sem 🙏',
+  'assignments and files are free marks, lock them in 😅',
+  'internals score is crying right now, save it fr',
+  'bhaiya ke notes are your only hope now 😭',
+  '75% attendance rules are real, don\'t skip class bro',
+  'practical files submitted late = instant rip 💀',
 ];
 
 // Low-internal specific remarks
 const LOW_EXT_REMARKS = [
-  'externals ne le li 😑',
-  'exam hall mein thoda aur likhte',
+  'externals went sideways, average internals couldn\'t save it 😑',
+  'externals checked out early. next sem let\'s lock in earlier!',
   'bhai externals dekh ke dil dukha 💔',
-  'theory thoda aur padh lena next sem',
+  'shaky theory execution. bhaiya\'s topics are your only savior!',
 ];
 
 // High internals matrix arrays (85%+)
 const HIGH_INT_EXC_EXT = [
-  'absolute topper behavior! cooked in both internals & externals 🌟',
-  'sheet check karne wala bhi hairaan ho gaya! clean sweep 💯',
-  'outstanding score, bhaiya is proud of you! 🔥',
+  'sheesh! cooked in both internals & externals 🌟',
+  'board sheet examiner is currently crying in absolute respect 💯',
+  'absolute gold medalist energy, you cooked and left no crumbs 🔥',
 ];
 const HIGH_INT_AVG_EXT = [
-  'internals ne bacha liya, decent performance! 📈',
-  'teacher ke solid support + average externals prep = saved!',
-  'internals safe early game built, externals stable.',
+  'internals hard carried this subject fr 📈',
+  'clutched with teacher support, externals were just okay 🤝',
+  'internals score built the defense, externals survived!',
 ];
 const HIGH_INT_LOW_EXT = [
-  'internals safe parts, par externals ne game kharab kar diya 💔',
-  'internals aag the, externals paani ho gaya! next sem theory lock in 🔒',
-  'clutch internally, choked in externals. brush up theory!',
+  'insane internal lead thrown away in the end-term exams 💔',
+  'internals were pure fire, externals were pure ice. theory lock in 🔒',
+  'clutched internally but choked hard in externals. focus on theory!',
 ];
 
 // Average internals matrix arrays (70% - 84.9%)
 const AVG_INT_EXC_EXT = [
-  'clutch in externals! end-term mein aag laga di 🔥',
-  'exam hall mein topper mode activate ho gaya tha kya? 🚀',
-  'internals average the par externals mein full back up!',
+  'insane end-term comeback! you woke up and chose violence in exams 🔥',
+  'exam hall topper mode activated! clutched when it mattered 🚀',
+  'average internals but externals went absolute sicko mode!',
 ];
 const AVG_INT_AVG_EXT = [
-  'decent performance across the board. thoda aur consistent raho bhai 🧑‍🏫',
-  'safe play, par potential bohot zyada hai next sem lock-in!',
-  'steady prep, stable score. room for growth!',
+  'balanced safe play, but you can definitely aim higher next sem 🧑‍🏫',
+  'mid prep, stable score. room for growth!',
+  'maintaining standard. potential to hit top tier is definitely there!',
 ];
 const AVG_INT_LOW_EXT = [
-  'externals ne le li, average internals se kaam nahi chala 😑',
-  'bhai externals dekh ke dil dukha, target theory next sem!',
-  'shaky externals performance. focus on bhaiya\'s topics early!',
+  'externals went sideways, average internals couldn\'t save it 😑',
+  'externals checked out early. next sem let\'s lock in earlier!',
+  'shaky theory execution. bhaiya\'s topics are your only savior!',
 ];
 
 function getInternalRemark(s, isBestTheory) {
