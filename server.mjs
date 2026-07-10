@@ -941,6 +941,66 @@ function findSubjectNameInSyllabus(code, syllabusData) {
       return;
     }
 
+    // ── POST /api/save-certificate-image ───────────────────────────────
+    if (url.pathname === '/api/save-certificate-image' && req.method === 'POST') {
+      const chunks = [];
+      for await (const c of req) chunks.push(c);
+      try {
+        const payload = JSON.parse(Buffer.concat(chunks).toString());
+        const { rollno, imageBase64 } = payload;
+        if (!rollno || !imageBase64) {
+          sendJSON(res, 400, { error: 'Missing rollno or image data.' });
+          return;
+        }
+        const dirPath = path.join(__dirname, 'certifications');
+        if (!fs.existsSync(dirPath)) {
+          fs.mkdirSync(dirPath, { recursive: true });
+        }
+        const cleanBase64 = imageBase64.replace(/^data:image\/png;base64,/, '');
+        const filePath = path.join(dirPath, `${rollno}.png`);
+        fs.writeFileSync(filePath, Buffer.from(cleanBase64, 'base64'));
+        sendJSON(res, 200, { success: true, path: `/certifications/${rollno}` });
+      } catch (err) {
+        sendJSON(res, 500, { error: err.message });
+      }
+      return;
+    }
+
+    // ── GET /certifications/:rollno ────────────────────────────────────
+    if (url.pathname.startsWith('/certifications/') && !url.pathname.endsWith('.png')) {
+      const parts = url.pathname.split('/');
+      const rollno = parts[parts.length - 1];
+      
+      const lb = await getLeaderboardData();
+      const student = lb.find(s => s.rollno === rollno) || { name: 'Academic Hustler', cgpa: 8.5 };
+      
+      const protocol = req.headers['x-forwarded-proto'] || 'https';
+      const host = `${protocol}://${req.headers.host}`;
+      
+      res.writeHead(200, { 'Content-Type': 'text/html' });
+      res.end(`<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>AEW Academic Hustle Certificate - ${student.name}</title>
+  <meta property="og:title" content="AEW Academic Hustle Certificate - ${student.name}" />
+  <meta property="og:description" content="Secured ${student.cgpa.toFixed(2)} CGPA in IPU Semester Exams. Proud to be an AEWian! 🔥" />
+  <meta property="og:image" content="${host}/certifications/${rollno}.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="675" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="${host}/certifications/${rollno}" />
+  <meta http-equiv="refresh" content="3;url=/" />
+</head>
+<body style="background:#09090b;color:#fff;font-family:sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;margin:0;text-align:center;padding:1rem;">
+  <img src="/certifications/${rollno}.png" style="max-width:90%;max-height:80vh;border-radius:12px;box-shadow:0 15px 45px rgba(0,0,0,0.8);border:2px solid #6366f1;" />
+  <p style="margin-top:20px;color:#a1a1aa;font-size:0.9rem;">Redirecting to Apna Engineering Wallah...</p>
+</body>
+</html>`);
+      return;
+    }
+
     // ── POST /api/certificate ─────────────────────────────────────────
     if (url.pathname === '/api/certificate' && req.method === 'POST') {
       const chunks = [];

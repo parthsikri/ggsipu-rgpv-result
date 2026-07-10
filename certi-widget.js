@@ -351,8 +351,74 @@
         const waMsg = `🏆 *I just got my Apna Engineering Wallah Hustle Certificate!*\n\nSecured *${cgpa.toFixed(2)} CGPA* in ${document.getElementById('wmCertSem').textContent}!\n\nStudied smart with *Apna Engineering Wallah* — bhaiya ke important topics ne kaam aa gaye! 🔥\n\nCheck your result & get yours too:\n${siteUrl}`;
         document.getElementById('wmWaBtn').href = `https://wa.me/?text=${encodeURIComponent(waMsg)}`;
 
-        const liText = `🏆 Proud to share — I secured ${cgpa.toFixed(2)} CGPA in my semester exams!\n\nStudied smart using Apna Engineering Wallah's important topics & resources. Bhaiya ke notes ne genuinely carried the semester! 🔥\n\nIf you're an engineering student, check out their result portal:\n${siteUrl}\n\n#ApnaEngineeringWallah #Engineering #IPU #AcademicHustle #ResultTime`;
-        document.getElementById('wmLinkedInBtn').href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(siteUrl)}&title=${encodeURIComponent('Apna Engineering Wallah Hustle Certificate')}&summary=${encodeURIComponent(liText)}`;
+        // Bind LinkedIn share button
+        const liBtn = document.getElementById('wmLinkedInBtn');
+        liBtn.onclick = (e) => {
+          e.preventDefault();
+          if (typeof html2canvas === 'undefined') {
+            alert('Loading certificate exporter... please wait a second and try again.');
+            return;
+          }
+
+          const originalText = liBtn.innerHTML;
+          liBtn.innerHTML = '⌛ preparing post...';
+          liBtn.style.pointerEvents = 'none';
+          liBtn.style.opacity = '0.7';
+
+          // Force desktop landscape mode during html2canvas rendering
+          certBox.classList.add('wm-force-desktop-landscape');
+          const originalShadow = certBox.style.boxShadow;
+          certBox.style.boxShadow = 'none';
+
+          setTimeout(() => {
+            html2canvas(certBox, {
+              backgroundColor: '#09090b',
+              scale: 3.5, // Ultra-sharp 3.5x scaling for crisp LinkedIn feed display
+              useCORS: true,
+              logging: false
+            }).then(async (canvas) => {
+              // Restore layout styles
+              certBox.classList.remove('wm-force-desktop-landscape');
+              certBox.style.boxShadow = originalShadow;
+
+              const imageBase64 = canvas.toDataURL('image/png');
+
+              // POST image to server
+              try {
+                const response = await fetch(WIDGET_API_BASE + '/api/save-certificate-image', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ rollno, imageBase64 })
+                });
+                const result = await response.json();
+                
+                if (result.success) {
+                  // Share the dynamic cert page
+                  const sharedUrl = window.location.origin + '/certifications/' + rollno;
+                  window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(sharedUrl)}`, '_blank');
+                } else {
+                  throw new Error('Failed response from server');
+                }
+              } catch (err) {
+                console.error('LinkedIn share error:', err);
+                // Fallback to home url
+                window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(siteUrl)}`, '_blank');
+              } finally {
+                liBtn.innerHTML = originalText;
+                liBtn.style.pointerEvents = 'auto';
+                liBtn.style.opacity = '1';
+              }
+            }).catch((err) => {
+              console.error('Failed to export certificate image:', err);
+              certBox.classList.remove('wm-force-desktop-landscape');
+              certBox.style.boxShadow = originalShadow;
+              window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(siteUrl)}`, '_blank');
+              liBtn.innerHTML = originalText;
+              liBtn.style.pointerEvents = 'auto';
+              liBtn.style.opacity = '1';
+            });
+          }, 100);
+        };
         
         // Bind Exporter button
         document.getElementById('wmPrintBtn').onclick = () => {
