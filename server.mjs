@@ -1051,8 +1051,30 @@ function findSubjectNameInSyllabus(code, syllabusData) {
       return;
     }
 
+    // ── GET /aew_admin_control_9901 ────────────────────────────────────
+    if (url.pathname === '/aew_admin_control_9901') {
+      const key = url.searchParams.get('key');
+      if (key !== 'AEWhustle2026') {
+        res.writeHead(403, { 'Content-Type': 'text/plain' });
+        res.end('Forbidden: Unauthorized Access.');
+        return;
+      }
+      const adminPath = path.join(__dirname, 'aew_admin_control_9901.html');
+      res.writeHead(200, { 'Content-Type': 'text/html' });
+      res.end(fs.readFileSync(adminPath));
+      return;
+    }
+
     // ── Static file serving ───────────────────────────────────────────
     const filePath = url.pathname === '/' ? '/index.html' : url.pathname;
+    
+    // Block direct access to the raw admin template file
+    if (filePath.includes('aew_admin_control_9901')) {
+      res.writeHead(403, { 'Content-Type': 'text/plain' });
+      res.end('Forbidden: Direct access to admin template is blocked.');
+      return;
+    }
+    
     const full = path.join(__dirname, filePath);
     if (fs.existsSync(full) && fs.statSync(full).isFile()) {
       const ext = path.extname(full);
