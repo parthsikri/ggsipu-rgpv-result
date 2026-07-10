@@ -120,8 +120,6 @@
             for securing a brilliant grade of <strong id="wmCertCgpa">8.18</strong> <strong>cgpa</strong> in <strong id="wmCertSem">sem-2 end term exams ipu</strong>.
           </div>
 
-          <div id="wmCertCustomMsg" class="wm-cert-custom-msg">"solid prep. clean execution. you are locking in and moving up."</div>
-
           <div id="wmCertPrepTag" class="wm-cert-prep-tag"></div>
 
           <!-- Signatures -->
@@ -148,6 +146,10 @@
           <button class="wm-cert-action-btn primary" id="wmPrintBtn">⬇ Download PNG</button>
           <a class="wm-cert-action-btn linkedin" id="wmLinkedInBtn" href="#" target="_blank">in LinkedIn</a>
           <a class="wm-cert-action-btn" id="wmWaBtn" href="#" target="_blank">📲 WhatsApp</a>
+        </div>
+
+        <div class="wm-cert-repost-notice" id="wmCertNotice" style="display:none;">
+          💡 LinkedIn par certi post karke tag karna mat bhulna, bhaiya repost karenge! 🚀🔥
         </div>
 
 
@@ -317,32 +319,21 @@
         const wordCount = experience.split(/\s+/).filter(w => w.length > 0).length;
         
         let certType = 'normal';
-        let customMsg = '';
         let decorText = 'official token of hustle';
         
         if (wordCount >= 100 || cgpa >= 9.5) {
           certType = 'gold';
           decorText = 'true loyal supporter & academic elite';
-          customMsg = '"you are truely a loyal supporter. academic absolute beast. you are genuinely built different. keep cooking!"';
         } else if (wordCount >= 70 || cgpa >= 9.2) {
           certType = 'silver';
           decorText = 'outstanding contributor & academic star';
-          customMsg = '"outstanding contributor & academic star. solid prep. clean execution. you are locking in and moving up."';
         } else {
           decorText = 'official token of hustle';
-          if (cgpa >= 9.0) {
-            customMsg = '"academic absolute beast. you are genuinely built different. keep cooking!"';
-          } else if (cgpa >= 7.5) {
-            customMsg = '"solid prep. clean execution. you are locking in and moving up."';
-          } else {
-            customMsg = '"saved by bhaiya\'s topics this time. next sem is a fresh start — let\'s lock in early!"';
-          }
         }
 
         const certBox = document.getElementById('wmCertDisplay');
         certBox.className = 'wm-cert-box ' + (certType === 'gold' ? 'gold-cert' : (certType === 'silver' ? 'silver-cert' : ''));
         document.getElementById('wmCertDecor').textContent = decorText;
-        document.getElementById('wmCertCustomMsg').textContent = customMsg;
         
         const prepTagEl = document.getElementById('wmCertPrepTag');
         if (activeSource === "Bhaiya's Important Topics") {
@@ -354,46 +345,42 @@
         
         certBox.style.display = 'flex'; // 16:9 flex layout
         document.getElementById('wmCertActions').style.display = 'flex';
-
+        document.getElementById('wmCertNotice').style.display = 'block'; // Show Gen-Z LinkedIn Tag notice
 
         // Bind share buttons
         const siteUrl = window.location.origin + '/';
         const waMsg = `🏆 *I just got my Apna Engineering Wallah Hustle Certificate!*\n\nSecured *${cgpa.toFixed(2)} CGPA* in ${document.getElementById('wmCertSem').textContent}!\n\nStudied smart with *Apna Engineering Wallah* — bhaiya ke important topics ne kaam aa gaye! 🔥\n\nCheck your result & get yours too:\n${siteUrl}`;
         document.getElementById('wmWaBtn').href = `https://wa.me/?text=${encodeURIComponent(waMsg)}`;
 
-        // Bind LinkedIn share button
+        // Direct LinkedIn Share link
         const liBtn = document.getElementById('wmLinkedInBtn');
+        liBtn.href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(siteUrl)}`;
+        liBtn.onclick = null;
+
+        /* Commented out automated canvas-screenshot upload for LinkedIn:
         liBtn.onclick = (e) => {
           e.preventDefault();
           if (typeof html2canvas === 'undefined') {
             alert('Loading certificate exporter... please wait a second and try again.');
             return;
           }
-
           const originalText = liBtn.innerHTML;
           liBtn.innerHTML = '⌛ preparing post...';
           liBtn.style.pointerEvents = 'none';
           liBtn.style.opacity = '0.7';
-
-          // Force desktop landscape mode during html2canvas rendering
           certBox.classList.add('wm-force-desktop-landscape');
           const originalShadow = certBox.style.boxShadow;
           certBox.style.boxShadow = 'none';
-
           setTimeout(() => {
             html2canvas(certBox, {
               backgroundColor: '#09090b',
-              scale: 3.5, // Ultra-sharp 3.5x scaling for crisp LinkedIn feed display
+              scale: 3.5,
               useCORS: true,
               logging: false
             }).then(async (canvas) => {
-              // Restore layout styles
               certBox.classList.remove('wm-force-desktop-landscape');
               certBox.style.boxShadow = originalShadow;
-
               const imageBase64 = canvas.toDataURL('image/png');
-
-              // POST image to server
               try {
                 const response = await fetch(WIDGET_API_BASE + '/api/save-certificate-image', {
                   method: 'POST',
@@ -401,17 +388,13 @@
                   body: JSON.stringify({ rollno, imageBase64 })
                 });
                 const result = await response.json();
-                
                 if (result.success) {
-                  // Share the dynamic cert page
                   const sharedUrl = window.location.origin + '/certifications/' + rollno;
                   window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(sharedUrl)}`, '_blank');
                 } else {
-                  throw new Error('Failed response from server');
+                  throw new Error('Failed response');
                 }
               } catch (err) {
-                console.error('LinkedIn share error:', err);
-                // Fallback to home url
                 window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(siteUrl)}`, '_blank');
               } finally {
                 liBtn.innerHTML = originalText;
@@ -419,7 +402,6 @@
                 liBtn.style.opacity = '1';
               }
             }).catch((err) => {
-              console.error('Failed to export certificate image:', err);
               certBox.classList.remove('wm-force-desktop-landscape');
               certBox.style.boxShadow = originalShadow;
               window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(siteUrl)}`, '_blank');
@@ -429,6 +411,7 @@
             });
           }, 100);
         };
+        */
         
         // Bind Exporter button
         document.getElementById('wmPrintBtn').onclick = () => {
