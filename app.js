@@ -591,22 +591,38 @@ const LOW_EXT_REMARKS = [
   'theory thoda aur padh lena next sem',
 ];
 
-// High-internal specific remarks (85%+)
-const HIGH_INT_REMARKS = [
-  'internals safe hain, ab bas external sambhalo! 📈',
-  'absolute topper behavior in internals! externals safe hai 🌟',
-  'teacher ke favorite lagte ho, clean sweep in internals 💯',
-  'internals check kar ke bhaiya khush hue, absolutely cooking! 🔥',
-  'clutch performance in internals, next sem bhi maintain rakhna!',
+// High internals matrix arrays (85%+)
+const HIGH_INT_EXC_EXT = [
+  'absolute topper behavior! cooked in both internals & externals 🌟',
+  'sheet check karne wala bhi hairaan ho gaya! clean sweep 💯',
+  'outstanding score, bhaiya is proud of you! 🔥',
+];
+const HIGH_INT_AVG_EXT = [
+  'internals ne bacha liya, decent performance! 📈',
+  'teacher ke solid support + average externals prep = saved!',
+  'internals safe early game built, externals stable.',
+];
+const HIGH_INT_LOW_EXT = [
+  'internals safe parts, par externals ne game kharab kar diya 💔',
+  'internals aag the, externals paani ho gaya! next sem theory lock in 🔒',
+  'clutch internally, choked in externals. brush up theory!',
 ];
 
-// Average-internal specific remarks (70% - 84.9%)
-const AVG_INT_REMARKS = [
-  'thoda aur consistent raho bhai 🧑‍🏫',
-  'internals decent hain, externals mein extra edge chahiye 🚀',
-  'average marks secured, next sem top tier prep target karte hain 🎯',
-  'clutch ho sakta tha par thik hai, prep tight rakho next time!',
-  'not bad but you can definitely push it higher, keep locking in!',
+// Average internals matrix arrays (70% - 84.9%)
+const AVG_INT_EXC_EXT = [
+  'clutch in externals! end-term mein aag laga di 🔥',
+  'exam hall mein topper mode activate ho gaya tha kya? 🚀',
+  'internals average the par externals mein full back up!',
+];
+const AVG_INT_AVG_EXT = [
+  'decent performance across the board. thoda aur consistent raho bhai 🧑‍🏫',
+  'safe play, par potential bohot zyada hai next sem lock-in!',
+  'steady prep, stable score. room for growth!',
+];
+const AVG_INT_LOW_EXT = [
+  'externals ne le li, average internals se kaam nahi chala 😑',
+  'bhai externals dekh ke dil dukha, target theory next sem!',
+  'shaky externals performance. focus on bhaiya\'s topics early!',
 ];
 
 function getInternalRemark(s, isBestTheory) {
@@ -614,28 +630,48 @@ function getInternalRemark(s, isBestTheory) {
   if (isBestTheory) {
     return 'teacher se toh dost banliye 🤝';
   }
+  
   const intMax = s.max === 100 ? 40 : 30;
   const intPct = (s.internal / intMax) * 100;
+  
+  // 1. Low internals (< 60%)
   if (intPct < 60) {
     const idx = Math.abs(s.name.charCodeAt(0) + s.name.length) % INTERNAL_REMARKS.length;
     return INTERNAL_REMARKS[idx];
   }
-  // Low externals separately
+  
   const extMax = s.max === 100 ? 60 : 70;
   const extPct = (s.external / extMax) * 100;
-  if (extPct < 55 && intPct >= 70) {
+  const hashVal = Math.abs(s.name.charCodeAt(0) + s.name.length);
+
+  // 2. High internals (>= 85%)
+  if (intPct >= 85) {
+    if (extPct >= 80) {
+      return HIGH_INT_EXC_EXT[hashVal % HIGH_INT_EXC_EXT.length];
+    } else if (extPct >= 55) {
+      return HIGH_INT_AVG_EXT[hashVal % HIGH_INT_AVG_EXT.length];
+    } else {
+      return HIGH_INT_LOW_EXT[hashVal % HIGH_INT_LOW_EXT.length];
+    }
+  }
+  
+  // 3. Average internals (70% to 84.9%)
+  if (intPct >= 70) {
+    if (extPct >= 80) {
+      return AVG_INT_EXC_EXT[hashVal % AVG_INT_EXC_EXT.length];
+    } else if (extPct >= 55) {
+      return AVG_INT_AVG_EXT[hashVal % AVG_INT_AVG_EXT.length];
+    } else {
+      return AVG_INT_LOW_EXT[hashVal % AVG_INT_LOW_EXT.length];
+    }
+  }
+
+  // 4. Low externals fallback for remaining internals range (60% to 69.9%)
+  if (extPct < 55) {
     const idx = Math.abs(s.name.charCodeAt(0)) % LOW_EXT_REMARKS.length;
     return LOW_EXT_REMARKS[idx];
   }
-  // Good internals
-  if (intPct >= 85) {
-    const idx = Math.abs(s.name.charCodeAt(0) + s.name.length) % HIGH_INT_REMARKS.length;
-    return HIGH_INT_REMARKS[idx];
-  }
-  if (intPct >= 70) {
-    const idx = Math.abs(s.name.charCodeAt(0) + s.name.length) % AVG_INT_REMARKS.length;
-    return AVG_INT_REMARKS[idx];
-  }
+  
   return null;
 }
 
