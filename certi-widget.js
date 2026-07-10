@@ -69,8 +69,8 @@
 
           <div class="wm-row">
             <div class="wm-item" style="grid-column: span 2;">
-              <div class="wm-label">cgpa secured</div>
-              <input class="wm-input" id="wmCgpaInput" type="number" placeholder="CGPA" step="0.01" min="0" max="10" required readonly style="opacity:0.75;cursor:not-allowed;" />
+              <div class="wm-label">sgpa secured</div>
+              <input class="wm-input" id="wmCgpaInput" type="number" placeholder="SGPA" step="0.01" min="0" max="10" required readonly style="opacity:0.75;cursor:not-allowed;" />
             </div>
           </div>
 
@@ -117,7 +117,7 @@
           </div>
           
           <div class="wm-cert-desc">
-            for securing a brilliant grade of <strong id="wmCertCgpa">8.18</strong> <strong>cgpa</strong> in <strong id="wmCertSem">sem-2 end term exams ipu</strong>.
+            for securing a brilliant grade of <strong id="wmCertCgpa">8.18</strong> <strong>sgpa</strong> in <strong id="wmCertSem">sem-2 end term exams ipu</strong>.
           </div>
 
           <div id="wmCertPrepTag" class="wm-cert-prep-tag"></div>
@@ -236,10 +236,15 @@
         if (data.studentInfo?.programme) {
           document.getElementById('wmBranchInput').value = data.studentInfo.programme.toLowerCase();
         }
-        if (data.cgpa) {
-          document.getElementById('wmCgpaInput').value = data.cgpa;
+        const kpiSgpaEl = document.getElementById('kpiSgpa');
+        const kpiSgpaVal = kpiSgpaEl ? parseFloat(kpiSgpaEl.textContent) : null;
+        
+        if (kpiSgpaVal && !isNaN(kpiSgpaVal)) {
+          document.getElementById('wmCgpaInput').value = kpiSgpaVal.toFixed(2);
         } else if (data.sgpa) {
-          document.getElementById('wmCgpaInput').value = data.sgpa;
+          document.getElementById('wmCgpaInput').value = data.sgpa.toFixed(2);
+        } else if (data.cgpa) {
+          document.getElementById('wmCgpaInput').value = data.cgpa.toFixed(2);
         }
       }
     } catch(e) {}
