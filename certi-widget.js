@@ -98,6 +98,10 @@
 
         <!-- Certificate Container -->
         <div class="wm-cert-box" id="wmCertDisplay">
+          <div class="wm-cert-corner top-left"></div>
+          <div class="wm-cert-corner top-right"></div>
+          <div class="wm-cert-corner bottom-left"></div>
+          <div class="wm-cert-corner bottom-right"></div>
           <div class="wm-cert-watermark">apna engineering</div>
 
           <img src="aew_logo.png" alt="Apna Engineering Wallah" class="wm-cert-logo-top" crossorigin="anonymous" />

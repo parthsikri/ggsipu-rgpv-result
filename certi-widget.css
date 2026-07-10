@@ -161,12 +161,16 @@
   display: none; /* shown via JS as flex */
   aspect-ratio: 16 / 9;
   width: 100%;
-  background: #09090b;
+  background-color: #09090b;
+  background-image: 
+    radial-gradient(circle at center, rgba(17, 17, 22, 0.4) 0%, rgba(9, 9, 11, 0.95) 100%),
+    radial-gradient(rgba(99, 102, 241, 0.05) 1.5px, transparent 0);
+  background-size: auto, 16px 16px;
   border: 2px solid #6366f1;
   border-radius: 12px;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.6), 0 0 30px rgba(99,102,241,0.15);
+  box-shadow: 0 15px 45px rgba(0,0,0,0.7), 0 0 35px rgba(99,102,241,0.12);
   margin-bottom: 1rem;
   
   display: flex;
@@ -177,6 +181,20 @@
   box-sizing: border-box;
   text-align: center;
 }
+/* Corner Graphics */
+.wm-cert-corner {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border: 2px solid rgba(99, 102, 241, 0.4);
+  pointer-events: none;
+  z-index: 1;
+}
+.wm-cert-corner.top-left { top: 12px; left: 12px; border-right: none; border-bottom: none; border-radius: 4px 0 0 0; }
+.wm-cert-corner.top-right { top: 12px; right: 12px; border-left: none; border-bottom: none; border-radius: 0 4px 0 0; }
+.wm-cert-corner.bottom-left { bottom: 12px; left: 12px; border-right: none; border-top: none; border-radius: 0 0 0 4px; }
+.wm-cert-corner.bottom-right { bottom: 12px; right: 12px; border-left: none; border-top: none; border-radius: 0 0 4px 0; }
+
 /* Inner dashed border decoration */
 .wm-cert-box::before {
   content: '';
@@ -320,6 +338,7 @@
   font-size: 0.52rem;
   color: #71717a;
   text-transform: none !important;
+}
 .wm-cert-aewian {
   font-size: 0.6rem;
   color: rgba(99, 102, 241, 0.6);
@@ -332,9 +351,13 @@
 /* ══ SILVER OVERRIDES ══════════════════════════════════ */
 .silver-cert {
   border-color: #9ca3af !important;
+  background-image: 
+    radial-gradient(circle at center, rgba(17, 17, 22, 0.4) 0%, rgba(9, 9, 11, 0.95) 100%),
+    radial-gradient(rgba(156, 163, 175, 0.05) 1.5px, transparent 0) !important;
   box-shadow: 0 10px 40px rgba(0,0,0,0.6), 0 0 30px rgba(156,163,175,0.2) !important;
 }
 .silver-cert::before { border-color: rgba(156,163,175,0.2) !important; }
+.silver-cert .wm-cert-corner { border-color: rgba(156, 163, 175, 0.4) !important; }
 .silver-cert .wm-cert-watermark { color: rgba(156,163,175,0.03) !important; }
 .silver-cert .wm-cert-decor { color: #cbd5e1 !important; }
 .silver-cert .wm-cert-title { color: #cbd5e1 !important; }
@@ -347,9 +370,13 @@
 /* ══ GOLD OVERRIDES ════════════════════════════════════ */
 .gold-cert {
   border-color: #fbbf24 !important;
+  background-image: 
+    radial-gradient(circle at center, rgba(17, 17, 22, 0.4) 0%, rgba(9, 9, 11, 0.95) 100%),
+    radial-gradient(rgba(251, 191, 36, 0.06) 1.5px, transparent 0) !important;
   box-shadow: 0 10px 40px rgba(0,0,0,0.6), 0 0 35px rgba(251,191,36,0.25) !important;
 }
 .gold-cert::before { border-color: rgba(251,191,36,0.25) !important; }
+.gold-cert .wm-cert-corner { border-color: rgba(251, 191, 36, 0.5) !important; }
 .gold-cert .wm-cert-watermark { color: rgba(251,191,36,0.04) !important; }
 .gold-cert .wm-cert-decor { color: #fbbf24 !important; }
 .gold-cert .wm-cert-title { color: #fbbf24 !important; }
