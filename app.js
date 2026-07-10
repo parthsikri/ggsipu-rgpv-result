@@ -591,6 +591,24 @@ const LOW_EXT_REMARKS = [
   'theory thoda aur padh lena next sem',
 ];
 
+// High-internal specific remarks (85%+)
+const HIGH_INT_REMARKS = [
+  'internals safe hain, ab bas external sambhalo! 📈',
+  'absolute topper behavior in internals! externals safe hai 🌟',
+  'teacher ke favorite lagte ho, clean sweep in internals 💯',
+  'internals check kar ke bhaiya khush hue, absolutely cooking! 🔥',
+  'clutch performance in internals, next sem bhi maintain rakhna!',
+];
+
+// Average-internal specific remarks (70% - 84.9%)
+const AVG_INT_REMARKS = [
+  'thoda aur consistent raho bhai 🧑‍🏫',
+  'internals decent hain, externals mein extra edge chahiye 🚀',
+  'average marks secured, next sem top tier prep target karte hain 🎯',
+  'clutch ho sakta tha par thik hai, prep tight rakho next time!',
+  'not bad but you can definitely push it higher, keep locking in!',
+];
+
 function getInternalRemark(s, isBestTheory) {
   if (s.credit < 2) return null;
   if (isBestTheory) {
@@ -610,8 +628,14 @@ function getInternalRemark(s, isBestTheory) {
     return LOW_EXT_REMARKS[idx];
   }
   // Good internals
-  if (intPct >= 85) return 'internals safe hain, ab bas external sambhalo! 📈';
-  if (intPct >= 70) return 'thoda aur consistent raho bhai 🧑‍🏫';
+  if (intPct >= 85) {
+    const idx = Math.abs(s.name.charCodeAt(0) + s.name.length) % HIGH_INT_REMARKS.length;
+    return HIGH_INT_REMARKS[idx];
+  }
+  if (intPct >= 70) {
+    const idx = Math.abs(s.name.charCodeAt(0) + s.name.length) % AVG_INT_REMARKS.length;
+    return AVG_INT_REMARKS[idx];
+  }
   return null;
 }
 
