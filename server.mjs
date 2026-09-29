@@ -536,78 +536,117 @@ function findSubjectNameInSyllabus(code, syllabusData) {
 
     // ── GET /api/captcha ──────────────────────────────────────────────
     if (url.pathname === '/api/captcha' && req.method === 'GET') {
-      const loginPage = await ggsipuRequest('/web/login.jsp');
-      let cookie = loginPage.cookie || '';
-      const capRes = await ggsipuRequest('/web/CaptchaServlet', { cookie });
-      if (capRes.cookie) cookie = capRes.cookie;
-      const sid = crypto.randomBytes(16).toString('hex');
-      sessions.set(sid, { jsessionid: cookie, timestamp: Date.now() });
-      sendJSON(res, 200, {
-        sessionId: sid,
-        captchaImage: `data:image/png;base64,${capRes.buf.toString('base64')}`,
-      });
+      try {
+        const loginPage = await ggsipuRequest('/web/login');
+        let cookie = loginPage.cookie || '';
+
+        // Find captcha URL from page or default to /web/captcha
+        const capMatch = loginPage.text.match(/src="(\/web\/captcha[^"]*)"/i);
+        const captchaPath = capMatch ? capMatch[1] : `/web/captcha?${Date.now()}`;
+
+        const capRes = await ggsipuRequest(captchaPath, { cookie });
+        if (capRes.cookie) cookie = capRes.cookie;
+
+        // Verify valid image buffer (magic bytes for PNG or JPEG)
+        const contentType = capRes.headers['content-type'] || 'image/png';
+        const isImage = contentType.includes('image') ||
+          capRes.buf.slice(0, 4).toString('hex') === '89504e47' ||
+          capRes.buf.slice(0, 3).toString('hex') === 'ffd8ff';
+
+        if (!isImage) {
+          console.error('GGSIPU captcha returned non-image payload:', capRes.text.substring(0, 200));
+          sendJSON(res, 500, { error: 'Failed to retrieve captcha image from GGSIPU portal.' });
+          return;
+        }
+
+        const sid = crypto.randomBytes(16).toString('hex');
+        const actionMatch = loginPage.text.match(/action="(\/web\/login[^"]*)"/i);
+        sessions.set(sid, {
+          jsessionid: cookie,
+          loginAction: actionMatch ? actionMatch[1] : '/web/login',
+          timestamp: Date.now()
+        });
+
+        sendJSON(res, 200, {
+          sessionId: sid,
+          captchaImage: `data:${contentType.split(';')[0]};base64,${capRes.buf.toString('base64')}`,
+        });
+      } catch (err) {
+        console.error('GGSIPU captcha error:', err);
+        sendJSON(res, 500, { error: 'Could not fetch GGSIPU captcha. Portal may be slow or down.' });
+      }
       return;
     }
 
     // ── POST /api/login ───────────────────────────────────────────────
     if (url.pathname === '/api/login' && req.method === 'POST') {
-      const chunks = [];
-      for await (const c of req) chunks.push(c);
-      const { sessionId, username, password, captcha } = JSON.parse(Buffer.concat(chunks).toString());
+      try {
+        const chunks = [];
+        for await (const c of req) chunks.push(c);
+        const { sessionId, username, password, captcha } = JSON.parse(Buffer.concat(chunks).toString());
 
-      const session = sessions.get(sessionId);
-      if (!session) { sendJSON(res, 400, { error: 'Session expired. Please refresh the captcha.' }); return; }
+        const session = sessions.get(sessionId);
+        if (!session) { sendJSON(res, 400, { error: 'Session expired. Please refresh the captcha.' }); return; }
 
-      const hashedPw = hashPassword(password, captcha);
-      const formBody = `username=${encodeURIComponent(username)}&passwd=${encodeURIComponent(hashedPw)}&captcha=${encodeURIComponent(captcha)}`;
+        const hashedPw = hashPassword(password, captcha);
+        const formBody = `username=${encodeURIComponent(username)}&passwd=${encodeURIComponent(hashedPw)}&captcha=${encodeURIComponent(captcha)}`;
 
-      const loginRes = await ggsipuRequest('/web/Login', {
-        method: 'POST',
-        cookie: session.jsessionid,
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Content-Length': Buffer.byteLength(formBody),
-          'Referer': 'https://examweb.ggsipu.ac.in/web/login.jsp',
-          'Origin': 'https://examweb.ggsipu.ac.in',
-        },
-      }, formBody);
+        const targetAction = session.loginAction || '/web/login';
+        const loginRes = await ggsipuRequest(targetAction, {
+          method: 'POST',
+          cookie: session.jsessionid,
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Length': Buffer.byteLength(formBody),
+            'Referer': 'https://examweb.ggsipu.ac.in/web/login',
+            'Origin': 'https://examweb.ggsipu.ac.in',
+          },
+        }, formBody);
 
-      if (loginRes.cookie) session.jsessionid = loginRes.cookie;
-      console.log('After login POST, cookie:', session.jsessionid?.substring(0,80));
+        if (loginRes.cookie) session.jsessionid = loginRes.cookie;
+        console.log('After login POST, cookie:', session.jsessionid?.substring(0,80));
 
-      const ltext = loginRes.text.toLowerCase();
-      if (ltext.includes('captcha validation fails') || (loginRes.status === 200 && ltext.includes('captcha'))) {
-        sendJSON(res, 200, { success: false, error: 'Captcha validation failed. Please refresh & try again.' }); return;
-      }
-      if (ltext.includes('invalid') && ltext.includes('password')) {
-        sendJSON(res, 200, { success: false, error: 'Invalid enrollment number or password.' }); return;
-      }
+        // Check if GGSIPU returned a message box, e.g. <div class="message">Invalid Captcha!</div>
+        const msgMatch = loginRes.text.match(/<div class="message">([\s\S]*?)<\/div>/i);
+        if (msgMatch) {
+          const msg = msgMatch[1].trim();
+          console.log('[GGSIPU Login] Portal message:', msg);
+          sendJSON(res, 200, { success: false, error: msg });
+          return;
+        }
 
-      // Follow ALL redirects (up to 6 hops), accumulating cookies at each step
-      let lastRes = loginRes;
-      let visitedPaths = new Set();
-      for (let hop = 0; hop < 6; hop++) {
-        const loc = lastRes.location;
-        if (!loc) break; // no more redirects
-        const nextPath = resolveGgsipuPath(loc);
-        if (visitedPaths.has(nextPath)) break; // loop guard
-        visitedPaths.add(nextPath);
-        console.log(`Redirect hop ${hop+1}: ${nextPath} | cookie len=${session.jsessionid?.length}`);
-        const r = await ggsipuRequest(nextPath, { cookie: session.jsessionid });
-        if (r.cookie) session.jsessionid = r.cookie;
-        lastRes = r;
-      }
+        const ltext = loginRes.text.toLowerCase();
+        if (ltext.includes('captcha validation fails') || (loginRes.status === 200 && ltext.includes('captcha') && ltext.includes('invalid'))) {
+          sendJSON(res, 200, { success: false, error: 'Captcha validation failed. Please refresh & try again.' }); return;
+        }
+        if (ltext.includes('invalid') && (ltext.includes('password') || ltext.includes('username') || ltext.includes('user name'))) {
+          sendJSON(res, 200, { success: false, error: 'Invalid enrollment number or password.' }); return;
+        }
 
-      const homeRes = lastRes;
-      console.log('Final cookie after all redirects:', session.jsessionid?.substring(0,80));
+        // Follow ALL redirects (up to 6 hops), accumulating cookies at each step
+        let lastRes = loginRes;
+        let visitedPaths = new Set();
+        for (let hop = 0; hop < 6; hop++) {
+          const loc = lastRes.location;
+          if (!loc) break; // no more redirects
+          const nextPath = resolveGgsipuPath(loc);
+          if (visitedPaths.has(nextPath)) break; // loop guard
+          visitedPaths.add(nextPath);
+          console.log(`Redirect hop ${hop+1}: ${nextPath} | cookie len=${session.jsessionid?.length}`);
+          const r = await ggsipuRequest(nextPath, { cookie: session.jsessionid });
+          if (r.cookie) session.jsessionid = r.cookie;
+          lastRes = r;
+        }
 
+        const homeRes = lastRes;
+        console.log('Final cookie after all redirects:', session.jsessionid?.substring(0,80));
 
-      // Check if still on login page
-      if (homeRes.text.toLowerCase().includes('captcha') && homeRes.text.includes('loginForm')) {
-        sendJSON(res, 200, { success: false, error: 'Login failed. Please check credentials & captcha.' }); return;
-      }
+        // Check if still on login page
+        if (homeRes.text.toLowerCase().includes('captcha') && homeRes.text.includes('loginForm')) {
+          sendJSON(res, 200, { success: false, error: 'Login failed. Please check credentials & captcha.' }); return;
+        }
 
-      const pages = { home: homeRes.text };
+        const pages = { home: homeRes.text };
       session.loggedIn = true;
       session.username = username; // save for result fetch
 
@@ -662,6 +701,10 @@ function findSubjectNameInSyllabus(code, syllabusData) {
       if (!resultJson) console.warn('All result fetch attempts failed');
 
       sendJSON(res, 200, { success: true, pages, resultJson, sessionId });
+      } catch (err) {
+        console.error('GGSIPU login error:', err);
+        sendJSON(res, 500, { error: 'Error connecting to GGSIPU portal: ' + err.message });
+      }
       return;
     }
 

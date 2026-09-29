@@ -3,7 +3,9 @@
    app.js – Full Build v12
    ═══════════════════════════════════════════ */
 
-const API = window.location.origin + '/api';
+const API = (window.location.protocol === 'file:' || ((window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') && window.location.port !== '5000' && window.location.port !== ''))
+  ? 'http://localhost:5000/api'
+  : (window.location.origin + '/api');
 let currentData = null;
 
 let dynamicCredits = {};
@@ -114,8 +116,10 @@ async function loadCaptcha() {
   const loading = document.getElementById('captchaLoading');
   const refreshBtn = document.getElementById('refreshBtn');
   const uni = document.getElementById('universitySelect')?.value || 'ggsipu';
+  const captchaInput = document.getElementById('captchaInput');
   
   if (!img) return;
+  if (captchaInput) captchaInput.value = '';
   if (loading) loading.style.display = 'flex';
   if (img) img.style.display = 'none';
   if (refreshBtn) refreshBtn.disabled = true;
@@ -130,13 +134,28 @@ async function loadCaptcha() {
     }
     const r = await fetch(`${API}/${route}${route.includes('?') ? '&' : '?'}t=${Date.now()}`);
     const d = await r.json();
-    if (d.sessionId) document.getElementById('sessionId').value = d.sessionId;
+    if (d.sessionId) {
+      const sidEl = document.getElementById('sessionId');
+      if (sidEl) sidEl.value = d.sessionId;
+    }
     if (d.captchaImage) {
       img.src = d.captchaImage;
       img.style.display = 'block';
+    } else {
+      console.error('Captcha error from server:', d.error);
+      const errEl = document.getElementById('loginError');
+      if (errEl) {
+        errEl.innerHTML = `⚠️ Failed to load captcha: ${d.error || 'Server error'}. <a href="#" onclick="loadCaptcha();this.closest('.error-msg').style.display='none';return false;" style="color:#a78bfa;text-decoration:underline;">Click here to retry</a>`;
+        errEl.style.display = 'block';
+      }
     }
   } catch(e) {
-    console.error('Captcha error:', e);
+    console.error('Captcha fetch error:', e);
+    const errEl = document.getElementById('loginError');
+    if (errEl) {
+      errEl.innerHTML = `⚠️ Could not reach server to load captcha. Make sure the server is running on port 5000. <a href="#" onclick="loadCaptcha();this.closest('.error-msg').style.display='none';return false;" style="color:#a78bfa;text-decoration:underline;">Click here to retry</a>`;
+      errEl.style.display = 'block';
+    }
   } finally {
     if (loading) loading.style.display = 'none';
     if (refreshBtn) refreshBtn.disabled = false;
