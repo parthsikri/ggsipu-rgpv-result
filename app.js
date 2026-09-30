@@ -237,7 +237,12 @@ const RGPV_GRADE_GP  = { 'O': 10, 'A+': 9, 'A': 8, 'B+': 7, 'B': 6, 'C+': 5.5, '
 const RGPV_GRADE_PCT = { 'O': 92, 'A+': 82, 'A': 72, 'B+': 62, 'B': 56, 'C+': 52, 'C': 48, 'D': 45, 'F': 30, 'I': 0, 'W': 0 };
 
 function parseAndRender(d, enrollmentNo) {
-  const resultJson = d.resultJson || d.data || d.result || d;
+  let resultJson = d.resultJson || d.data || d.result || d;
+  if (resultJson && resultJson.message && (!resultJson.stresult && !resultJson.stprofile)) {
+    try {
+      resultJson = typeof resultJson.message === 'string' ? JSON.parse(resultJson.message) : resultJson.message;
+    } catch(e) {}
+  }
 
   // ── RGPV format detection ──────────────────────────────────────────
   // RGPV returns allSemesters[] with grade-based subjects (no stresult)

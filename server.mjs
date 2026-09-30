@@ -651,24 +651,44 @@ function findSubjectNameInSyllabus(code, syllabusData) {
       session.username = username; // save for result fetch
 
       // Fetch result data
-      // NOTE: euno=100 was the originally working value (session cookie identifies the user, not euno)
+      // GGSIPU new portal uses /web/student/search?flag=2&euno=100 (where euno=100 returns ALL semesters)
       let resultJson = null;
       const endpoints = [
+        `/web/student/search?flag=2&euno=100`,
+        `/web/student/search?flag=2&euno=1`,
+        `/web/student/search?flag=2&euno=2`,
+        `/web/student/search?flag=1&euno=100`,
+        `/web/student/search?flag=3&euno=100`,
+        `/web/student/search?flag=2`,
+        `/web/student/searchProcess?flag=2&euno=100`,
         `/web/StudentSearchProcess?flag=2&euno=100`,
         `/web/StudentSearchProcess?flag=3&euno=100`,
         `/web/StudentSearchProcess?flag=1&euno=100`,
-        `/web/StudentSearchProcess?flag=2&euno=0`,
-        `/web/StudentSearchProcess?flag=2`,
       ];
 
       for (const endpoint of endpoints) {
         try {
-          const r = await ggsipuRequest(endpoint, { cookie: session.jsessionid });
+          const r = await ggsipuRequest(endpoint, {
+            cookie: session.jsessionid,
+            headers: {
+              'Referer': 'https://examweb.ggsipu.ac.in/web/student/studenthome',
+              'X-Requested-With': 'XMLHttpRequest',
+              'Accept': 'application/json, text/plain, */*'
+            }
+          });
           console.log(`[${endpoint}] status=${r.status} => ${r.text.substring(0,80)}`);
           if (r.status === 200 && r.text.trim().startsWith('{')) {
             const parsed = JSON.parse(r.text);
-            if (parsed && (parsed.stresult || parsed.stprofile)) {
-              resultJson = parsed;
+            let candidate = parsed;
+            if (parsed.status === 'OK' && parsed.message) {
+              try {
+                candidate = typeof parsed.message === 'string' ? JSON.parse(parsed.message) : parsed.message;
+              } catch (parseErr) {
+                console.warn('Could not parse parsed.message:', parseErr.message);
+              }
+            }
+            if (candidate && (candidate.stresult || candidate.stprofile)) {
+              resultJson = candidate;
               console.log('Result fetched OK from:', endpoint);
               break;
             }
@@ -692,13 +712,28 @@ function findSubjectNameInSyllabus(code, syllabusData) {
             if (r.status === 200) {
               // Try to find embedded JSON
               const m = r.text.match(/\{[^<]*"stresult"[^<]*\}/s);
-              if (m) { try { resultJson = JSON.parse(m[0]); break; } catch(_) {} }
+              if (m) {
+                try {
+                  const candidate = JSON.parse(m[0]);
+                  if (candidate && (candidate.stresult || candidate.stprofile)) {
+                    resultJson = candidate;
+                    break;
+                  }
+                } catch(_) {}
+              }
             }
           } catch(e) {}
         }
       }
 
-      if (!resultJson) console.warn('All result fetch attempts failed');
+      if (!resultJson) {
+        console.warn('All result fetch attempts failed');
+        sendJSON(res, 200, {
+          success: false,
+          error: 'Login succeeded, but no result data found on the GGSIPU portal. Your results may not be declared yet.'
+        });
+        return;
+      }
 
       sendJSON(res, 200, { success: true, pages, resultJson, sessionId });
       } catch (err) {
